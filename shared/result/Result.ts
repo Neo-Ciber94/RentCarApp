@@ -1,0 +1,175 @@
+/**
+ * A result type.
+ */
+export abstract class Result<T, E> {
+  /**
+   * Type of the result: `ok` or `error`
+   */
+  abstract readonly type: "ok" | "error";
+
+  /**
+   * Returns `true` is the result is ok.
+   */
+  abstract get isOk(): boolean;
+
+  /**
+   * Returns `true` is the result is an error.
+   */
+  get isError(): boolean {
+    return !this.isOk;
+  }
+
+  /**
+   * Gets the value of this return if is ok.
+   */
+  abstract get(): T;
+
+  /**
+   * Gets the error of this result is is an error.
+   */
+  abstract getError(): E;
+
+  /**
+   * Gets the value if is ok, otherwise returns `null`.
+   */
+  getOrNull(): T | null {
+    return this.isOk ? this.get() : null;
+  }
+
+  /**
+   * Gets the value if is ok, otherwise returns `undefined`.
+   */
+  getOrUndefined(): T | undefined {
+    return this.isOk ? this.get() : undefined;
+  }
+
+  /**
+   * Gets the value if is ok, otherwise throws an error.
+   */
+  getOrThrow(): T {
+    if (this.isOk) {
+      return this.get();
+    } else {
+      throw new Error("Result was an error");
+    }
+  }
+
+  /**
+   * Gets the value if is ok, otherwise throws the specify error.
+   */
+  getOrError(error: string): T {
+    if (this.isOk) {
+      return this.get();
+    } else {
+      throw new Error(error);
+    }
+  }
+
+  /**
+   * Get the value if is ok, otherwise return the specify value.
+   */
+  getOr(value: T | (() => T)): T {
+    if (this.isOk) {
+      return this.get();
+    }
+
+    if (typeof value === "function") {
+      return (value as () => T)();
+    } else {
+      return value;
+    }
+  }
+
+  /**
+   * Returns `true` if the result contains the given value.
+   */
+  contains(value: T): boolean {
+    if (this.isOk) {
+      return this.get() === value;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Returns `true` if the result contains the given error.
+   */
+  containsError(error: E): boolean {
+    if (this.isError) {
+      return this.getError() === error;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Maps the value of this result if is `Ok` otherwise returns an error result.
+   */
+  map<R>(fn: (value: T) => R): Result<R, E> {
+    if (this.isOk) {
+      return ok(fn(this.get()));
+    } else {
+      return err(this.getError());
+    }
+  }
+}
+
+/**
+ * An ok result.
+ */
+class Ok<T> extends Result<T, never> {
+  readonly type = "ok";
+
+  constructor(private readonly value: T) {
+    super();
+  }
+
+  get isOk(): boolean {
+    return true;
+  }
+
+  get(): T {
+    return this.value;
+  }
+
+  getError(): never {
+    throw new Error(`Result was ok: ${this.value}`);
+  }
+}
+
+/**
+ * An error result.
+ */
+class Err<E> extends Result<never, E> {
+  readonly type = "error";
+
+  constructor(private readonly error: E) {
+    super();
+  }
+
+  get isOk(): boolean {
+    return false;
+  }
+
+  get(): never {
+    throw new Error(`Result was an error: ${this.error}`);
+  }
+
+  getError(): E {
+    return this.error;
+  }
+}
+
+/**
+ * Creates an `Ok` result.
+ */
+export function ok<T, E = never>(value: T): Result<T, E> {
+  return new Ok<T>(value);
+}
+
+/**
+ * Creates an `Error` result.
+ */
+export function err<E, T = never>(error: E): Result<T, E> {
+  return new Err<E>(error);
+}

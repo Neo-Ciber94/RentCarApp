@@ -1,5 +1,5 @@
 /**
- * A result type.
+ * Wraps a value that can be either a valid value `Ok(T)` or an error value `Err(E)`.
  */
 export abstract class Result<T, E> {
   /**
@@ -11,6 +11,18 @@ export abstract class Result<T, E> {
    * Returns `true` is the result is ok.
    */
   abstract get isOk(): boolean;
+
+  /**
+   * Construct a `Result<T,E>` from other.
+   */
+  static from<T, E>(result: Result<T, E>): Result<T, E> {
+    switch (result.type) {
+      case "ok":
+        return new Ok(result.get());
+      case "error":
+        return new Err(result.getError());
+    }
+  }
 
   /**
    * Returns `true` is the result is an error.

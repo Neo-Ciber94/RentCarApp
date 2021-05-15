@@ -1,22 +1,14 @@
+import { UserRole, UserStatus } from "@shared/types";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeepPartial,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserSession } from "./UserSession";
-
-export enum UserRole {
-  Admin = "admin",
-  Employee = "employee",
-}
-
-export enum UserStatus {
-  Active = "active",
-  Inactive = "inactive",
-}
 
 @Entity()
 export class User extends BaseEntity {
@@ -62,4 +54,14 @@ export class User extends BaseEntity {
     onDelete: "CASCADE",
   })
   sessions!: UserSession[];
+
+  static createWithRole(entityLike: DeepPartial<User> & { role: UserRole }) {
+    return User.create(entityLike);
+  }
+
+  static findUserByEmail(email: string): Promise<User | undefined> {
+    return User.findOne({
+      where: { email },
+    });
+  }
 }

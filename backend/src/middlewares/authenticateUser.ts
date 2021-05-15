@@ -13,7 +13,7 @@ export async function authenticateUser(request: Request, allowedRoles: UserRole[
       // Get the current session
       const userSession = await UserSession.findOne({
         where: { id: sessionId },
-        relations: ["user"],
+        relations: ["user", "user.role"],
       });
 
       // If the session have an user, the user is logged
@@ -33,6 +33,7 @@ function hasValidRole(user: User, roles: UserRole[]) {
     return true;
   }
 
+  console.assert(user.role);
   return roles.includes(user.role);
 }
 

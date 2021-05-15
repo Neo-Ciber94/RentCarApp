@@ -57,7 +57,7 @@ export class AuthRepository {
       const valid = await this.hasher.compare(userLogin.password, user.hash);
 
       if (valid) {
-        // Stores the current user id
+        // Stores the current user id and role
         request.session.userId = user.id;
         request.session.role = user.role;
 

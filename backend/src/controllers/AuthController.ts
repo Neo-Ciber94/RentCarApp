@@ -1,11 +1,20 @@
 import {
   UserChangePassword,
   UserLogin,
+  UserRole,
   UserSignup,
   UserUpdate,
 } from "@shared/types";
 import { Request } from "express";
-import { Body, JsonController, Post, Put, Req, Res } from "routing-controllers";
+import {
+  Authorized,
+  Body,
+  JsonController,
+  Post,
+  Put,
+  Req,
+  Res,
+} from "routing-controllers";
 import { AuthRepository, UserRepository } from "src/repositories";
 
 @JsonController("/auth")
@@ -13,6 +22,7 @@ export class AuthController {
   private repository = new AuthRepository();
 
   @Post("/signup")
+  @Authorized(UserRole.Admin)
   async signup(@Body() userSignup: UserSignup) {
     return this.repository.signup(userSignup);
   }

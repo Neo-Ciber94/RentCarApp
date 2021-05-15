@@ -3,24 +3,29 @@ import { GenericRepository } from "src/repositories";
 import { Mapper, MapperFn } from "src/utils";
 import { DeepPartial, Repository } from "typeorm";
 
-export class AbstractController<T, R> {
-  protected readonly repository: GenericRepository<T, R>;
+export interface ControllerOptions<T, R = T> {
+  repository: Repository<T>;
+  mapper?: Mapper<T, R> | MapperFn<T, R>;
+  relations?: string[];
+}
 
-  constructor(
-    repository: Repository<T>,
-    mapper?: Mapper<T, R> | MapperFn<T, R>
-  ) {
-    this.repository = new GenericRepository(repository, mapper);
+export class AbstractController<T, R = T> {
+  protected readonly repository: GenericRepository<T, R>;
+  protected readonly relations: string[];
+
+  constructor(options: ControllerOptions<T, R>) {
+    this.repository = new GenericRepository(options.repository, options.mapper);
+    this.relations = options.relations || [];
   }
 
   @Get()
   getAll() {
-    return this.repository.find();
+    return this.repository.find({ relations: this.relations });
   }
 
   @Get("/:id")
   getById(@Param("id") id: number) {
-    return this.repository.findById(id);
+    return this.repository.findById(id, { relations: this.relations });
   }
 
   @Post()

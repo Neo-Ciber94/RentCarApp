@@ -1,6 +1,11 @@
-import { SESSION_EXPIRATION } from "@shared/config";
 import { err, ok, Result } from "@shared/result";
-import { UserSignup, UserDTO, UserLogin } from "@shared/types";
+import {
+  UserSignup,
+  UserDTO,
+  UserLogin,
+  UserUpdate,
+  UserChangePassword,
+} from "@shared/types";
 import { Request } from "express";
 import { User, UserSession } from "../entities";
 import { BCryptHasher, PasswordHasher } from "../utils";
@@ -69,6 +74,51 @@ export class AuthRepository {
       });
     } else {
       return err("User is already logout");
+    }
+  }
+
+  async update(userUpdate: UserUpdate): Promise<Result<UserDTO, string>> {
+    const user = await User.findUserByEmail(userUpdate.email);
+
+    if (user) {
+      const newUser = User.create({
+        ...user,
+        ...userUpdate,
+      });
+
+      return ok(await User.save(newUser));
+    } else {
+      return err(`Cannot find the user with email: ${userUpdate.email}`);
+    }
+  }
+
+  async changePassword(
+    userChangePassword: UserChangePassword
+  ): Promise<Result<void, string>> {
+    const user = await User.findUserByEmail(userChangePassword.email);
+
+    if (user) {
+      const valid = await this.hasher.compare(
+        userChangePassword.oldPassword,
+        user.hash
+      );
+
+      if (valid) {
+        const { hash, salt } = await this.hasher.hash(
+          userChangePassword.newPassword
+        );
+
+        user.hash = hash;
+        user.salt = salt;
+        await User.save(user);
+        return ok(undefined);
+      } else {
+        return err("password missmatch");
+      }
+    } else {
+      return err(
+        `Cannot find the user with email: ${userChangePassword.email}`
+      );
     }
   }
 

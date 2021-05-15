@@ -25,5 +25,3 @@ POST http://localhost:8000/api/auth/logout
 
 ### Get users
 GET http://localhost:8000/api/users
-
-#Cookie: s%3AjLmzVj-yd1d-vYJdZZI1i02WYQ1bMUGF.ndGDCKfrdNtdi6fNgkED16EliRFTONsp9y0vnNV74Hg

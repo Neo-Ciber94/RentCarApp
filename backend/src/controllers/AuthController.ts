@@ -13,9 +13,8 @@ import {
   Post,
   Put,
   Req,
-  Res,
 } from "routing-controllers";
-import { AuthRepository, UserRepository } from "src/repositories";
+import { AuthRepository } from "src/repositories";
 
 @JsonController("/auth")
 export class AuthController {

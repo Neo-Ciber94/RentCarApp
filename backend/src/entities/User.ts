@@ -1,6 +1,7 @@
 import { UserRole, UserStatus } from "@shared/types";
 import {
   BaseEntity,
+  Check,
   Column,
   CreateDateColumn,
   DeepPartial,
@@ -13,6 +14,7 @@ import { UserSession } from "./UserSession";
 
 @Entity()
 @Index("idx_email", ["email"])
+@Check("check_document_length", "LENGTH(documentId) >= 6")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

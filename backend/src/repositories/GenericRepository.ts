@@ -7,7 +7,7 @@ import {
   Repository,
 } from "typeorm";
 
-export abstract class AbstractRepository<T, R = T> {
+export class GenericRepository<T, R = T> {
   #repository: Repository<T>;
   #mapper: Mapper<T, R>;
 

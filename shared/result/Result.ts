@@ -62,7 +62,7 @@ export abstract class Result<T, E> {
     if (this.isOk) {
       return this.get();
     } else {
-      throw new Error("Result was an error");
+      throwIsError(this.getError());
     }
   }
 
@@ -124,6 +124,28 @@ export abstract class Result<T, E> {
       return err(this.getError());
     }
   }
+
+  /**
+   * Returns this result as an `Ok`.
+   */
+  asOk(): Ok<T> {
+    if (this.isOk && this instanceof Ok) {
+      return this;
+    } else {
+      throwIsError(this.getError());
+    }
+  }
+
+  /**
+   * Returns this result as an `Err`.
+   */
+  asError(): Err<E> {
+    if (this.isError && this instanceof Err) {
+      return this;
+    } else {
+      throwIsOk(this.get());
+    }
+  }
 }
 
 /**
@@ -145,7 +167,7 @@ class Ok<T> extends Result<T, never> {
   }
 
   getError(): never {
-    throw new Error(`Result was ok: ${this.value}`);
+    throwIsOk(this.value);
   }
 }
 
@@ -164,7 +186,7 @@ class Err<E> extends Result<never, E> {
   }
 
   get(): never {
-    throw new Error(`Result was an error: ${this.error}`);
+    throwIsError(this.error);
   }
 
   getError(): E {
@@ -184,4 +206,12 @@ export function ok<T, E = never>(value: T): Result<T, E> {
  */
 export function err<E, T = never>(error: E): Result<T, E> {
   return new Err<E>(error);
+}
+
+function throwIsOk(value: any): never {
+  throw new Error(`Result is ok: ${value}`);
+}
+
+function throwIsError(error: any): never {
+  throw new Error(`Result is an error: ${error}`);
 }

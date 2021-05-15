@@ -1,33 +1,45 @@
 import { err, ok, Result } from "@shared/result";
+import { validatePassword } from "@shared/utils";
 import {
   UserSignup,
   UserDTO,
   UserLogin,
   UserUpdate,
   UserChangePassword,
+  UserRole,
 } from "@shared/types";
 import { Request } from "express";
 import { User, UserSession } from "../entities";
 import { BCryptHasher, PasswordHasher } from "../utils";
-
-declare module "express-session" {
-  interface Session {
-    userId: number;
-  }
-}
+import { resolve } from "path";
 
 export class AuthRepository {
   readonly hasher: PasswordHasher = new BCryptHasher();
 
   async signup(userSignup: UserSignup): Promise<Result<UserDTO, string>> {
+    return this.signupWithRole(userSignup);
+  }
+
+  async signupWithRole(
+    userSignup: UserSignup & { role?: UserRole }
+  ): Promise<Result<UserDTO, string>> {
     const exist = await User.findUserByEmail(userSignup.email);
     if (exist) {
       return err(`email already exist: ${userSignup.email}`);
     }
 
+    const passwordValid = validatePassword(userSignup.password);
+    if (passwordValid.isError) {
+      return passwordValid.asError();
+    }
+
     const { hash, salt } = await this.hasher.hash(userSignup.password);
 
     const user = User.create(userSignup);
+    if (userSignup.role) {
+      user.role = userSignup.role;
+    }
+
     user.hash = hash;
     user.salt = salt;
 
@@ -37,24 +49,34 @@ export class AuthRepository {
 
   async login(
     userLogin: UserLogin,
-    resquest: Request
+    request: Request
   ): Promise<Result<UserDTO, string>> {
-    const user = await User.findUserByEmail(userLogin.username);
+    const user = await User.findUserByEmail(userLogin.email);
 
     if (user) {
-      const valid = await this.hasher.compare(user.hash, userLogin.password);
+      const valid = await this.hasher.compare(userLogin.password, user.hash);
+
       if (valid) {
         // Stores the current user id
-        resquest.session.userId = user.id;
+        request.session.userId = user.id;
+        request.session.role = user.role;
 
-        // The session must have an id at this point
-        const userSession = await UserSession.findOne(resquest.session.id);
-        userSession!.user = user;
-        await UserSession.save(userSession!);
-
-        resquest.session.save();
-
-        return ok(user);
+        // Saves the session with the user id, and store the user in the session
+        return new Promise<Result<UserDTO, string>>((resolve, reject) => {
+          request.session.save(async (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              // The session must have an id at this point
+              const userSession = await UserSession.findOne({
+                where: { id: request.sessionID },
+              });
+              userSession!.user = user;
+              await UserSession.save(userSession!);
+              resolve(ok(user));
+            }
+          });
+        });
       }
     }
 
@@ -98,6 +120,11 @@ export class AuthRepository {
     const user = await User.findUserByEmail(userChangePassword.email);
 
     if (user) {
+      const passwordValid = validatePassword(userChangePassword.newPassword);
+      if (passwordValid.isError) {
+        return passwordValid.asError();
+      }
+
       const valid = await this.hasher.compare(
         userChangePassword.oldPassword,
         user.hash

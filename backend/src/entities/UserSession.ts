@@ -7,7 +7,7 @@ export class UserSession extends BaseEntity implements SessionEntity {
   @PrimaryColumn()
   id!: string;
 
-  @Column()
+  @Column({ type: "int" })
   expiresAt!: number;
 
   @Column()

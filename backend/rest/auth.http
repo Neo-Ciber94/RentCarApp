@@ -1,0 +1,29 @@
+
+### Signup
+POST http://localhost:8000/api/auth/signup
+Content-Type: application/json
+
+{
+    "firstName": "Alex",
+    "lastName": "Alexander",
+    "email": "alex@alex.com",
+    "documentId": "400",
+    "password": "123456"
+}
+
+### Login
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "alex@alex.com",
+    "password": "123456"
+}
+
+### Logout
+POST http://localhost:8000/api/auth/logout
+
+### Get users
+GET http://localhost:8000/api/users
+
+#Cookie: s%3AjLmzVj-yd1d-vYJdZZI1i02WYQ1bMUGF.ndGDCKfrdNtdi6fNgkED16EliRFTONsp9y0vnNV74Hg

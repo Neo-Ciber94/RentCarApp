@@ -10,6 +10,8 @@ import session from "express-session";
 import { SESSION_EXPIRATION, SESSION_SECRET } from "@shared/config";
 import { TypeormStore } from "typeorm-store";
 import { UserSession } from "./entities";
+import { API_URL } from "./config";
+import { authenticateUser } from "./middlewares/authenticateUser";
 
 // Server port
 const PORT = process.env.PORT || 8000;
@@ -46,7 +48,7 @@ async function main() {
       store: new TypeormStore({ repository: UserSession.getRepository() }),
       cookie: {
         httpOnly: true,
-        maxAge: new Date(Date.now() + SESSION_EXPIRATION).getTime(),
+        maxAge: SESSION_EXPIRATION,
       },
     })
   );
@@ -59,7 +61,14 @@ async function main() {
   // Initialize the routing controllers
   useExpressServer(app, {
     cors: corsOptions,
-    routePrefix: "/api",
+    routePrefix: API_URL,
+    defaults: {
+      nullResultCode: 200,
+      undefinedResultCode: 200,
+    },
+    authorizationChecker: (action, roles) => {
+      return authenticateUser(action.request, roles);
+    },
     middlewares: [__dirname + "/middlewares/*.ts"],
     controllers: [__dirname + "/controllers/*.ts"],
   });

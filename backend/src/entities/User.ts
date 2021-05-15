@@ -5,12 +5,14 @@ import {
   CreateDateColumn,
   DeepPartial,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserSession } from "./UserSession";
 
 @Entity()
+@Index("idx_email", ["email"])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

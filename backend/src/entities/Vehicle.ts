@@ -1,5 +1,7 @@
+import { GearBox } from "@shared/types";
 import {
   BaseEntity,
+  Check,
   Column,
   Entity,
   OneToOne,
@@ -15,6 +17,7 @@ export enum VehicleType {
 }
 
 @Entity()
+@Check("check_capacity", "CHECK(capacity > 0)")
 export class Vehicle extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -46,8 +49,17 @@ export class Vehicle extends BaseEntity {
   })
   vehicleType!: VehicleType;
 
+  @Column({
+    type: "enum",
+    enum: GearBox,
+  })
+  gearBox!: GearBox;
+
   @Column({ type: "decimal" })
   rentPrice!: number;
+
+  @Column()
+  capacity!: number;
 
   @Column() // TODO: Use an enum?
   status!: string;

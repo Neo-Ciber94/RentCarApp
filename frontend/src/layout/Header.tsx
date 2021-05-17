@@ -1,5 +1,6 @@
 import { createRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import nextId from "../utils/nextId";
 
 export default function Header() {
   const [isOpen, setToggleMenu] = useState(false);
@@ -76,37 +77,25 @@ export default function Header() {
         ref={menuRef}
         className="w-full block flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
       >
-        <NavBarMenu />
+        <div className="text-2xl ml-auto">
+          {NavbarRoutes(["reservation", "vehicles", "login"])}
+        </div>
       </div>
     </nav>
   );
 }
 
-function NavBarMenu() {
-  return (
-    <div className="text-2xl ml-auto">
+// TODO: Check is don't break when update because the unique Id
+function NavbarRoutes(routes: string[]) {
+  return routes.map((route) => {
+    return (
       <Link
-        to="/reserve"
+        key={nextId()}
+        to={`/${route.toLowerCase()}`}
         className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-red-600 mr-4"
       >
-        Reserve
+        {route[0].toLocaleUpperCase() + route.slice(1).toLocaleLowerCase()}
       </Link>
-      <Link
-        to="/vehicles"
-        className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-red-600 mr-4"
-      >
-        Vehicles
-      </Link>
-      <Link
-        to="/login"
-        className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-red-600 mr-4"
-      >
-        Login
-      </Link>
-    </div>
-  );
+    );
+  });
 }
-
-// function EmployeeNavBarMenu() {}
-
-// function AdminNavBarMenu() {}

@@ -29,7 +29,10 @@ export default function Header() {
     <nav className="flex items-center justify-between flex-wrap bg-white p-5 px-3 shadow-md">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <a href="#">
-          <span className="font-semibold text-4xl tracking-tight text-red-600">
+          <span
+            id="logo"
+            className="font-semibold text-4xl tracking-tight text-red-600"
+          >
             Rent Car
           </span>
         </a>

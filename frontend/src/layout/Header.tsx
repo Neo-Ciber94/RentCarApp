@@ -1,12 +1,32 @@
-import { createRef, useState } from "react";
-import { Link, BrowserRouter as Router } from "react-router-dom";
-import "./Header.css";
+import { createRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setToggleMenu] = useState(false);
 
+  // A reference used for the menu
   const menuRef = createRef<HTMLDivElement>();
 
+  // Listen for the changes in the width to change the navbar menu
+  useEffect(() => {
+    const menu = menuRef.current!;
+
+    const onResize = () => {
+      const currentHeight = menu.getBoundingClientRect().height;
+      if (window.screen.width > 1024 && currentHeight > 0) {
+        menu.style.height = "0px";
+        setToggleMenu(false);
+      }
+    };
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  });
+
+  // Collapse or expand the navbar menu
   const toggleMenu = () => {
     const menu = menuRef.current!;
 
@@ -54,7 +74,7 @@ export default function Header() {
       <div
         id="menu"
         ref={menuRef}
-        className="w-full block flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 lg:h-0"
+        className="w-full block flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
       >
         <NavBarMenu />
       </div>

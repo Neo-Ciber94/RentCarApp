@@ -1,19 +1,20 @@
 import "./App.css";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from "./pages/home/Home";
+import Login from "./pages/home/Login";
 
 function App() {
   return (
-    <>
+    <Router>
       <Header />
-      <Router>
-        <div className="container p-4">
-          <h1>Hello World!</h1>
-        </div>
-      </Router>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/login" component={Login} />
+      </Switch>
       <Footer />
-    </>
+    </Router>
   );
 }
 

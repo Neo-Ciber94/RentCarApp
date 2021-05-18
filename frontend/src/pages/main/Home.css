@@ -10,11 +10,11 @@
   background-size: 100%;
   width: auto;
   height: 70vh;
-  transition-duration: 200ms;
+  transition-duration: 1s;
 }
 
 .bg-image:hover {
-  background-size: 103%;
+  background-size: 105%;
 }
 
 @media (max-width: 1024px) {

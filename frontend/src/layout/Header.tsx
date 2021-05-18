@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { createRef, useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import nextId from "../utils/nextId";
 
@@ -7,6 +7,13 @@ export default function Header() {
 
   // A reference used for the menu
   const menuRef = createRef<HTMLDivElement>();
+
+  // Fix for a bug where the navbar is expanded after refresh
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      menuRef.current!.style.height = "0px";
+    }
+  });
 
   // Listen for the changes in the width to change the navbar menu
   useEffect(() => {
@@ -48,7 +55,7 @@ export default function Header() {
   };
 
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-white p-5 px-3 shadow-md">
+    <nav className="flex items-center justify-between flex-wrap bg-white p-5 px-3 shadow-md z-10">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <Link to="/">
           <span

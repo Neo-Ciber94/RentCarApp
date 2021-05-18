@@ -5,6 +5,15 @@
   font-family: "Inter", sans-serif;
 }
 
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}
+
 #logo {
   font-family: "KoHo", sans-serif;
 }

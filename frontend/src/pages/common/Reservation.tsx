@@ -1,1 +1,3 @@
-export default function Reservation() {}
+export default function Reservation() {
+  return <h1>Reservation</h1>;
+}

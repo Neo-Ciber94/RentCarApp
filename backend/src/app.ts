@@ -10,7 +10,7 @@ import session from "express-session";
 import { SESSION_EXPIRATION, SESSION_SECRET } from "@shared/config";
 import { TypeormStore } from "typeorm-store";
 import { UserSession } from "./entities";
-import { API_URL } from "./config";
+import { BASE_API } from "./config";
 import { authenticateUser } from "./middlewares/authenticateUser";
 
 // Server port
@@ -61,7 +61,7 @@ async function main() {
   // Initialize the routing controllers
   useExpressServer(app, {
     cors: corsOptions,
-    routePrefix: API_URL,
+    routePrefix: BASE_API,
     defaults: {
       nullResultCode: 200,
       undefinedResultCode: 200,

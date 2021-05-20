@@ -1,0 +1,33 @@
+.dropdown {
+  overflow: hidden;
+}
+
+.dropdown-content {
+  position: absolute;
+  display: none;
+  min-width: 150px;
+  z-index: 1;
+}
+
+.dropdown-btn {
+  text-align: left;
+}
+
+.dropdown-content {
+  float: none;
+}
+
+.dropdown:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .dropdown-btn {
+    width: 100%;
+  }
+
+  .dropdown-content {
+    position: relative;
+  }
+}

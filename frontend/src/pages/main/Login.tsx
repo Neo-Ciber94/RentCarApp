@@ -1,4 +1,5 @@
 import { Field, FormikErrors, FormikProps, Form, Formik } from "formik";
+import { useHistory } from "react-router-dom";
 
 interface FormValues {
   email: string;
@@ -70,6 +71,8 @@ function LoginForm(props: { props: FormikProps<FormValues> }) {
 
 export default function Login() {
   const initialValues: FormValues = { email: "", password: "" };
+  const history = useHistory();
+
   return (
     <Formik
       initialValues={initialValues}
@@ -90,11 +93,11 @@ export default function Login() {
       onSubmit={(values, actions) => {
         console.log({ values, actions });
         actions.setSubmitting(false);
+        history.push("/");
       }}
     >
       {(props) => (
         <>
-          <h1>Login</h1>
           <div className="flex flex-row justify-center">
             <div className="w-full md:w-3/6 px-6 py-12">
               <LoginForm props={props} />

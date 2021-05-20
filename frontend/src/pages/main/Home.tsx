@@ -22,7 +22,7 @@ export default function Home() {
         </Link>
       </div>
       {/* Cards */}
-      <div className="flex flex-col md:flex-row justify-evenly items-center p-6">
+      <div className="flex flex-col md:flex-row justify-evenly items-center p-6 gap-3">
         <Card icon="fa fa-car" title="More than 40 cars" />
         <Card icon="fas fa-building" title="More than 34 offices" />
         <Card icon="fas fa-mobile-alt" title="Reserve from home" />

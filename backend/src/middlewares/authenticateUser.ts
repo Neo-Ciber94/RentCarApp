@@ -1,11 +1,11 @@
 import { UserRole } from "@shared/types";
-import { API_URL } from "src/config";
+import { BASE_API } from "src/config";
 import { UserSession, User } from "src/entities";
 import { Request } from "express";
 
 // prettier-ignore
 export async function authenticateUser(request: Request, allowedRoles: UserRole[] = []) {
-  if (needsAuthentication(API_URL, request.url)) {
+  if (needsAuthentication(BASE_API, request.url)) {
     const sessionId = request.sessionID;
     const userId = request.session.userId;
 

@@ -5,7 +5,7 @@ export abstract class Result<T, E> {
   /**
    * Type of the result: `ok` or `error`
    */
-  abstract readonly type: "ok" | "error";
+  abstract readonly status: "ok" | "error";
 
   /**
    * Returns `true` is the result is ok.
@@ -16,7 +16,7 @@ export abstract class Result<T, E> {
    * Construct a `Result<T,E>` from other.
    */
   static from<T, E>(result: Result<T, E>): Result<T, E> {
-    switch (result.type) {
+    switch (result.status) {
       case "ok":
         return new Ok(result.get());
       case "error":
@@ -152,7 +152,7 @@ export abstract class Result<T, E> {
  * An ok result.
  */
 class Ok<T> extends Result<T, never> {
-  readonly type = "ok";
+  readonly status = "ok";
 
   constructor(private readonly value: T) {
     super();
@@ -175,7 +175,7 @@ class Ok<T> extends Result<T, never> {
  * An error result.
  */
 class Err<E> extends Result<never, E> {
-  readonly type = "error";
+  readonly status = "error";
 
   constructor(private readonly error: E) {
     super();

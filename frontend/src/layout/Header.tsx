@@ -40,12 +40,8 @@ export default function Header() {
     setToggleMenu(!isOpen);
   };
 
-  const routes = getCurrentUserNavItems(() => setToggleMenu(false));
-  const currentLocation = useLocation();
-  const currentRoute = routes.find(
-    (e) => e.route.path === currentLocation.pathname
-  )?.route;
-  // console.log(currentLocation);
+  const currentLocation = useLocation<string>();
+  const navItems = getHomeNav(() => setToggleMenu(false));
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -80,39 +76,43 @@ export default function Header() {
           className="w-full flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
         >
           <div className="text-xl ml-auto block lg:flex lg:flex-row lg:gap-3">
-            <NavDropdown key={nextId()} name={"Dropdown"}>
+            <NavDropdown key={nextId()} name={"Admin"}>
               <NavLink
-                key={nextId()}
                 className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`1`}
+                to={`/fuel`}
               >
-                Link 1
+                Employees
               </NavLink>
               <NavLink
-                key={nextId()}
                 className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`2`}
+                to={`brands`}
               >
-                Link 2
+                Brands
               </NavLink>
               <NavLink
-                key={nextId()}
                 className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`3`}
+                to={`/models`}
               >
-                Link 3
+                Models
+              </NavLink>
+              <NavLink
+                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
+                to={`/fuel`}
+              >
+                Fuel
               </NavLink>
             </NavDropdown>
-            {routes.map((e) => e.component)}
+
+            {navItems}
           </div>
         </div>
       </div>
 
       {/* Page title */}
-      {currentRoute && currentRoute.path !== "/" && (
+      {currentLocation.pathname !== "/" && (
         <div className="bg-red-600 w-full shadow p-4">
           <h1 className="font-bold text-lg text-white select-none">
-            {currentRoute.name}
+            {currentLocation.state}
           </h1>
         </div>
       )}
@@ -120,50 +120,16 @@ export default function Header() {
   );
 }
 
-function getCurrentUserNavItems(fn: () => void) {
+function getHomeNav(fn: () => void) {
   return [
-    {
-      route: Routes.reservation,
-      component: (
-        <NavItem
-          path={Routes.login.path}
-          name={Routes.login.name}
-          onClick={fn}
-        />
-      ),
-    },
-    {
-      route: Routes.vehicles,
-      component: (
-        <NavItem
-          path={Routes.login.path}
-          name={Routes.login.name}
-          onClick={fn}
-        />
-      ),
-    },
-    {
-      route: Routes.login,
-      component: (
-        <NavItem
-          path={Routes.login.path}
-          name={Routes.login.name}
-          onClick={fn}
-        />
-      ),
-    },
+    <NavItem key={nextId()} route={Routes.reservation} onClick={fn} />,
+    <NavItem key={nextId()} route={Routes.vehicles} onClick={fn} />,
+    <NavItem key={nextId()} route={Routes.login} onClick={fn} />,
   ];
 }
 
-/**
+// function getEmployeeNav(fn: () => void) {}
 
-- Common:
-Reservation / Vehicles / Login
+// function getAdminNav(fn: () => void) {}
 
-- Employee
-Client / Rent / Inspection / Reservation / Vehicles / Login
-
-- Admin
-Admin / Client / Rent / Inspection / Reservation / Vehicles / Login
--> Employees, Models, Brands, Fuels
- */
+// function AuthNavLink() {}

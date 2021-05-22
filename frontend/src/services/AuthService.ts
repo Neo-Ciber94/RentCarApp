@@ -19,13 +19,21 @@ export class AuthService {
     return this.#currentUser;
   }
 
+  get isLogged() {
+    return this.#currentUser != null;
+  }
+
   signup(userSignUp: UserSignup): Promise<Result<UserDTO, string>> {
     return webClient.post("/signup", userSignUp);
   }
 
-  login() {}
+  login() {
+    this.#currentUser = {} as UserDTO;
+  }
 
-  logout() {}
+  logout() {
+    this.#currentUser = null;
+  }
 
   refresh() {}
 }

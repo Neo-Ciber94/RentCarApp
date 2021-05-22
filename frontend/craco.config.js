@@ -1,4 +1,5 @@
-const path = require('path');
+const path = require("path");
+const CracoAlias = require("craco-alias");
 
 module.exports = {
   style: {
@@ -8,5 +9,16 @@ module.exports = {
         require('autoprefixer'),
       ],
     },
-  }
+  },
+  plugins: [
+    {
+      plugin: CracoAlias,
+      options: {
+        source: "tsconfig",
+        baseUrl: "./",
+        tsConfigPath: "./tsconfig.paths.json"
+      }
+    }
+  ]
+
 }

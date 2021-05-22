@@ -8,7 +8,7 @@
     url("../../assets/images/ford.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: 50%;
+  background-position: 50% 20%;
   width: auto;
   height: 70vh;
   transition-duration: 1s;
@@ -16,6 +16,6 @@
 
 @media (max-width: 1024px) {
   .bg-image {
-    height: 50vh;
+    height: 30vh;
   }
 }

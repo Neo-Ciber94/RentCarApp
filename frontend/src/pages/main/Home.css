@@ -7,22 +7,15 @@
     ),
     url("../../assets/images/ford.jpg");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
+  background-position: 50%;
   width: auto;
   height: 70vh;
   transition-duration: 1s;
 }
 
-@media (min-width: 1024px) {
-  .bg-image:hover {
-    background-size: 105%;
-  }
-}
-
 @media (max-width: 1024px) {
   .bg-image {
-    background-size: cover;
-    background-position: 50%;
     height: 50vh;
   }
 }

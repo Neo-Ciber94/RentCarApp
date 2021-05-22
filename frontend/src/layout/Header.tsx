@@ -1,12 +1,12 @@
-import { createRef, useEffect, useLayoutEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import nextId from "../utils/nextId";
+import { NavDropdown, NavItem } from "../components";
 import { Routes } from "./routes";
+import nextId from "../utils/nextId";
 import "./Header.css";
 
 export default function Header() {
   const [isOpen, setToggleMenu] = useState(false);
-  const [menuHeight, setMenuHeight] = useState(0);
 
   // A reference used for the menu
   const menuRef = createRef<HTMLDivElement>();
@@ -45,7 +45,7 @@ export default function Header() {
   const currentRoute = routes.find(
     (e) => e.route.path === currentLocation.pathname
   )?.route;
-  console.log(currentLocation);
+  // console.log(currentLocation);
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -77,11 +77,32 @@ export default function Header() {
         <div
           id="menu"
           ref={menuRef}
-          // style={{ minHeight: menuHeight }}
           className="w-full flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
         >
           <div className="text-xl ml-auto block lg:flex lg:flex-row lg:gap-3">
-            <NavDropdown />
+            <NavDropdown key={nextId()} name={"Dropdown"}>
+              <NavLink
+                key={nextId()}
+                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
+                to={`1`}
+              >
+                Link 1
+              </NavLink>
+              <NavLink
+                key={nextId()}
+                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
+                to={`2`}
+              >
+                Link 2
+              </NavLink>
+              <NavLink
+                key={nextId()}
+                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
+                to={`3`}
+              >
+                Link 3
+              </NavLink>
+            </NavDropdown>
             {routes.map((e) => e.component)}
           </div>
         </div>
@@ -89,8 +110,10 @@ export default function Header() {
 
       {/* Page title */}
       {currentRoute && currentRoute.path !== "/" && (
-        <div className="bg-red-600 w-full shadow">
-          <h1 className="font-bold text-lg text-white">{currentRoute.name}</h1>
+        <div className="bg-red-600 w-full shadow p-4">
+          <h1 className="font-bold text-lg text-white select-none">
+            {currentRoute.name}
+          </h1>
         </div>
       )}
     </nav>
@@ -132,49 +155,15 @@ function getCurrentUserNavItems(fn: () => void) {
   ];
 }
 
-function NavItem(props: { path: string; name: string; onClick: () => void }) {
-  const { path, name, onClick } = props;
+/**
 
-  return (
-    <NavLink
-      key={nextId()}
-      activeClassName="active"
-      to={`${path}`}
-      onClick={onClick}
-      className="block p-4 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white"
-    >
-      {name}
-    </NavLink>
-  );
-}
+- Common:
+Reservation / Vehicles / Login
 
-function NavDropdown() {
-  return (
-    <div className="dropdown">
-      <button className="text-gray-400 p-4 hover:bg-red-600 hover:text-white dropdown-btn">
-        Dropdown
-        <i className="fa fa-caret-down ml-2"></i>
-      </button>
-      <div className="dropdown-content bg-gray-100 lg:bg-white shadow-inner lg:shadow">
-        <NavLink
-          className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-          to="1"
-        >
-          Link 1
-        </NavLink>
-        <NavLink
-          className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-          to="2"
-        >
-          Link 2
-        </NavLink>
-        <NavLink
-          className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-          to="3"
-        >
-          Link 3
-        </NavLink>
-      </div>
-    </div>
-  );
-}
+- Employee
+Client / Rent / Inspection / Reservation / Vehicles / Login
+
+- Admin
+Admin / Client / Rent / Inspection / Reservation / Vehicles / Login
+-> Employees, Models, Brands, Fuels
+ */

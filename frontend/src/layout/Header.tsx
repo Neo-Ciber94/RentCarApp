@@ -1,15 +1,27 @@
-import { createRef, useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { createRef, useEffect, useLayoutEffect } from "react";
+import { Link, NavLink, useHistory, useLocation } from "react-router-dom";
 import { NavDropdown, NavItem } from "../components";
 import { Routes } from "./routes";
 import nextId from "../utils/nextId";
+import { useNavbar } from "../context/NavbarContext";
+import { AuthService } from "../services/AuthService";
 import "./Header.css";
 
 export default function Header() {
-  const [isOpen, setToggleMenu] = useState(false);
+  const { isOpen, setOpen } = useNavbar();
 
   // A reference used for the menu
   const menuRef = createRef<HTMLDivElement>();
+
+  // Set initial state of the navbar menu
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      const menu = menuRef.current!;
+      if (!menu.classList.contains("h-0")) {
+        menu.classList.add("h-0");
+      }
+    }
+  });
 
   // Listen for the changes in the width to change the navbar menu
   useEffect(() => {
@@ -21,7 +33,7 @@ export default function Header() {
         if (!menu.classList.contains("h-0")) {
           menu.classList.add("h-0");
         }
-        setToggleMenu(false);
+        setOpen(false);
       }
     };
 
@@ -37,11 +49,10 @@ export default function Header() {
     const menu = menuRef.current!;
 
     menu.classList.toggle("h-0");
-    setToggleMenu(!isOpen);
+    setOpen(!isOpen);
   };
 
   const currentLocation = useLocation<string>();
-  const navItems = getHomeNav(() => setToggleMenu(false));
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -103,7 +114,7 @@ export default function Header() {
               </NavLink>
             </NavDropdown>
 
-            {navItems}
+            <HomeNavItems />
           </div>
         </div>
       </div>
@@ -120,16 +131,56 @@ export default function Header() {
   );
 }
 
-function getHomeNav(fn: () => void) {
-  return [
-    <NavItem key={nextId()} route={Routes.reservation} onClick={fn} />,
-    <NavItem key={nextId()} route={Routes.vehicles} onClick={fn} />,
-    <NavItem key={nextId()} route={Routes.login} onClick={fn} />,
-  ];
-}
+const HomeNavItems: React.FC = () => {
+  const { setOpen } = useNavbar();
+
+  return (
+    <>
+      <NavItem
+        key={Routes.reservation.name}
+        route={Routes.reservation}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.vehicles.name}
+        route={Routes.vehicles}
+        onClick={() => setOpen(false)}
+      />
+      <NavAuthLink />
+    </>
+  );
+};
 
 // function getEmployeeNav(fn: () => void) {}
 
 // function getAdminNav(fn: () => void) {}
 
-// function AuthNavLink() {}
+const NavAuthLink: React.FC = () => {
+  const authService = new AuthService();
+  const { setOpen } = useNavbar();
+  const history = useHistory();
+
+  const logout = () => {
+    authService.logout();
+    history.push("/");
+  };
+
+  if (!authService.isLogged) {
+    return (
+      <NavItem
+        key={Routes.login.name}
+        route={Routes.login}
+        onClick={() => setOpen(false)}
+      />
+    );
+  } else {
+    return (
+      <button
+        onClick={logout}
+        className="btn block p-4 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800"
+      >
+        Logout
+      </button>
+    );
+  }
+};

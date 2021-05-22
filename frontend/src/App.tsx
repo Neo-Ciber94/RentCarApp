@@ -7,21 +7,24 @@ import Login from "./pages/main/Login";
 import NotFound from "./pages/main/NotFound";
 import Reservation from "./pages/common/Reservation";
 import Vehicles from "./pages/common/Vehicles";
+import { NavbarProvider } from "./context/NavbarContext";
 
 function App() {
   return (
     <Router>
-      <div className="flex flex-col h-full">
-        <Header />
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/reservation" component={Reservation} />
-          <Route path="/vehicles" component={Vehicles} />
-          <Route path="/login" component={Login} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-        <Footer />
-      </div>
+      <NavbarProvider>
+        <div className="flex flex-col h-full">
+          <Header />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/reservation" component={Reservation} />
+            <Route path="/vehicles" component={Vehicles} />
+            <Route path="/login" component={Login} />
+            <Route path="*" component={NotFound} />
+          </Switch>
+          <Footer />
+        </div>
+      </NavbarProvider>
     </Router>
   );
 }

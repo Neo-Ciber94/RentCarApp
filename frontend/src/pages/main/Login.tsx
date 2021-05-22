@@ -1,5 +1,6 @@
 import { Field, FormikErrors, FormikProps, Form, Formik } from "formik";
 import { useHistory } from "react-router-dom";
+import { AuthService } from "../../services/AuthService";
 
 interface FormValues {
   email: string;
@@ -70,6 +71,7 @@ function LoginForm(props: { props: FormikProps<FormValues> }) {
 }
 
 export default function Login() {
+  const authService = new AuthService();
   const initialValues: FormValues = { email: "", password: "" };
   const history = useHistory();
 
@@ -93,6 +95,7 @@ export default function Login() {
       onSubmit={(values, actions) => {
         console.log({ values, actions });
         actions.setSubmitting(false);
+        authService.login();
         history.push("/");
       }}
     >

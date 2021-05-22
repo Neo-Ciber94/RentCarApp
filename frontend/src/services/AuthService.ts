@@ -5,7 +5,7 @@ import { webClient } from "./http";
 
 export class AuthService {
   private static INSTANCE?: AuthService;
-  #currentUser: UserDTO | null = null;
+  private user: UserDTO | null = null;
 
   constructor() {
     if (AuthService.INSTANCE) {
@@ -16,11 +16,11 @@ export class AuthService {
   }
 
   get currentUser() {
-    return this.#currentUser;
+    return this.user;
   }
 
   get isLogged() {
-    return this.#currentUser != null;
+    return this.user != null;
   }
 
   signup(userSignUp: UserSignup): Promise<Result<UserDTO, string>> {
@@ -28,11 +28,11 @@ export class AuthService {
   }
 
   login() {
-    this.#currentUser = {} as UserDTO;
+    this.user = {} as UserDTO;
   }
 
   logout() {
-    this.#currentUser = null;
+    this.user = null;
   }
 
   refresh() {}

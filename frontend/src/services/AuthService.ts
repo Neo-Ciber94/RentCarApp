@@ -20,7 +20,7 @@ export class AuthService {
     return this.user;
   }
 
-  get isLogged() {
+  get isAuthenticated() {
     return this.user != null;
   }
 
@@ -37,7 +37,6 @@ export class AuthService {
     runInAction(() => {
       if (result.isOk) {
         this.user = result.get();
-        console.log(result);
       }
     });
 
@@ -58,14 +57,16 @@ export class AuthService {
       userUpdate
     );
 
-    if (result.isOk) {
-      const newUser = result.get();
+    runInAction(() => {
+      if (result.isOk) {
+        const newUser = result.get();
 
-      // Only update the current user if the id's match
-      if (newUser.id === this.user?.id) {
-        this.user = newUser;
+        // Only update the current user if the id's match
+        if (newUser.id === this.user?.id) {
+          this.user = newUser;
+        }
       }
-    }
+    });
 
     return result;
   }
@@ -79,9 +80,11 @@ export class AuthService {
   async forceLogout(self: boolean): Promise<void> {
     const result = await webClient.post<void>("/auth/forcelogout");
 
-    if (self) {
-      this.user = null;
-    }
+    runInAction(() => {
+      if (self) {
+        this.user = null;
+      }
+    });
 
     return result;
   }
@@ -90,11 +93,7 @@ export class AuthService {
     const user = await webClient.get<UserDTO | undefined>("/auth/user");
 
     runInAction(() => {
-      if (user) {
-        this.user = user;
-      } else {
-        this.user = null;
-      }
+      this.user = user || null;
     });
 
     return user;

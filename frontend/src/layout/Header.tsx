@@ -126,8 +126,8 @@ const HomeNav: React.FC = () => {
   return (
     <>
       <NavItem
-        key={Routes.reservation.name}
-        route={Routes.reservation}
+        key={Routes.reservations.name}
+        route={Routes.reservations}
         onClick={() => setOpen(false)}
       />
       <NavItem
@@ -163,8 +163,8 @@ const EmployeeNav: React.FC = () => {
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.reservation.name}
-        route={Routes.reservation}
+        key={Routes.reservations.name}
+        route={Routes.reservations}
         onClick={() => setOpen(false)}
       />
       <NavItem
@@ -229,8 +229,8 @@ const AdminNav: React.FC = () => {
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.reservation.name}
-        route={Routes.reservation}
+        key={Routes.reservations.name}
+        route={Routes.reservations}
         onClick={() => setOpen(false)}
       />
       <NavItem
@@ -260,7 +260,7 @@ const NavLoginAndLogout = observer(() => {
     });
   };
 
-  if (!authService.isLogged) {
+  if (!authService.isAuthenticated) {
     return (
       <NavItem
         key={Routes.login.name}

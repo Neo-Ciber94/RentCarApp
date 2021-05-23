@@ -4,7 +4,7 @@ export interface RouteName {
 }
 export module Routes {
   // Main routes
-  export const reservation: RouteName = {
+  export const reservations: RouteName = {
     path: "/reservations",
     name: "Reservation",
   };
@@ -21,8 +21,8 @@ export module Routes {
   export const rent: RouteName = { path: "/rents", name: "Rent" };
 
   // Admin routes
+  export const employees: RouteName = { path: "/employees", name: "Employees" };
   export const brands: RouteName = { path: "/brands", name: "Brands" };
   export const models: RouteName = { path: "/models", name: "Models" };
-  export const employees: RouteName = { path: "/employees", name: "Employees" };
   export const fuels: RouteName = { path: "/fuels", name: "Fuels" };
 }

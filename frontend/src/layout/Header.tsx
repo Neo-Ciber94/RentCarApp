@@ -1,13 +1,14 @@
-import { createRef, useEffect, useLayoutEffect } from "react";
+import { createRef, useContext, useEffect, useLayoutEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { NavDropdown, NavItem } from "src/components";
 import { Routes } from "./routes";
 import { useNavbar } from "src/context/NavbarContext";
-import { AuthService } from "../services/AuthService";
-import "./Header.css";
 import { UserRole } from "@shared/types";
+import { AuthContext } from "src/context/AuthContext";
+import { observer } from "mobx-react-lite";
+import "./Header.css";
 
-export default function Header() {
+export const Header: React.FC = () => {
   const { isOpen, setOpen } = useNavbar();
 
   // A reference used for the menu
@@ -87,7 +88,7 @@ export default function Header() {
           className="w-full flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
         >
           <div className="text-xl ml-auto block lg:flex lg:flex-row lg:gap-3">
-            {getCurrentUserNav()}
+            <CurrentUserNav />
           </div>
         </div>
       </div>
@@ -102,10 +103,10 @@ export default function Header() {
       )}
     </nav>
   );
-}
+};
 
-function getCurrentUserNav() {
-  const authService = new AuthService();
+const CurrentUserNav = observer(() => {
+  const authService = useContext(AuthContext);
   const role = authService.currentUser?.role;
 
   switch (role) {
@@ -116,7 +117,7 @@ function getCurrentUserNav() {
     default:
       return <HomeNav />;
   }
-}
+});
 
 // reservation, vehicles, login
 const HomeNav: React.FC = () => {
@@ -169,6 +170,11 @@ const EmployeeNav: React.FC = () => {
       <NavItem
         key={Routes.vehicles.name}
         route={Routes.vehicles}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.profile.name}
+        route={Routes.profile}
         onClick={() => setOpen(false)}
       />
       {/** Login/Logout */}
@@ -232,20 +238,26 @@ const AdminNav: React.FC = () => {
         route={Routes.vehicles}
         onClick={() => setOpen(false)}
       />
+      <NavItem
+        key={Routes.profile.name}
+        route={Routes.profile}
+        onClick={() => setOpen(false)}
+      />
       {/** Login/Logout */}
       <NavLoginAndLogout />
     </>
   );
 };
 
-const NavLoginAndLogout: React.FC = () => {
-  const authService = new AuthService();
+const NavLoginAndLogout = observer(() => {
+  const authService = useContext(AuthContext);
   const { setOpen } = useNavbar();
   const history = useHistory();
 
   const logout = () => {
-    authService.logout();
-    history.push("/");
+    authService.logout().then(() => {
+      history.push("/");
+    });
   };
 
   if (!authService.isLogged) {
@@ -260,10 +272,10 @@ const NavLoginAndLogout: React.FC = () => {
     return (
       <button
         onClick={logout}
-        className="btn block p-4 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800"
+        className="btn block text-lg p-2 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800"
       >
         Logout
       </button>
     );
   }
-};
+});

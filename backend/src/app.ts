@@ -55,7 +55,8 @@ async function main() {
 
   // Cross origin resources sharing policy configuration
   const corsOptions: CorsOptions = {
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   };
 
   // Initialize the routing controllers

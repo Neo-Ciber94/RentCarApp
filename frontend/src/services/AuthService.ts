@@ -1,18 +1,19 @@
-import { makeAutoObservable } from "mobx";
-import { UserDTO, UserLogin, UserSignup } from "@shared/types";
+import { makeAutoObservable, runInAction } from "mobx";
+import {
+  UserChangePassword,
+  UserDTO,
+  UserLogin,
+  UserSignup,
+  UserUpdate,
+} from "@shared/types";
 import { Result } from "@shared/result";
 import { webClient } from "./http";
 
 export class AuthService {
-  private static INSTANCE?: AuthService;
   private user: UserDTO | null = null;
 
   constructor() {
-    if (AuthService.INSTANCE) {
-      return AuthService.INSTANCE;
-    } else {
-      AuthService.INSTANCE = makeAutoObservable(this);
-    }
+    makeAutoObservable(this);
   }
 
   get currentUser() {
@@ -23,7 +24,7 @@ export class AuthService {
     return this.user != null;
   }
 
-  signup(userSignUp: UserSignup): Promise<Result<UserDTO, string>> {
+  async signup(userSignUp: UserSignup): Promise<Result<UserDTO, string>> {
     return webClient.post("/auth/signup", userSignUp);
   }
 
@@ -33,24 +34,69 @@ export class AuthService {
       userLogin
     );
 
-    if (result.isOk) {
-      this.user = result.get();
-    }
+    runInAction(() => {
+      if (result.isOk) {
+        this.user = result.get();
+        console.log(result);
+      }
+    });
 
     return result;
   }
 
   async logout(): Promise<Result<void, string>> {
     const result = await webClient.post<Result<void, string>>("/auth/logout");
-    this.user = null;
+    runInAction(() => {
+      this.user = null;
+    });
+    return result;
+  }
+
+  async update(userUpdate: UserUpdate): Promise<Result<UserDTO, string>> {
+    const result = await webClient.put<Result<UserDTO, string>, UserUpdate>(
+      "/auth/update",
+      userUpdate
+    );
+
+    if (result.isOk) {
+      const newUser = result.get();
+
+      // Only update the current user if the id's match
+      if (newUser.id === this.user?.id) {
+        this.user = newUser;
+      }
+    }
+
+    return result;
+  }
+
+  async changePassword(
+    changePassword: UserChangePassword
+  ): Promise<Result<void, string>> {
+    return webClient.put("/auth/changepassword", changePassword);
+  }
+
+  async forceLogout(self: boolean): Promise<void> {
+    const result = await webClient.post<void>("/auth/forcelogout");
+
+    if (self) {
+      this.user = null;
+    }
+
     return result;
   }
 
   async refresh() {
-    const result = await webClient.get<UserDTO>("/auth/user");
+    const user = await webClient.get<UserDTO | undefined>("/auth/user");
 
-    if (result) {
-      this.user = result;
-    }
+    runInAction(() => {
+      if (user) {
+        this.user = user;
+      } else {
+        this.user = null;
+      }
+    });
+
+    return user;
   }
 }

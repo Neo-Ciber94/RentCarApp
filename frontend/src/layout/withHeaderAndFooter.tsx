@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentType } from "react";
-import Footer from "./Footer";
-import Header from "./Header";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
 
 export function withHeaderAndFooter(Component: ComponentType) {
   return class extends React.Component {

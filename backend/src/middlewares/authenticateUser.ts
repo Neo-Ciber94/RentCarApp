@@ -10,10 +10,11 @@ export async function authenticateUser(request: Request, allowedRoles: UserRole[
     const userId = request.session.userId;
 
     if (userId) {
+
       // Get the current session
       const userSession = await UserSession.findOne({
         where: { id: sessionId },
-        relations: ["user", "user.role"],
+        relations: ["user"],
       });
 
       // If the session have an user, the user is logged

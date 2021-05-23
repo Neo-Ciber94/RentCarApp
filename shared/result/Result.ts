@@ -220,6 +220,14 @@ export function err<E, T = never>(error: E): Result<T, E> {
   return new Err<E>(error);
 }
 
+/**
+ * Check if an object is a `Result` type.
+ */
+export function isResult(obj: any): obj is Result<unknown, unknown> {
+  // prettier-ignore
+  return (typeof obj.value !== undefined) && obj.status === "error" || obj.status === "ok";
+}
+
 function throwIsOk(value: any): never {
   throw new Error(`Result is ok: ${value}`);
 }

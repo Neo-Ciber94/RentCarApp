@@ -15,7 +15,7 @@ export const NavItem: React.FC<NavItemProps> = ({ route, onClick }) => {
       activeClassName="active"
       to={{ pathname: route.path, state: route.name }}
       onClick={onClick}
-      className="block text-lg p-2 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white"
+      className="nav-link"
     >
       {route.name}
     </NavLink>

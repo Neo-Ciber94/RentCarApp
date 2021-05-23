@@ -270,10 +270,7 @@ const NavLoginAndLogout = observer(() => {
     );
   } else {
     return (
-      <button
-        onClick={logout}
-        className="btn block text-lg p-2 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800"
-      >
+      <button onClick={logout} className="nav-link rounded-lg">
         Logout
       </button>
     );

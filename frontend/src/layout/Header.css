@@ -1,3 +1,15 @@
+.active {
+  @apply text-lg p-2 lg:inline-block lg:mt-0 text-white bg-red-600 rounded-lg shadow;
+}
+
+.nav-link:not(.active) {
+  @apply rounded-lg hover:shadow block text-lg p-2 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800;
+}
+
+.dropdown .nav-link {
+  @apply rounded-none;
+}
+
 .dropdown {
   overflow: hidden;
 }
@@ -20,11 +32,6 @@
 .dropdown:hover .dropdown-content {
   display: flex;
   flex-direction: column;
-}
-
-.dropdown:hover .dropdown-btn {
-  color: white;
-  background-color: #dc2626;
 }
 
 @media (max-width: 1024px) {

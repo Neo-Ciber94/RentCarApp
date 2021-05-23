@@ -52,7 +52,7 @@ const App = observer(() => {
           <Route path={Routes.login.path} component={withHeaderAndFooter(Login)} />
 
           {/* Employees */}
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.profile.path} component={withHeaderAndFooter(Profile)}/>
+          <ProtectedRoute roles={ROLES_ALL} path={Routes.profile.path} component={withHeaderAndFooter(Profile)} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.clients.path} component={withHeaderAndFooter(Clients)} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.inspections.path} component={withHeaderAndFooter(Inspections)} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.rent.path} component={withHeaderAndFooter(Rents)} />

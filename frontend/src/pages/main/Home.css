@@ -16,6 +16,12 @@
 
 @media (max-width: 1024px) {
   .bg-image {
+    height: 50vh;
+  }
+}
+
+@media (max-width: 620px) {
+  .bg-image {
     height: 30vh;
   }
 }

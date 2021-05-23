@@ -1,10 +1,10 @@
 import { createRef, useEffect, useLayoutEffect } from "react";
 import { Link, NavLink, useHistory, useLocation } from "react-router-dom";
-import { NavDropdown, NavItem } from "../components";
+import { NavDropdown, NavItem } from "src/components";
 import { Routes } from "./routes";
 import nextId from "../utils/nextId";
-import { useNavbar } from "../context/NavbarContext";
-import { AuthService } from "../services/AuthService";
+import { useNavbar } from "src/context/NavbarContext";
+import { AuthService } from "src/services/AuthService";
 import "./Header.css";
 
 export default function Header() {

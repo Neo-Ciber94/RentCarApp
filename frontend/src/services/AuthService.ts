@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { UserDTO, UserSignup } from "@shared/types";
+import { UserDTO, UserLogin, UserSignup } from "@shared/types";
 import { Result } from "@shared/result";
 import { webClient } from "./http";
 
@@ -24,16 +24,33 @@ export class AuthService {
   }
 
   signup(userSignUp: UserSignup): Promise<Result<UserDTO, string>> {
-    return webClient.post("/signup", userSignUp);
+    return webClient.post("/auth/signup", userSignUp);
   }
 
-  login() {
-    this.user = {} as UserDTO;
+  async login(userLogin: UserLogin): Promise<Result<UserDTO, string>> {
+    const result = await webClient.post<Result<UserDTO, string>, UserLogin>(
+      "/auth/login",
+      userLogin
+    );
+
+    if (result.isOk) {
+      this.user = result.get();
+    }
+
+    return result;
   }
 
-  logout() {
+  async logout(): Promise<Result<void, string>> {
+    const result = await webClient.post<Result<void, string>>("/auth/logout");
     this.user = null;
+    return result;
   }
 
-  refresh() {}
+  async refresh() {
+    const result = await webClient.get<UserDTO>("/auth/user");
+
+    if (result) {
+      this.user = result;
+    }
+  }
 }

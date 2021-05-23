@@ -2,6 +2,7 @@ import { UserRole } from "../UserRole";
 import { UserStatus } from "../UserStatus";
 
 export interface UserDTO {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;

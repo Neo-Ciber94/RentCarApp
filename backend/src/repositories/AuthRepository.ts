@@ -12,17 +12,16 @@ import { Request } from "express";
 import { User, UserSession } from "../entities";
 import { BCryptHasher, PasswordHasher } from "../utils";
 import { resolve } from "path";
+import { UserMapper } from "src/mapper/UserMapper";
 
 export class AuthRepository {
+  private mapper = new UserMapper();
   readonly hasher: PasswordHasher = new BCryptHasher();
 
-  async signup(userSignup: UserSignup): Promise<Result<UserDTO, string>> {
-    return this.signupWithRole(userSignup);
-  }
-
+  // @internal
   async signupWithRole(
     userSignup: UserSignup & { role?: UserRole }
-  ): Promise<Result<UserDTO, string>> {
+  ): Promise<Result<User, string>> {
     const exist = await User.findUserByEmail(userSignup.email);
     if (exist) {
       return err(`email already exist: ${userSignup.email}`);
@@ -45,6 +44,11 @@ export class AuthRepository {
 
     const newUser = await User.save(user);
     return ok(newUser);
+  }
+
+  async signup(userSignup: UserSignup): Promise<Result<UserDTO, string>> {
+    const result = await this.signupWithRole(userSignup);
+    return result.map((user) => this.mapper.map(user));
   }
 
   async login(
@@ -73,7 +77,9 @@ export class AuthRepository {
               });
               userSession!.user = user;
               await UserSession.save(userSession!);
-              resolve(ok(user));
+
+              const userDTO = this.mapper.map(user);
+              resolve(ok(userDTO));
             }
           });
         });
@@ -108,7 +114,9 @@ export class AuthRepository {
         ...userUpdate,
       });
 
-      return ok(await User.save(newUser));
+      const updatedUser = await User.save(newUser);
+      const userDTO = this.mapper.map(updatedUser);
+      return ok(userDTO);
     } else {
       return err(`Cannot find the user with email: ${userUpdate.email}`);
     }
@@ -159,5 +167,18 @@ export class AuthRepository {
 
       await UserSession.remove(sessions);
     }
+  }
+
+  async getUser(request: Request) {
+    const userId = request.session.userId;
+
+    if (userId) {
+      const user = await User.findOne(userId);
+      if (user) {
+        return this.mapper.map(user);
+      }
+    }
+
+    return undefined;
   }
 }

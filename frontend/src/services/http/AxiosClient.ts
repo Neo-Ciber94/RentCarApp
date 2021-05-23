@@ -12,27 +12,31 @@ export class AxiosClient implements HttpClient {
     return new AxiosClient({ baseURL: url });
   }
 
-  get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.client.get(url, config);
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    const result = await this.client.get(url, config);
+    return result.data;
   }
 
-  post<T, TData = T>(
+  async post<T, TData = T>(
+    url: string,
+    data?: TData,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    const result = await this.client.post(url, data, config);
+    return result.data;
+  }
+
+  async put<T, TData = T>(
     url: string,
     data: TData,
     config?: AxiosRequestConfig
   ): Promise<T> {
-    return this.client.post(url, data, config);
+    const result = await this.client.put(url, data, config);
+    return result.data;
   }
 
-  put<T, TData = T>(
-    url: string,
-    data: TData,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
-    return this.client.post(url, data, config);
-  }
-
-  delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.client.delete(url, config);
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    const result = await this.client.delete(url, config);
+    return result.data;
   }
 }

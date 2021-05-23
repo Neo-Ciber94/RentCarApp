@@ -1,11 +1,11 @@
 import { createRef, useEffect, useLayoutEffect } from "react";
-import { Link, NavLink, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { NavDropdown, NavItem } from "src/components";
 import { Routes } from "./routes";
-import nextId from "../utils/nextId";
 import { useNavbar } from "src/context/NavbarContext";
-import { AuthService } from "src/services/AuthService";
+import { AuthService } from "../services/AuthService";
 import "./Header.css";
+import { UserRole } from "@shared/types";
 
 export default function Header() {
   const { isOpen, setOpen } = useNavbar();
@@ -87,34 +87,7 @@ export default function Header() {
           className="w-full flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
         >
           <div className="text-xl ml-auto block lg:flex lg:flex-row lg:gap-3">
-            <NavDropdown key={nextId()} name={"Admin"}>
-              <NavLink
-                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`/fuel`}
-              >
-                Employees
-              </NavLink>
-              <NavLink
-                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`brands`}
-              >
-                Brands
-              </NavLink>
-              <NavLink
-                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`/models`}
-              >
-                Models
-              </NavLink>
-              <NavLink
-                className="p-4 lg:p-2 text-gray-400 hover:bg-red-600 hover:text-white"
-                to={`/fuel`}
-              >
-                Fuel
-              </NavLink>
-            </NavDropdown>
-
-            <HomeNavItems />
+            {getCurrentUserNav()}
           </div>
         </div>
       </div>
@@ -131,7 +104,22 @@ export default function Header() {
   );
 }
 
-const HomeNavItems: React.FC = () => {
+function getCurrentUserNav() {
+  const authService = new AuthService();
+  const role = authService.currentUser?.role;
+
+  switch (role) {
+    case UserRole.Employee:
+      return <EmployeeNav />;
+    case UserRole.Admin:
+      return <AdminNav />;
+    default:
+      return <HomeNav />;
+  }
+}
+
+// reservation, vehicles, login
+const HomeNav: React.FC = () => {
   const { setOpen } = useNavbar();
 
   return (
@@ -146,16 +134,111 @@ const HomeNavItems: React.FC = () => {
         route={Routes.vehicles}
         onClick={() => setOpen(false)}
       />
-      <NavAuthLink />
+      {/** Login/Logout */}
+      <NavLoginAndLogout />
     </>
   );
 };
 
-// function getEmployeeNav(fn: () => void) {}
+// clients, inspection, rent, reservation, vehicles, login
+const EmployeeNav: React.FC = () => {
+  const { setOpen } = useNavbar();
 
-// function getAdminNav(fn: () => void) {}
+  return (
+    <>
+      <NavItem
+        key={Routes.clients.name}
+        route={Routes.clients}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.inspections.name}
+        route={Routes.inspections}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.rent.name}
+        route={Routes.rent}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.reservation.name}
+        route={Routes.reservation}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.vehicles.name}
+        route={Routes.vehicles}
+        onClick={() => setOpen(false)}
+      />
+      {/** Login/Logout */}
+      <NavLoginAndLogout />
+    </>
+  );
+};
 
-const NavAuthLink: React.FC = () => {
+// employees, model, brand, fuel, ...employee routes
+const AdminNav: React.FC = () => {
+  const { setOpen } = useNavbar();
+
+  return (
+    <>
+      <NavDropdown name="Admin">
+        <NavItem
+          key={Routes.employees.name}
+          route={Routes.employees}
+          onClick={() => setOpen(false)}
+        />
+        <NavItem
+          key={Routes.models.name}
+          route={Routes.models}
+          onClick={() => setOpen(false)}
+        />
+        <NavItem
+          key={Routes.brands.name}
+          route={Routes.brands}
+          onClick={() => setOpen(false)}
+        />
+        <NavItem
+          key={Routes.fuels.name}
+          route={Routes.fuels}
+          onClick={() => setOpen(false)}
+        />
+      </NavDropdown>
+
+      {/** Employee routes */}
+      <NavItem
+        key={Routes.clients.name}
+        route={Routes.clients}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.inspections.name}
+        route={Routes.inspections}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.rent.name}
+        route={Routes.rent}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.reservation.name}
+        route={Routes.reservation}
+        onClick={() => setOpen(false)}
+      />
+      <NavItem
+        key={Routes.vehicles.name}
+        route={Routes.vehicles}
+        onClick={() => setOpen(false)}
+      />
+      {/** Login/Logout */}
+      <NavLoginAndLogout />
+    </>
+  );
+};
+
+const NavLoginAndLogout: React.FC = () => {
   const authService = new AuthService();
   const { setOpen } = useNavbar();
   const history = useHistory();

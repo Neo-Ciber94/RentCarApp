@@ -47,6 +47,7 @@ function needsAuthentication(apiUrl: string, url: string) {
     switch (urlRest) {
       case "/signup":
       case "/login":
+      case "/user":
         return false;
     }
   }

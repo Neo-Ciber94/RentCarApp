@@ -9,7 +9,9 @@ import { Request } from "express";
 import {
   Authorized,
   Body,
+  Get,
   JsonController,
+  OnUndefined,
   Post,
   Put,
   Req,
@@ -49,5 +51,11 @@ export class AuthController {
   @Post("/forcelogout")
   async forceLogout(@Req() request: Request) {
     return this.repository.forceLogout(request);
+  }
+
+  @Get("/user")
+  @OnUndefined(200)
+  async getUser(@Req() request: Request) {
+    return this.repository.getUser(request);
   }
 }

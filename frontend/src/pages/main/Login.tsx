@@ -1,4 +1,6 @@
+import { Result } from "@shared/result";
 import { Field, FormikErrors, FormikProps, Form, Formik } from "formik";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AuthService } from "../../services/AuthService";
 
@@ -73,6 +75,7 @@ function LoginForm(props: { props: FormikProps<FormValues> }) {
 export default function Login() {
   const authService = new AuthService();
   const initialValues: FormValues = { email: "", password: "" };
+  const [loginError, setError] = useState<string | null>(null);
   const history = useHistory();
 
   return (
@@ -92,11 +95,21 @@ export default function Login() {
 
         return errors;
       }}
-      onSubmit={(values, actions) => {
+      onSubmit={async (values, actions) => {
         console.log({ values, actions });
-        actions.setSubmitting(false);
-        authService.login();
-        history.push("/");
+
+        try {
+          const result = await Result.from(authService.login(values));
+          console.log(result);
+
+          if (result.isOk) {
+            history.push("/");
+          } else {
+            setError(result.getError());
+          }
+        } finally {
+          actions.setSubmitting(false);
+        }
       }}
     >
       {(props) => (
@@ -104,10 +117,21 @@ export default function Login() {
           <div className="flex flex-row justify-center">
             <div className="w-full md:w-3/6 px-6 py-12">
               <LoginForm props={props} />
+              {loginError && <LoginError error={loginError} />}
             </div>
           </div>
         </>
       )}
     </Formik>
+  );
+}
+
+function LoginError(props: { error: string }) {
+  return (
+    <div role="alert" className="my-4">
+      <div className="border rounded-md border-red-400 bg-red-100 px-4 py-3 text-red-700">
+        <p>{props.error}</p>
+      </div>
+    </div>
   );
 }

@@ -4,4 +4,7 @@ import { AxiosClient } from "./AxiosClient";
 /**
  * Http client services for web requests.
  */
-export const webClient = AxiosClient.fromUrl(API_URL);
+export const webClient = new AxiosClient({
+  baseURL: API_URL,
+  withCredentials: true,
+});

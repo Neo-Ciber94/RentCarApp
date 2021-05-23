@@ -1,7 +1,11 @@
+import isPromise from "is-promise";
+
 /**
  * Wraps a value that can be either a valid value `Ok(T)` or an error value `Err(E)`.
  */
 export abstract class Result<T, E> {
+  protected abstract readonly value: T | E;
+
   /**
    * Type of the result: `ok` or `error`
    */
@@ -15,12 +19,20 @@ export abstract class Result<T, E> {
   /**
    * Construct a `Result<T,E>` from other.
    */
-  static from<T, E>(result: Result<T, E>): Result<T, E> {
-    switch (result.status) {
-      case "ok":
-        return new Ok(result.get());
-      case "error":
-        return new Err(result.getError());
+  static from<T, E>(result: Result<T, E>): Result<T, E>;
+  static from<T, E>(result: Promise<Result<T, E>>): Promise<Result<T, E>>;
+  static from<T, E>(
+    result: Result<T, E> | Promise<Result<T, E>>
+  ): Result<T, E> | Promise<Result<T, E>> {
+    if (isPromise(result)) {
+      return result.then((e) => Result.from(e));
+    } else {
+      switch (result.status) {
+        case "ok":
+          return new Ok(result.value as T);
+        case "error":
+          return new Err(result.value as E);
+      }
     }
   }
 
@@ -154,7 +166,7 @@ export abstract class Result<T, E> {
 class Ok<T> extends Result<T, never> {
   readonly status = "ok";
 
-  constructor(private readonly value: T) {
+  constructor(protected readonly value: T) {
     super();
   }
 
@@ -177,7 +189,7 @@ class Ok<T> extends Result<T, never> {
 class Err<E> extends Result<never, E> {
   readonly status = "error";
 
-  constructor(private readonly error: E) {
+  constructor(protected readonly value: E) {
     super();
   }
 
@@ -186,11 +198,11 @@ class Err<E> extends Result<never, E> {
   }
 
   get(): never {
-    throwIsError(this.error);
+    throwIsError(this.value);
   }
 
   getError(): E {
-    return this.error;
+    return this.value;
   }
 }
 

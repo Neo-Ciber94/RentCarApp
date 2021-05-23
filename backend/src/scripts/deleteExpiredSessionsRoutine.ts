@@ -1,5 +1,6 @@
 import { ROUTINE_INVERVAL } from "src/config";
 import { UserSession } from "src/entities";
+import { Logger } from "src/loggers/logger";
 
 async function deleteExpiredSessions() {
   const result = await UserSession.createQueryBuilder()
@@ -8,11 +9,11 @@ async function deleteExpiredSessions() {
     .execute();
 
   if (result.affected && result.affected > 0) {
-    console.log(`Deleted ${result.affected} expired sessions`);
+    Logger.info(`Deleted ${result.affected} expired sessions`);
   }
 }
 
 export function startDeleteExpiredSessionsRoutine() {
-  console.log("Starting 'delete expired sessions' routine...");
+  Logger.info("Starting 'delete expired sessions' routine...");
   setInterval(deleteExpiredSessions, ROUTINE_INVERVAL);
 }

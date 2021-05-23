@@ -25,7 +25,7 @@ const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
 
 const App = observer(() => {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const authService = useContext(AuthContext);
 
   useEffect(() => {

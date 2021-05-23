@@ -13,6 +13,7 @@ import { UserSession } from "./entities";
 import { BASE_API } from "./config";
 import { authenticateUser } from "./middlewares/authenticateUser";
 import { startDeleteExpiredSessionsRoutine } from "./scripts/deleteExpiredSessionsRoutine";
+import { Logger } from "./loggers/logger";
 
 // Server port
 const PORT = process.env.PORT || 8000;
@@ -36,7 +37,7 @@ async function main() {
   await createConnection()
     .then(async (connection) => {
       await connection.runMigrations();
-      console.log(`Connected to database: ${connection.driver.database}`);
+      Logger.info(`Connected to database: ${connection.driver.database}`);
 
       // Run routines
       startDeleteExpiredSessionsRoutine();
@@ -80,7 +81,7 @@ async function main() {
 
   // Start listeting
   app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+    Logger.info(`Listening on port ${PORT}`);
   });
 }
 

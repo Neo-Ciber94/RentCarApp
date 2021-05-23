@@ -9,7 +9,7 @@ export const Profile = observer(() => {
 
   return (
     <Container>
-      <div className="flex flex-col items-center justify-items-center content-center">
+      <div className="flex flex-col items-center justify-items-center content-center lg:w-2/5">
         <div className="w-full">
           <h5 className="font-bold text-lg text-black">First Name</h5>
           <p className="border p-1 w-full text-gray-600">{user?.firstName}</p>

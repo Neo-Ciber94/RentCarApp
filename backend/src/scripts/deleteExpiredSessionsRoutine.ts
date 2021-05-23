@@ -5,7 +5,7 @@ import { Logger } from "src/loggers/logger";
 async function deleteExpiredSessions() {
   const result = await UserSession.createQueryBuilder()
     .delete()
-    .where(":now > expiresAt", { now: Date.now() })
+    .where("expiresAt > :now", { now: Date.now() })
     .execute();
 
   if (result.affected && result.affected > 0) {

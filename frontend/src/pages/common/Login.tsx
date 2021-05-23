@@ -1,6 +1,6 @@
 import { Field, FormikErrors, FormikProps, Form, Formik } from "formik";
 import { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
 
@@ -76,6 +76,10 @@ export const Login = observer(() => {
   const initialValues: FormValues = { email: "", password: "" };
   const history = useHistory();
   const authService = useContext(AuthContext);
+
+  if (authService.isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Formik

@@ -1,4 +1,4 @@
-import { GearBox } from "@shared/types";
+import { GearBox, VehicleType } from "@shared/types";
 import {
   BaseEntity,
   Check,
@@ -9,12 +9,6 @@ import {
 } from "typeorm";
 import { Fuel } from "./Fuel";
 import { Model } from "./Model";
-
-export enum VehicleType {
-  Car = "car",
-  Jeep = "jeep",
-  Wagon = "wagon",
-}
 
 @Entity()
 @Check("check_capacity", "CHECK(capacity > 0)")

@@ -8,11 +8,18 @@ import {
 } from "typeorm";
 import { Client } from "./Client";
 import { Employee } from "./Employee";
+import { Vehicle } from "./Vehicle";
 
 @Entity()
 export class Rent extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column()
+  vehicleId!: number;
+
+  @OneToOne(() => Vehicle)
+  vehicle!: Vehicle;
 
   @Column()
   employeeId!: number;

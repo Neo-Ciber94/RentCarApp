@@ -6,3 +6,4 @@ export * from './UserRole';
 export * from './UserSignup';
 export * from './UserStatus';
 export * from './UserUpdate';
+export * from './VehicleType';

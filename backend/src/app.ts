@@ -12,6 +12,7 @@ import { TypeormStore } from "typeorm-store";
 import { UserSession } from "./entities";
 import { BASE_API } from "./config";
 import { authenticateUser } from "./middlewares/authenticateUser";
+import { startDeleteExpiredSessionsRoutine } from "./scripts/deleteExpiredSessionsRoutine";
 
 // Server port
 const PORT = process.env.PORT || 8000;
@@ -36,6 +37,9 @@ async function main() {
     .then(async (connection) => {
       await connection.runMigrations();
       console.log(`Connected to database: ${connection.driver.database}`);
+
+      // Run routines
+      startDeleteExpiredSessionsRoutine();
     })
     .catch((e) => console.error(e));
 

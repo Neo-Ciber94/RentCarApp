@@ -1,5 +1,5 @@
-.active {
-  @apply text-lg p-2 lg:inline-block lg:mt-0 text-white bg-red-600 rounded-lg shadow;
+.nav-link.active {
+  @apply text-lg p-2 lg:inline-block  text-white bg-red-600 rounded-lg shadow;
 }
 
 .nav-link {

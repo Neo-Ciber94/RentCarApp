@@ -10,7 +10,6 @@ import { Routes, withHeaderAndFooter } from "./layout";
 import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { AuthContext } from "./context/AuthContext";
-import { Profile } from "./pages/profile/Profile";
 import { Clients } from "./pages/clients/Clients";
 import { Inspections } from "./pages/inspections/Inspections";
 import { Rents } from "./pages/rents/Rents";
@@ -20,6 +19,7 @@ import { Fuels } from "./pages/fuels/Fuels";
 import { Models } from "./pages/models/Models";
 import { ProtectedRoute } from "./components";
 import { UserRole } from "@shared/types";
+import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
@@ -52,7 +52,7 @@ const App = observer(() => {
           <Route path={Routes.login.path} component={withHeaderAndFooter(Login)} />
 
           {/* Employees */}
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.profile.path} component={withHeaderAndFooter(Profile)} />
+          <ProtectedRoute roles={ROLES_ALL} path={Routes.profile.path} component={ProfileRoutes} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.clients.path} component={withHeaderAndFooter(Clients)} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.inspections.path} component={withHeaderAndFooter(Inspections)} />
           <ProtectedRoute roles={ROLES_ALL} path={Routes.rent.path} component={withHeaderAndFooter(Rents)} />

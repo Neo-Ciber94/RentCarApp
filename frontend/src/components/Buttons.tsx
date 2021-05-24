@@ -1,3 +1,5 @@
+import { NavLink, NavLinkProps } from "react-router-dom";
+
 export type ButtonColor = "primary" | "secondary" | "warning";
 
 interface ColoredButton {
@@ -14,7 +16,10 @@ const WARNING_COLOR =
 // prettier-ignore
 type ButtonProps = ColoredButton & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-export const PrimaryButton: React.FC<ButtonProps> = ({
+// prettier-ignore
+type LinkProps<S = unknown> = ColoredButton & React.PropsWithoutRef<NavLinkProps<S>> & React.RefAttributes<HTMLAnchorElement>;
+
+export const MainButton: React.FC<ButtonProps> = ({
   className,
   color,
   ...props
@@ -23,12 +28,32 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${btnColor} text-xl py-3 px-8 rounded-lg shadow focus:outline-none ${
+      {...props}
+      className={`${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none ${
         className || ""
       }`}
     >
       {props.children}
     </button>
+  );
+};
+
+export const LinkButton: React.FC<LinkProps> = ({
+  className,
+  color,
+  ...props
+}) => {
+  const btnColor = getColor(color);
+
+  return (
+    <NavLink
+      {...props}
+      className={`${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none text-center ${
+        className || ""
+      }`}
+    >
+      {props.children}
+    </NavLink>
   );
 };
 

@@ -1,13 +1,13 @@
 import { Container } from "src/components";
 import { VehicleDTO } from "@shared/types";
-import { PrimaryButton } from "src/components/PrimaryButton";
+import { MainButton } from "src/components/Buttons";
 
 export default function Vehicles() {
   const vehicles: VehicleDTO[] = [];
 
   return (
     <Container className="h-full">
-      <PrimaryButton className="w-full sm:w-auto">Add Vehicle</PrimaryButton>
+      <MainButton className="w-full sm:w-auto">Add Vehicle</MainButton>
       {vehicles.length === 0 && (
         <div className="flex items-center justify-center content-center h-full pb-10">
           <h1 className="text-red-400 sm:text-5xl text-3xl font-light select-none">

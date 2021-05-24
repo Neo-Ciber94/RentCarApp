@@ -2,6 +2,7 @@ import { Container } from "src/components";
 import { observer } from "mobx-react-lite";
 import { AuthContext } from "src/context/AuthContext";
 import { useContext } from "react";
+import { LinkButton } from "src/components/Buttons";
 
 export const Profile = observer(() => {
   const authService = useContext(AuthContext);
@@ -27,6 +28,15 @@ export const Profile = observer(() => {
           info={new Date(user!.createdAt).toLocaleString()}
         />
         <ProfileField title={"Status"} info={capitalize(user.status)} />
+
+        <div className="flex flex-row justify-center gap-3 mt-4 mb-2 w-full md:w-4/5 lg:w-3/5">
+          <LinkButton to="/profile/changepassword" className="w-full">
+            Change Password
+          </LinkButton>
+          <LinkButton to="/profile/edit" className="w-full">
+            Edit
+          </LinkButton>
+        </div>
       </div>
     </Container>
   );
@@ -34,7 +44,7 @@ export const Profile = observer(() => {
 
 function ProfileField(props: { title: string; info: string }) {
   return (
-    <div className="w-full  md:w-4/5 lg:w-3/5 px-5 py-2 shadow border rounded-md my-1">
+    <div className="w-full md:w-4/5 lg:w-3/5 px-5 py-2 shadow border rounded-md my-1">
       <h5 className="font-bold text-lg text-red-600">{props.title}</h5>
       <p className="w-full font-semibold text-gray-500">{props.info}</p>
     </div>

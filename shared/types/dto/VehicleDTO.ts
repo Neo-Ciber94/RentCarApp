@@ -12,7 +12,6 @@ export interface VehicleDTO {
   engineNumber: string;
   chassisNumber: string;
   licensePlate: string;
-  vehicleType: VehicleType;
   gearBox: GearBox;
   status: string;
   description: string | null;

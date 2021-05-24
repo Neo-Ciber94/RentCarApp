@@ -1,3 +1,4 @@
+import { VehicleType } from "..";
 import { BrandDTO } from "./BrandDTO";
 
 export interface ModelDTO {
@@ -5,4 +6,6 @@ export interface ModelDTO {
   name: string;
   brandId: number;
   brand: BrandDTO;
+  vehicleType: VehicleType;
+  capacity: number;
 }

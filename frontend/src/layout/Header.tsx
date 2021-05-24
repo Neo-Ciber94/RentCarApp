@@ -57,7 +57,7 @@ export const Header: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-md z-10">
-      <div className="flex items-center justify-between flex-wrap p-4">
+      <div className="flex items-center justify-between flex-wrap p-2 sm:p-4">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
           <Link to="/">
             <span
@@ -83,11 +83,10 @@ export const Header: React.FC = () => {
 
         {/* Menu */}
         <div
-          id="menu"
           ref={menuRef}
-          className="w-full flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
+          className="w-full mt-2 flex-grow lg:flex lg:items-center lg:w-auto transition-all ease-out duration-300 overflow-hidden lg:overflow-visible"
         >
-          <div className="text-xl ml-auto block lg:flex lg:flex-row lg:gap-3">
+          <div className="text-xl py-3 ml-auto block lg:flex lg:flex-row lg:gap-3">
             <CurrentUserNav />
           </div>
         </div>

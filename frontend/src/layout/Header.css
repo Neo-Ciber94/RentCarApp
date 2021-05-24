@@ -2,8 +2,12 @@
   @apply text-lg p-2 lg:inline-block lg:mt-0 text-white bg-red-600 rounded-lg shadow;
 }
 
+.nav-link {
+  @apply block my-2;
+}
+
 .nav-link:not(.active) {
-  @apply rounded-lg hover:shadow block text-lg p-2 lg:inline-block lg:mt-0 text-gray-400 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-800;
+  @apply rounded-lg hover:shadow block text-lg p-2 lg:inline-block focus:outline-none text-gray-400 hover:bg-red-600 hover:text-white active:bg-red-800;
 }
 
 .dropdown .nav-link {

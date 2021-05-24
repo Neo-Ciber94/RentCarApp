@@ -1,5 +1,7 @@
+import { VehicleType } from "@shared/types";
 import {
   BaseEntity,
+  Check,
   Column,
   Entity,
   ManyToOne,
@@ -8,6 +10,7 @@ import {
 import { Brand } from "./Brand";
 
 @Entity()
+@Check("check_capacity", "CHECK(capacity > 0)")
 export class Model extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -20,4 +23,13 @@ export class Model extends BaseEntity {
 
   @ManyToOne(() => Brand, (brand) => brand.models)
   brand!: Brand;
+
+  @Column({
+    type: "enum",
+    enum: VehicleType,
+  })
+  vehicleType!: VehicleType;
+
+  @Column()
+  capacity!: number;
 }

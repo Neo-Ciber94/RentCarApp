@@ -10,9 +10,9 @@ export class Seed1621089236963 implements MigrationInterface {
     await repository.signupWithRole({
       firstName: "Admin",
       lastName: "Admin",
-      documentId: "1234",
+      documentId: "0123456789",
       email: "admin@admin.com",
-      password: "0123456789",
+      password: "123456",
       role: UserRole.Admin,
     });
   }

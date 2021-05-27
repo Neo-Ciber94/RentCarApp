@@ -71,9 +71,10 @@ export const EditProfile = observer(() => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
+      onSubmit={(values, actions) => {
         authService.update(values).then(() => {
           goToProfile(history);
+          actions.setSubmitting(false);
         });
       }}
     >

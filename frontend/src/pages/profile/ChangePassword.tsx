@@ -1,4 +1,3 @@
-import { UserChangePassword } from "@shared/types";
 import { Form, Formik, FormikProps } from "formik";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
@@ -10,6 +9,7 @@ import { goToProfile } from "src/utils/goToProfile";
 import { MIN_PASSWORD_LENGTH } from "@shared/config";
 
 interface ChangePasswordValues {
+  email: string;
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
@@ -23,6 +23,12 @@ function ChangePasswordForm(props: {
 
   return (
     <Form>
+      <FormInput
+        name="oldPassword"
+        label="Email"
+        autoComplete="current-user"
+        hidden
+      />
       <FormInput
         name="oldPassword"
         label="Old Password"
@@ -68,6 +74,7 @@ function ChangePasswordForm(props: {
 export const ChangePassword = observer(() => {
   const authService = useContext(AuthContext);
   const initialValues: ChangePasswordValues = {
+    email: authService.currentUser!.email,
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -79,14 +86,26 @@ export const ChangePassword = observer(() => {
     newPassword: Yup.string()
       .min(
         MIN_PASSWORD_LENGTH,
-        `Password but have at least ${MIN_PASSWORD_LENGTH} characters`
+        `Passwords but have at least ${MIN_PASSWORD_LENGTH} characters`
       )
       .required("New password is required"),
 
     confirmPassword: Yup.string()
       .required("Confirm password is required")
+      .test(
+        "different",
+        "New password cannot be the same as old password",
+        function () {
+          const { newPassword, oldPassword } = this
+            .parent as ChangePasswordValues;
+          return newPassword !== oldPassword;
+        }
+      )
       .test("match", "Passwords don't match", function () {
-        return this.parent.password !== this.parent.confirmPassword;
+        // prettier-ignore
+        const { newPassword, confirmPassword } = this.parent as ChangePasswordValues;
+        console.log(this.parent);
+        return newPassword === confirmPassword;
       }),
   });
 
@@ -97,15 +116,10 @@ export const ChangePassword = observer(() => {
       validateOnBlur={false}
       validateOnChange={false}
       onSubmit={(values, actions) => {
-        const changePassword: UserChangePassword = {
-          email: authService.currentUser!.email,
-          newPassword: values.newPassword,
-          oldPassword: values.oldPassword,
-        };
-
-        authService.changePassword(changePassword).then((result) => {
+        authService.changePassword(values).then((result) => {
           if (result.isOk) {
             goToProfile(history);
+            actions.setSubmitting(false);
           } else {
             actions.setErrors({
               confirmPassword: result.getError(),

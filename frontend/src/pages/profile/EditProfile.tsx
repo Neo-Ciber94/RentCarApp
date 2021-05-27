@@ -9,11 +9,7 @@ import * as Yup from "yup";
 import { DOCUMENT_ID_LENGTH } from "@shared/config";
 import { goToProfile } from "src/utils/goToProfile";
 
-interface UserUpdateValues extends UserUpdate {
-  email: string;
-}
-
-function EditProfileForm(props: { props: FormikProps<UserUpdateValues> }) {
+function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
   const { touched, errors } = props.props;
   const history = useHistory();
 
@@ -58,7 +54,7 @@ function EditProfileForm(props: { props: FormikProps<UserUpdateValues> }) {
 
 export const EditProfile = observer(() => {
   const authService = useContext(AuthContext);
-  const initialValues: UserUpdateValues = authService.currentUser!;
+  const initialValues: UserUpdate = authService.currentUser!;
   const history = useHistory();
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),

@@ -111,7 +111,9 @@ export class AuthRepository {
     if (user) {
       const newUser = User.create({
         ...user,
-        ...userUpdate,
+        firstName: userUpdate.firstName,
+        lastName: userUpdate.lastName,
+        documentId: userUpdate.documentId,
       });
 
       const updatedUser = await User.save(newUser);

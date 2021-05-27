@@ -29,39 +29,87 @@ const App = observer(() => {
   const authService = useContext(AuthContext);
 
   useEffect(() => {
+    let isMounted = true;
     setLoading(true);
 
-    authService.refresh().finally(() => {
-      setLoading(false);
-    });
+    if (isMounted) {
+      authService.refresh().finally(() => {
+        setLoading(false);
+      });
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [authService]);
 
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
 
-  // prettier-ignore
   return (
     <Router>
       <NavbarProvider>
         <Switch>
           {/* Common routes */}
           <Route path="/" exact component={withHeaderAndFooter(Home)} />
-          <Route path={Routes.reservations.path} component={withHeaderAndFooter(Reservation)}/>
-          <Route path={Routes.vehicles.path} component={withHeaderAndFooter(Vehicles)} />
-          <Route path={Routes.login.path} component={withHeaderAndFooter(Login)} />
+          <Route
+            path={Routes.reservations.path}
+            component={withHeaderAndFooter(Reservation)}
+          />
+          <Route
+            path={Routes.vehicles.path}
+            component={withHeaderAndFooter(Vehicles)}
+          />
+          <Route
+            path={Routes.login.path}
+            component={withHeaderAndFooter(Login)}
+          />
 
           {/* Employees */}
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.profile.path} component={ProfileRoutes} />
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.clients.path} component={withHeaderAndFooter(Clients)} />
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.inspections.path} component={withHeaderAndFooter(Inspections)} />
-          <ProtectedRoute roles={ROLES_ALL} path={Routes.rent.path} component={withHeaderAndFooter(Rents)} />
+          <ProtectedRoute
+            roles={ROLES_ALL}
+            path={Routes.profile.path}
+            component={ProfileRoutes}
+          />
+
+          <ProtectedRoute
+            roles={ROLES_ALL}
+            path={Routes.clients.path}
+            component={withHeaderAndFooter(Clients)}
+          />
+          <ProtectedRoute
+            roles={ROLES_ALL}
+            path={Routes.inspections.path}
+            component={withHeaderAndFooter(Inspections)}
+          />
+          <ProtectedRoute
+            roles={ROLES_ALL}
+            path={Routes.rent.path}
+            component={withHeaderAndFooter(Rents)}
+          />
 
           {/* Admin */}
-          <ProtectedRoute roles={ROLES_ADMIN} path={Routes.employees.path} component={withHeaderAndFooter(Employees)} />
-          <ProtectedRoute roles={ROLES_ADMIN} path={Routes.brands.path} component={withHeaderAndFooter(Brands)} />
-          <ProtectedRoute roles={ROLES_ADMIN} path={Routes.models.path} component={withHeaderAndFooter(Models)} />
-          <ProtectedRoute roles={ROLES_ADMIN} path={Routes.fuels.path} component={withHeaderAndFooter(Fuels)} />
+          <ProtectedRoute
+            roles={ROLES_ADMIN}
+            path={Routes.employees.path}
+            component={withHeaderAndFooter(Employees)}
+          />
+          <ProtectedRoute
+            roles={ROLES_ADMIN}
+            path={Routes.brands.path}
+            component={withHeaderAndFooter(Brands)}
+          />
+          <ProtectedRoute
+            roles={ROLES_ADMIN}
+            path={Routes.models.path}
+            component={withHeaderAndFooter(Models)}
+          />
+          <ProtectedRoute
+            roles={ROLES_ADMIN}
+            path={Routes.fuels.path}
+            component={withHeaderAndFooter(Fuels)}
+          />
 
           {/* 404 */}
           <Route path="*" component={NotFound} />

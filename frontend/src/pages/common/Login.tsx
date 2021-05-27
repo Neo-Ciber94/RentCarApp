@@ -12,8 +12,8 @@ interface FormValues {
 function LoginForm(props: { props: FormikProps<FormValues> }) {
   const { touched, errors, isSubmitting } = props.props;
 
-  const emailError = errors.email && touched;
-  const passwordError = errors.password && touched;
+  const emailError = errors.email && touched.email;
+  const passwordError = errors.password && touched.password;
 
   return (
     <Form>

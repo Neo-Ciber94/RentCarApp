@@ -30,10 +30,19 @@ export const Profile = observer(() => {
         <ProfileField title={"Status"} info={capitalize(user.status)} />
 
         <div className="flex flex-row justify-center gap-3 mt-4 mb-2 w-full md:w-4/5 lg:w-3/5">
-          <LinkButton to="/profile/changepassword" className="w-full">
+          <LinkButton
+            to={{
+              pathname: "/profile/changepassword",
+              state: "Change Password",
+            }}
+            className="w-full"
+          >
             Change Password
           </LinkButton>
-          <LinkButton to="/profile/edit" className="w-full">
+          <LinkButton
+            to={{ pathname: "/profile/edit", state: "Edit Profile" }}
+            className="w-full"
+          >
             Edit
           </LinkButton>
         </div>

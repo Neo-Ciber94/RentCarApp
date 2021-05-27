@@ -1,6 +1,6 @@
 import { UserRole } from "@shared/types";
 import { AuthRepository } from "src/repositories";
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface } from "typeorm";
 
 export class Seed1621089236963 implements MigrationInterface {
   public async up(): Promise<void> {
@@ -12,10 +12,10 @@ export class Seed1621089236963 implements MigrationInterface {
       lastName: "Admin",
       documentId: "1234",
       email: "admin@admin.com",
-      password: "123456",
+      password: "0123456789",
       role: UserRole.Admin,
     });
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }

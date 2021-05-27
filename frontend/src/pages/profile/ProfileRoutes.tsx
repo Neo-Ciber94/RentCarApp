@@ -1,21 +1,21 @@
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { Footer, Header } from "src/layout";
 import { ChangePassword } from "./ChangePassword";
 import { EditProfile } from "./EditProfile";
 import { Profile } from "./Profile";
 
 export function ProfileRoutes() {
+  const match = useRouteMatch();
+
+  // prettier-ignore
   return (
     <>
       <Header />
       <Switch>
-        <Route exact path="" component={Profile} />
-        <Route exact path="/profile/edit" component={EditProfile} />
-        <Route
-          exact
-          path="/profile/changepassword"
-          component={ChangePassword}
-        />
+        <Route exact path={match.url} component={Profile} />
+        <Route exact path={`${match.url}/edit`} component={EditProfile} />
+        <Route exact path={`${match.url}/changepassword`} component={ChangePassword} />
+        <Redirect from={match.url} to={match.url} />
       </Switch>
       <Footer />
     </>

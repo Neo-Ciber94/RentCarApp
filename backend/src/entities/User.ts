@@ -1,3 +1,4 @@
+import { DOCUMENT_ID_LENGTH } from "@shared/config";
 import { UserRole, UserStatus } from "@shared/types";
 import {
   BaseEntity,
@@ -14,7 +15,7 @@ import { UserSession } from "./UserSession";
 
 @Entity()
 @Index("idx_email", ["email"])
-@Check("check_document_length", "LENGTH(documentId) >= 6")
+@Check("check_document_length", `LENGTH(documentId) = ${DOCUMENT_ID_LENGTH}`)
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

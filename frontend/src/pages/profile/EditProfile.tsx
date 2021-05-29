@@ -7,7 +7,7 @@ import { Container, FormInput, MainButton } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
 import { DOCUMENT_ID_LENGTH } from "@shared/config";
-import { goToProfile } from "src/utils/goToProfile";
+import { goToProfile } from "src/utils/historyHelper";
 
 function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
   const { touched, errors } = props.props;

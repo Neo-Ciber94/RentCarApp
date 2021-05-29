@@ -1,9 +1,15 @@
 import { NavLink, NavLinkProps } from "react-router-dom";
+import { RouteName } from "src/layout";
+import { LocationDescriptor } from "history";
 
 export type ButtonColor = "primary" | "secondary" | "warning";
 
 interface ColoredButton {
   color?: ButtonColor;
+}
+
+interface LinkButtonProps {
+  route?: RouteName;
 }
 
 const PRIMARY_COLOR =
@@ -17,7 +23,7 @@ const WARNING_COLOR =
 type ButtonProps = ColoredButton & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 // prettier-ignore
-type LinkProps<S = unknown> = ColoredButton & React.PropsWithoutRef<NavLinkProps<S>> & React.RefAttributes<HTMLAnchorElement>;
+type LinkProps<S = unknown> = ColoredButton & LinkButtonProps & React.PropsWithoutRef<Partial<NavLinkProps<S>>> & React.RefAttributes<HTMLAnchorElement>;
 
 export const MainButton: React.FC<ButtonProps> = ({
   className,
@@ -27,12 +33,7 @@ export const MainButton: React.FC<ButtonProps> = ({
   const btnColor = getColor(color);
 
   return (
-    <button
-      {...props}
-      className={`${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none ${
-        className || ""
-      }`}
-    >
+    <button {...props} className={getClassNames(btnColor, className)}>
       {props.children}
     </button>
   );
@@ -41,21 +42,34 @@ export const MainButton: React.FC<ButtonProps> = ({
 export const LinkButton: React.FC<LinkProps> = ({
   className,
   color,
+  to,
+  route,
   ...props
 }) => {
+  if (to == null && route == null) {
+    throw new Error("LinkButton require 'to' or 'route' property");
+  }
+
   const btnColor = getColor(color);
+  const location: LocationDescriptor = to
+    ? (to as any)
+    : { pathname: route?.path, state: route?.name };
 
   return (
     <NavLink
       {...props}
-      className={`${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none text-center ${
-        className || ""
-      }`}
+      to={location}
+      className={getClassNames(btnColor, className) + "inline-block"}
     >
       {props.children}
     </NavLink>
   );
 };
+
+// prettier-ignore
+function getClassNames(btnColor: string, className?: string) {
+  return `${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none ${className || ""}`;
+}
 
 function getColor(buttonColor?: ButtonColor) {
   switch (buttonColor) {

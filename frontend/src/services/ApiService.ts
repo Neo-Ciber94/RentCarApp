@@ -1,5 +1,7 @@
 import { webClient } from "./http";
 
+type Create<T> = Omit<T, "id">;
+
 /**
  * A RestAPI client.
  */
@@ -14,8 +16,8 @@ export class ApiService<T> {
     return webClient.get<T>(this.baseUrl, { params: { id } });
   }
 
-  async create(entity: T): Promise<T> {
-    return webClient.post<T>(this.baseUrl, entity);
+  async create(entity: Create<T>): Promise<T> {
+    return webClient.post<T, Create<T>>(this.baseUrl, entity);
   }
 
   async update(entity: T): Promise<T> {

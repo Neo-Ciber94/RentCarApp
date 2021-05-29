@@ -2,6 +2,7 @@ export interface RouteName {
   path: string;
   name: string;
 }
+
 export module Routes {
   // Main routes
   export const reservations: RouteName = {

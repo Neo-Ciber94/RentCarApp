@@ -14,15 +14,19 @@ import { Clients } from "./pages/clients/Clients";
 import { Inspections } from "./pages/inspections/Inspections";
 import { Rents } from "./pages/rents/Rents";
 import { Employees } from "./pages/employees/Employess";
-import { Brands } from "./pages/brands/Brands";
 import { Fuels } from "./pages/fuels/Fuels";
 import { Models } from "./pages/models/Models";
 import { ProtectedRoute } from "./components";
 import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { BrandRoutes } from "./pages";
+import { HeaderTitleProvider } from "./context/HeaderTitleContext";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
+
+const queryClient = new QueryClient();
 
 const App = observer(() => {
   const [isLoading, setLoading] = useState(true);
@@ -48,74 +52,78 @@ const App = observer(() => {
   }
 
   return (
-    <Router>
-      <NavbarProvider>
-        <Switch>
-          {/* Common routes */}
-          <Route path="/" exact component={withHeaderAndFooter(Home)} />
-          <Route
-            path={Routes.reservations.path}
-            component={withHeaderAndFooter(Reservation)}
-          />
-          <Route
-            path={Routes.vehicles.path}
-            component={withHeaderAndFooter(Vehicles)}
-          />
-          <Route
-            path={Routes.login.path}
-            component={withHeaderAndFooter(Login)}
-          />
+    <QueryClientProvider client={queryClient}>
+      <HeaderTitleProvider>
+        <Router>
+          <NavbarProvider>
+            <Switch>
+              {/* Common routes */}
+              <Route path="/" exact component={withHeaderAndFooter(Home)} />
+              <Route
+                path={Routes.reservations.path}
+                component={withHeaderAndFooter(Reservation)}
+              />
+              <Route
+                path={Routes.vehicles.path}
+                component={withHeaderAndFooter(Vehicles)}
+              />
+              <Route
+                path={Routes.login.path}
+                component={withHeaderAndFooter(Login)}
+              />
 
-          {/* Employees */}
-          <ProtectedRoute
-            roles={ROLES_ALL}
-            path={Routes.profile.path}
-            component={ProfileRoutes}
-          />
+              {/* Employees */}
+              <ProtectedRoute
+                roles={ROLES_ALL}
+                path={Routes.profile.path}
+                component={ProfileRoutes}
+              />
 
-          <ProtectedRoute
-            roles={ROLES_ALL}
-            path={Routes.clients.path}
-            component={withHeaderAndFooter(Clients)}
-          />
-          <ProtectedRoute
-            roles={ROLES_ALL}
-            path={Routes.inspections.path}
-            component={withHeaderAndFooter(Inspections)}
-          />
-          <ProtectedRoute
-            roles={ROLES_ALL}
-            path={Routes.rent.path}
-            component={withHeaderAndFooter(Rents)}
-          />
+              <ProtectedRoute
+                roles={ROLES_ALL}
+                path={Routes.clients.path}
+                component={withHeaderAndFooter(Clients)}
+              />
+              <ProtectedRoute
+                roles={ROLES_ALL}
+                path={Routes.inspections.path}
+                component={withHeaderAndFooter(Inspections)}
+              />
+              <ProtectedRoute
+                roles={ROLES_ALL}
+                path={Routes.rent.path}
+                component={withHeaderAndFooter(Rents)}
+              />
 
-          {/* Admin */}
-          <ProtectedRoute
-            roles={ROLES_ADMIN}
-            path={Routes.employees.path}
-            component={withHeaderAndFooter(Employees)}
-          />
-          <ProtectedRoute
-            roles={ROLES_ADMIN}
-            path={Routes.brands.path}
-            component={withHeaderAndFooter(Brands)}
-          />
-          <ProtectedRoute
-            roles={ROLES_ADMIN}
-            path={Routes.models.path}
-            component={withHeaderAndFooter(Models)}
-          />
-          <ProtectedRoute
-            roles={ROLES_ADMIN}
-            path={Routes.fuels.path}
-            component={withHeaderAndFooter(Fuels)}
-          />
+              {/* Admin */}
+              <ProtectedRoute
+                roles={ROLES_ADMIN}
+                path={Routes.employees.path}
+                component={withHeaderAndFooter(Employees)}
+              />
+              <ProtectedRoute
+                roles={ROLES_ADMIN}
+                path={Routes.brands.path}
+                component={BrandRoutes}
+              />
+              <ProtectedRoute
+                roles={ROLES_ADMIN}
+                path={Routes.models.path}
+                component={withHeaderAndFooter(Models)}
+              />
+              <ProtectedRoute
+                roles={ROLES_ADMIN}
+                path={Routes.fuels.path}
+                component={withHeaderAndFooter(Fuels)}
+              />
 
-          {/* 404 */}
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </NavbarProvider>
-    </Router>
+              {/* 404 */}
+              <Route path="*" component={NotFound} />
+            </Switch>
+          </NavbarProvider>
+        </Router>
+      </HeaderTitleProvider>
+    </QueryClientProvider>
   );
 });
 

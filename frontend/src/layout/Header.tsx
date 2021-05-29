@@ -7,9 +7,11 @@ import { UserRole } from "@shared/types";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
 import "./Header.css";
+import { useHeaderTitle } from "src/context/HeaderTitleContext";
 
 export const Header: React.FC = () => {
   const { isOpen, setOpen } = useNavbar();
+  const location = useLocation();
 
   // A reference used for the menu
   const menuRef = createRef<HTMLDivElement>();
@@ -53,7 +55,9 @@ export const Header: React.FC = () => {
     setOpen(!isOpen);
   };
 
-  const currentLocation = useLocation<string>();
+  // Header title
+  const title = useHeaderTitle();
+  console.log(title, location.pathname);
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -93,13 +97,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Page title */}
-      {currentLocation.pathname !== "/" && (
-        <div className="bg-red-600 w-full shadow p-4">
-          <h1 className="font-bold text-lg text-white select-none">
-            {currentLocation.state}
-          </h1>
-        </div>
-      )}
+      {location.pathname !== "/" && title && <HeaderTitle title={title} />}
     </nav>
   );
 };
@@ -117,6 +115,16 @@ const CurrentUserNav = observer(() => {
       return <HomeNav />;
   }
 });
+
+function HeaderTitle(props: { title: string }) {
+  return (
+    <div className="bg-red-600 w-full shadow p-4">
+      <h1 className="font-bold text-lg text-white select-none">
+        {props.title}
+      </h1>
+    </div>
+  );
+}
 
 // reservation, vehicles, login
 const HomeNav: React.FC = () => {

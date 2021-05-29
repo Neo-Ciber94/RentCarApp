@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Container, FormInput, MainButton } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
-import { goToProfile } from "src/utils/goToProfile";
+import { goToProfile } from "src/utils/historyHelper";
 import { MIN_PASSWORD_LENGTH } from "@shared/config";
 
 interface ChangePasswordValues {

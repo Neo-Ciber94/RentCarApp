@@ -1,8 +1,14 @@
+import "./NavDropdown.css";
+
 interface NavDropdownProps {
   name: string;
 }
 
 export const NavDropdown: React.FC<NavDropdownProps> = ({ name, ...props }) => {
+  // const [open, setOpen] = useState(false);
+
+  // const toggleDropdown = useCallback(() => setOpen(!open), []);
+
   return (
     <div className="dropdown cursor-pointer">
       <div className="nav-link dropdown-btn select-none">

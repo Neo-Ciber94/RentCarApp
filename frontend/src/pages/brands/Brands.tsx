@@ -1,14 +1,18 @@
-import { Container, fireForm, FormInput, MainButton } from "src/components";
+import {
+  Container,
+  openSwalForm,
+  FormInput,
+  Loading,
+  MainButton,
+  ReactSwal,
+} from "src/components";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import { BrandDTO } from "@shared/types";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
-import Loader from "react-loader-spinner";
 
 import * as Yup from "yup";
 import { CSSProperties } from "react";
-
-interface BrandValues extends Omit<BrandDTO, "id"> {}
 
 // Redefinition due they don't work as expected
 export interface IDataTableStyles {
@@ -112,55 +116,52 @@ const columns: IDataTableColumn<BrandDTO>[] = [
     sortable: true,
     selector: (e) => e.name,
   },
-
-  {
-    name: "Actions",
-    cell: (row) => {
-      return (
-        <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
-          <i
-            className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"
-            onClick={() => console.log("Info")}
-          ></i>
-          <i
-            className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"
-            onClick={() => console.log("Edit")}
-          ></i>
-          <i
-            className="fas fa-trash-alt text-red-600 hover:text-red-800 cursor-pointer"
-            onClick={() => console.log("Delete")}
-          ></i>
-        </div>
-      );
-    },
-  },
 ];
 
 export function Brands() {
-  const { isLoading, data } = useBrands();
-  const initialValues: BrandValues = { name: "" };
-  console.log(data);
+  const { isLoading, data, refetch } = useBrands();
+  const initialValues: Omit<BrandDTO, "id"> = { name: "" };
 
   if (isLoading) {
-    // TODO: Wrap in a single component
-    return (
-      <Container className="h-full">
-        <div className="flex flex-row h-full items-center justify-center">
-          <Loader type="Oval" color="red" />
-        </div>
-      </Container>
-    );
+    return <Loading />;
   }
+
+  const mergedColumns: IDataTableColumn<BrandDTO>[] = [
+    ...columns,
+    {
+      name: "Actions",
+      cell: (row) => {
+        return (
+          <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
+            <i
+              className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"
+              onClick={() => console.log("Info")}
+            ></i>
+            <i
+              className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"
+              onClick={() => openBrandEditor(row).then(() => refetch())}
+            ></i>
+            <i
+              className="fas fa-trash-alt text-red-600 hover:text-red-800 cursor-pointer"
+              onClick={() => openBrandDelete(row).then(() => refetch())}
+            ></i>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <Container className="h-full lg:max-w-5xl">
       <div className="p-1">
-        <MainButton onClick={() => openBrandEditor(initialValues)}>
+        <MainButton
+          onClick={() => openBrandEditor(initialValues).then(() => refetch())}
+        >
           Add Brand
         </MainButton>
       </div>
       <DataTable
-        columns={columns}
+        columns={mergedColumns}
         data={data!}
         customStyles={customStyles}
         paginationComponentOptions={{ noRowsPerPage: true }}
@@ -174,7 +175,7 @@ export function Brands() {
   );
 }
 
-function openBrandEditor(initialValues: BrandValues) {
+async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Brand name is required")
@@ -185,16 +186,19 @@ function openBrandEditor(initialValues: BrandValues) {
       ),
   });
 
-  fireForm({
+  return openSwalForm({
     title: "Add Brand",
-    initialValues,
+    initialValues: initialValues,
     validationSchema,
     onSubmit: async (values, actions) => {
-      console.log(values);
-
       try {
-        const result = await Services.brands.create(values);
-        console.log(result);
+        let result: BrandDTO;
+        if ("id" in values) {
+          result = await Services.brands.update(values as BrandDTO);
+        } else {
+          result = await Services.brands.create(values);
+        }
+        actions.close();
       } finally {
         actions.setSubmitting(false);
       }
@@ -203,10 +207,26 @@ function openBrandEditor(initialValues: BrandValues) {
       <FormInput
         label="Name"
         name="name"
+        autoFocus
         error={errors.name}
         touched={touched.name}
       />
     ),
+  });
+}
+
+async function openBrandDelete(brand: BrandDTO) {
+  return ReactSwal.fire({
+    icon: "question",
+    title: "Delete Brand",
+    text: `Want do delete brand '${brand.name}'?`,
+    showCancelButton: true,
+    focusCancel: true,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const result = await Services.brands.delete(brand.id);
+      console.log("DELETED", result);
+    }
   });
 }
 

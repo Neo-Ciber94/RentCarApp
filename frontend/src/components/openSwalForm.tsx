@@ -1,12 +1,10 @@
 import { FormikHelpers, FormikErrors, FormikProps, Form, Formik } from "formik";
 import Swal from "sweetalert2";
-import createWithContent from "sweetalert2-react-content";
-import { MainButton } from ".";
+
+import { MainButton, ReactSwal } from ".";
 
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
 type CloseCallback = { close: () => void };
-
-const ReactSwal = createWithContent(Swal);
 
 interface FormConfig<T> {
   title: string;
@@ -14,13 +12,15 @@ interface FormConfig<T> {
   cancelButtonText?: string;
   initialValues: T;
   validationSchema?: any | (() => any);
+  autoFocusCancel?: boolean;
+  autoFocusSubmit?: boolean;
   onSubmit: (values: T, helpers: FormikHelpers<T> & CloseCallback) => void;
   onCancel?: (close: CloseCallback) => void;
   validate?: (values: T) => void | object | Promise<FormikErrors<T>>;
   render: (props: FormikProps<T>) => ReactNode;
 }
 
-export function fireForm<T>(config: FormConfig<T>) {
+export function openSwalForm<T>(config: FormConfig<T>) {
   // Function to close the sweet alert
   const closeCallback = () => Swal.close();
 
@@ -32,6 +32,7 @@ export function fireForm<T>(config: FormConfig<T>) {
     title: config.title,
     showConfirmButton: false,
     customClass: {
+      htmlContainer: "text-left",
       container: "text-left",
     },
     html: (
@@ -53,10 +54,10 @@ export function fireForm<T>(config: FormConfig<T>) {
 
               <div className="flex flex-row w-100 gap-2 mt-10">
                 <MainButton
-                  autoFocus
                   type="button"
                   color="secondary"
                   className={buttonClassNames}
+                  autoFocus={config.autoFocusCancel || false}
                   onClick={() => {
                     if (config.onCancel) {
                       config.onCancel({ close: closeCallback });
@@ -68,7 +69,11 @@ export function fireForm<T>(config: FormConfig<T>) {
                   {config.cancelButtonText || "Cancel"}
                 </MainButton>
 
-                <MainButton type="submit" className={buttonClassNames}>
+                <MainButton
+                  type="submit"
+                  className={buttonClassNames}
+                  autoFocus={config.autoFocusSubmit || false}
+                >
                   {config.submitButtonText || "Submit"}
                 </MainButton>
               </div>

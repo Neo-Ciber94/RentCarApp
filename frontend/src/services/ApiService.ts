@@ -13,7 +13,7 @@ export class ApiService<T> {
   }
 
   async get(id: number): Promise<T> {
-    return webClient.get<T>(this.baseUrl, { params: { id } });
+    return webClient.get<T>(`${this.baseUrl}/${id}`);
   }
 
   async create(entity: Create<T>): Promise<T> {
@@ -25,6 +25,6 @@ export class ApiService<T> {
   }
 
   async delete(id: number): Promise<T> {
-    return webClient.delete<T>(this.baseUrl, { params: { id } });
+    return webClient.delete<T>(`${this.baseUrl}/${id}`);
   }
 }

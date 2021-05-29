@@ -13,9 +13,9 @@ interface LinkButtonProps {
 }
 
 const PRIMARY_COLOR =
-  "bg-red-600 hover:bg-red-800 active:bg-red-700 text-white ring ring-transparent focus:ring-red-300";
+  "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white ring ring-transparent focus:ring-red-300";
 const SECONDARY_COLOR =
-  "bg-gray-600 hover:bg-gray-800 active:bg-gray-700 text-white ring ring-transparent focus:ring-gray-300";
+  "bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white ring ring-transparent focus:ring-gray-400";
 const WARNING_COLOR =
   "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-500 text-black ring ring-transparent focus:ring-yellow-200";
 

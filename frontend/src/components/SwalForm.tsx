@@ -1,7 +1,7 @@
 import { FormikHelpers, FormikErrors, FormikProps, Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import createWithContent from "sweetalert2-react-content";
-import { FormInput, MainButton } from ".";
+import { MainButton } from ".";
 
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
 type CloseCallback = { close: () => void };
@@ -24,12 +24,16 @@ export function fireForm<T>(config: FormConfig<T>) {
   // Function to close the sweet alert
   const closeCallback = () => Swal.close();
 
-  const buttonClassNames = "w-full py-3";
+  // Classes for the buttons
+  const buttonClassNames = "w-full py-3 text-lg";
 
   // Fire the alert
   return ReactSwal.fire<void>({
     title: config.title,
-    //showConfirmButton: false,
+    showConfirmButton: false,
+    customClass: {
+      htmlContainer: "text-left",
+    },
     html: (
       <Formik
         initialValues={config.initialValues}
@@ -47,7 +51,7 @@ export function fireForm<T>(config: FormConfig<T>) {
             <Form>
               {config.render(props)}
 
-              <div className="flex flex-row w-100 gap-2">
+              <div className="flex flex-row w-100 gap-2 mt-10">
                 <MainButton
                   type="button"
                   color="secondary"

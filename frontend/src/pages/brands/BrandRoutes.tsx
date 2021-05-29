@@ -8,7 +8,7 @@ export function BrandRoutes() {
 
   return (
     <>
-      <Header />
+      <Header title="Brands" />
       <Switch>
         <Route exact path={match.url} component={Brands} />
         <Route exact path={`${match.url}/new`} component={AddBrand} />

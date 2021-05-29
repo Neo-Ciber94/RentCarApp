@@ -1,7 +1,6 @@
 import { BrandDTO } from "@shared/types";
 import { useHistory } from "react-router-dom";
 import { FormInput, withCustomForm } from "src/components";
-import { useNewHeaderTitle } from "src/context/HeaderTitleContext";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
 import * as Yup from "yup";
@@ -9,8 +8,6 @@ import * as Yup from "yup";
 interface BrandValues extends Omit<BrandDTO, "id"> {}
 
 export const AddBrand: React.FC = () => {
-  useNewHeaderTitle("Add Brand");
-
   const initialValues: BrandValues = { name: "" };
   const schema = Yup.object().shape({
     name: Yup.string()

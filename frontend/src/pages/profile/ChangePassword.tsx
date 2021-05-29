@@ -7,7 +7,6 @@ import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
 import { goToProfile } from "src/utils/historyHelper";
 import { MIN_PASSWORD_LENGTH } from "@shared/config";
-import { useNewHeaderTitle } from "src/context/HeaderTitleContext";
 
 interface ChangePasswordValues {
   email: string;
@@ -73,8 +72,6 @@ function ChangePasswordForm(props: {
 }
 
 export const ChangePassword = observer(() => {
-  useNewHeaderTitle("Change Password");
-
   const authService = useContext(AuthContext);
   const initialValues: ChangePasswordValues = {
     email: authService.currentUser!.email,

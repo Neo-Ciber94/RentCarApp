@@ -3,11 +3,8 @@ import { observer } from "mobx-react-lite";
 import { AuthContext } from "src/context/AuthContext";
 import { useContext } from "react";
 import { LinkButton } from "src/components/Buttons";
-import { useNewHeaderTitle } from "src/context/HeaderTitleContext";
 
 export const Profile = observer(() => {
-  useNewHeaderTitle("Profile");
-
   const authService = useContext(AuthContext);
   const user = authService.currentUser;
 

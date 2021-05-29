@@ -7,9 +7,12 @@ import { UserRole } from "@shared/types";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
 import "./Header.css";
-import { useHeaderTitle } from "src/context/HeaderTitleContext";
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  title?: string;
+}
+
+export const Header: React.FC<HeaderProps> = ({ title }) => {
   const { isOpen, setOpen } = useNavbar();
   const location = useLocation();
 
@@ -54,9 +57,6 @@ export const Header: React.FC = () => {
     menu.classList.toggle("h-0");
     setOpen(!isOpen);
   };
-
-  // Header title
-  const title = useHeaderTitle();
 
   return (
     <nav className="bg-white shadow-md z-10">

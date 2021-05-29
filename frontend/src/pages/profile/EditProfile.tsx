@@ -8,7 +8,6 @@ import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
 import { DOCUMENT_ID_LENGTH } from "@shared/config";
 import { goToProfile } from "src/utils/historyHelper";
-import { useNewHeaderTitle } from "src/context/HeaderTitleContext";
 
 function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
   const { touched, errors } = props.props;
@@ -54,8 +53,6 @@ function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
 }
 
 export const EditProfile = observer(() => {
-  useNewHeaderTitle("Edit Profile");
-
   const authService = useContext(AuthContext);
   const initialValues: UserUpdate = authService.currentUser!;
   const history = useHistory();

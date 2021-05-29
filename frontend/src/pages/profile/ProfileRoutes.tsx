@@ -7,10 +7,12 @@ import { Profile } from "./Profile";
 export function ProfileRoutes() {
   const match = useRouteMatch();
 
+  console.log(match);
+
   // prettier-ignore
   return (
     <>
-      <Header />
+      <Header title="Profile" />
       <Switch>
         <Route exact path={match.url} component={Profile} />
         <Route exact path={`${match.url}/edit`} component={EditProfile} />

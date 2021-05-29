@@ -57,7 +57,6 @@ export const Header: React.FC = () => {
 
   // Header title
   const title = useHeaderTitle();
-  console.log(title, location.pathname);
 
   return (
     <nav className="bg-white shadow-md z-10">

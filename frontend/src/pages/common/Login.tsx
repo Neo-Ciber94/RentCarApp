@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
+import { useNewHeaderTitle } from "src/context/HeaderTitleContext";
 
 interface FormValues {
   email: string;
@@ -73,6 +74,8 @@ function LoginForm(props: { props: FormikProps<FormValues> }) {
 }
 
 export const Login = observer(() => {
+  useNewHeaderTitle("Login");
+
   const initialValues: FormValues = { email: "", password: "" };
   const history = useHistory();
   const authService = useContext(AuthContext);

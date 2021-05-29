@@ -5,7 +5,7 @@ import { createContext } from "react";
 
 interface HeaderTitleProps {
   title: string | null;
-  setTitle: (newTitle: string) => void;
+  setTitle: (newTitle: string | null) => void;
 }
 
 const titleReducer = (_: string | null, newTitle: string | null) => newTitle;
@@ -35,5 +35,9 @@ export function useNewHeaderTitle(newTitle: string) {
     if (newTitle) {
       context.setTitle(newTitle);
     }
-  }, []);
+
+    return () => {
+      context.setTitle(null);
+    };
+  }, [context, newTitle]);
 }

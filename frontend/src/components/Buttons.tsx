@@ -13,11 +13,11 @@ interface LinkButtonProps {
 }
 
 const PRIMARY_COLOR =
-  "bg-red-600 hover:bg-red-800 active:bg-red-700 text-white";
+  "bg-red-600 hover:bg-red-800 active:bg-red-700 text-white ring ring-transparent focus:ring-red-300";
 const SECONDARY_COLOR =
-  "bg-gray-600 hover:bg-gray-800 active:bg-gray-700 text-white";
+  "bg-gray-600 hover:bg-gray-800 active:bg-gray-700 text-white ring ring-transparent focus:ring-gray-300";
 const WARNING_COLOR =
-  "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-400 text-color";
+  "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-500 text-black ring ring-transparent focus:ring-yellow-200";
 
 // prettier-ignore
 type ButtonProps = ColoredButton & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;

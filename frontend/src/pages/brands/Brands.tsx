@@ -4,9 +4,101 @@ import { BrandDTO } from "@shared/types";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
 import Loader from "react-loader-spinner";
+
 import * as Yup from "yup";
+import { CSSProperties } from "react";
 
 interface BrandValues extends Omit<BrandDTO, "id"> {}
+
+// Redefinition due they don't work as expected
+export interface IDataTableStyles {
+  table?: {
+    style: CSSProperties;
+  };
+  tableWrapper?: {
+    style: CSSProperties;
+  };
+  header?: {
+    style: CSSProperties;
+  };
+  subHeader?: {
+    style: CSSProperties;
+  };
+  head?: {
+    style: CSSProperties;
+  };
+  headRow?: {
+    style?: CSSProperties;
+    denseStyle?: CSSProperties;
+  };
+  headCells?: {
+    style?: CSSProperties;
+    activeSortStyle?: CSSProperties;
+    inactiveSortStyle?: CSSProperties;
+  };
+  contextMenu?: {
+    style?: CSSProperties;
+    activeStyle?: CSSProperties;
+  };
+  cells?: {
+    style: CSSProperties;
+  };
+  rows?: {
+    style?: CSSProperties;
+    selectedHighlightStyle?: CSSProperties;
+    denseStyle?: CSSProperties;
+    highlightOnHoverStyle?: CSSProperties;
+    stripedStyle?: CSSProperties;
+  };
+  expanderRow?: {
+    style: CSSProperties;
+  };
+  expanderCell?: {
+    style: CSSProperties;
+  };
+  expanderButton?: {
+    style: CSSProperties;
+  };
+  pagination?: {
+    style?: CSSProperties;
+    pageButtonsStyle?: CSSProperties;
+  };
+  noData?: {
+    style: CSSProperties;
+  };
+  progress?: {
+    style: CSSProperties;
+  };
+}
+
+const customStyles: IDataTableStyles = {
+  headRow: {
+    style: {
+      backgroundColor: "rgb(220, 38, 38)",
+      borderRadius: "5px",
+    },
+  },
+  headCells: {
+    style: {
+      color: "white",
+      fontSize: "18px",
+      textAlign: "center",
+      padding: "15px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
+  cells: {
+    style: {
+      fontSize: "18px",
+      padding: "5px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
+};
 
 const columns: IDataTableColumn<BrandDTO>[] = [
   {
@@ -24,7 +116,22 @@ const columns: IDataTableColumn<BrandDTO>[] = [
   {
     name: "Actions",
     cell: (row) => {
-      return <button>Edit {row.id}</button>;
+      return (
+        <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
+          <i
+            className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"
+            onClick={() => console.log("Info")}
+          ></i>
+          <i
+            className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"
+            onClick={() => console.log("Edit")}
+          ></i>
+          <i
+            className="fas fa-trash-alt text-red-600 hover:text-red-800 cursor-pointer"
+            onClick={() => console.log("Delete")}
+          ></i>
+        </div>
+      );
     },
   },
 ];
@@ -52,7 +159,17 @@ export function Brands() {
           Add Brand
         </MainButton>
       </div>
-      <DataTable columns={columns} data={data!} striped />
+      <DataTable
+        columns={columns}
+        data={data!}
+        customStyles={customStyles}
+        paginationComponentOptions={{ noRowsPerPage: true }}
+        paginationTotalRows={10}
+        highlightOnHover
+        pagination
+        dense
+        striped
+      />
     </Container>
   );
 }

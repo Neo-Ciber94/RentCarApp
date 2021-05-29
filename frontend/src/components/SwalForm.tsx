@@ -32,7 +32,7 @@ export function fireForm<T>(config: FormConfig<T>) {
     title: config.title,
     showConfirmButton: false,
     customClass: {
-      htmlContainer: "text-left",
+      container: "text-left",
     },
     html: (
       <Formik
@@ -53,6 +53,7 @@ export function fireForm<T>(config: FormConfig<T>) {
 
               <div className="flex flex-row w-100 gap-2 mt-10">
                 <MainButton
+                  autoFocus
                   type="button"
                   color="secondary"
                   className={buttonClassNames}

@@ -2,7 +2,7 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { RouteName } from "src/layout";
 import { LocationDescriptor } from "history";
 
-export type ButtonColor = "primary" | "secondary" | "warning";
+export type ButtonColor = "primary" | "secondary" | "warning" | "info";
 
 interface ColoredButton {
   color?: ButtonColor;
@@ -16,6 +16,8 @@ const PRIMARY_COLOR =
   "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white ring ring-transparent focus:ring-red-300";
 const SECONDARY_COLOR =
   "bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white ring ring-transparent focus:ring-gray-400";
+const INFO_COLOR =
+  "bg-blue-400 hover:bg-blue-500 active:bg-blue-500 text-black ring ring-transparent focus:ring-blue-200";
 const WARNING_COLOR =
   "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-500 text-black ring ring-transparent focus:ring-yellow-200";
 
@@ -68,7 +70,7 @@ export const LinkButton: React.FC<LinkProps> = ({
 
 // prettier-ignore
 function getClassNames(btnColor: string, className?: string) {
-  return `${btnColor} py-2 px-6 rounded-lg shadow focus:outline-none ${className || ""}`;
+  return `${btnColor} py-2 px-6 rounded shadow focus:outline-none ${className || ""}`;
 }
 
 function getColor(buttonColor?: ButtonColor) {
@@ -79,6 +81,8 @@ function getColor(buttonColor?: ButtonColor) {
       return SECONDARY_COLOR;
     case "warning":
       return WARNING_COLOR;
+    case "info":
+      return INFO_COLOR;
     default:
       return PRIMARY_COLOR;
   }

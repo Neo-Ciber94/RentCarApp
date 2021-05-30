@@ -1,16 +1,16 @@
-import { useQuery } from "react-query";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, LinkButton, Loading, TextWithLabel } from "src/components";
 import { Routes } from "src/layout";
-import { Services } from "src/services";
+import { useEmployee } from "./hooks";
 
 interface Params {
   id: string;
 }
 
 export function EmployeeDetails() {
-  const match = useRouteMatch<Params>();
-  const { isLoading, data } = useEmployee(Number(match.params.id));
+  const params = useParams<Params>();
+  console.log(params);
+  const { isLoading, data } = useEmployee(Number(params.id));
 
   if (isLoading || data == null) {
     return <Loading />;
@@ -18,18 +18,18 @@ export function EmployeeDetails() {
 
   return (
     <Container>
-      <TextWithLabel label="ID" value={data.id} />
-      <TextWithLabel label="First Name" value={data.user.firstName} />
-      <TextWithLabel label="Last Name" value={data.user.lastName} />
-      <TextWithLabel label="Document ID" value={data.user.documentId} />
-      <TextWithLabel label="Email" value={data.user.email} />
-      <TextWithLabel label="Role" value={data.user.role} />
-      <TextWithLabel
+      <TextField label="ID" value={data.id} />
+      <TextField label="First Name" value={data.user.firstName} />
+      <TextField label="Last Name" value={data.user.lastName} />
+      <TextField label="Document ID" value={data.user.documentId} />
+      <TextField label="Email" value={data.user.email} />
+      <TextField label="Role" value={data.user.role} />
+      <TextField
         label="Comission Percentage"
         value={data.comissionPercentage}
       />
-      <TextWithLabel label="Work Shift" value={data.workShift} />
-      <TextWithLabel label="Created At" value={data.user.createdAt} />
+      <TextField label="Work Shift" value={data.workShift} />
+      <TextField label="Created At" value={data.user.createdAt} />
       <div className="flex flex-row gap-4 mt-4">
         <LinkButton
           className="w-full"
@@ -49,6 +49,11 @@ export function EmployeeDetails() {
   );
 }
 
-function useEmployee(id: number) {
-  return useQuery("employee", () => Services.employees.get(id));
+function TextField(props: { label: string; value: string | number | Date }) {
+  return (
+    <div className="mb-4">
+      <TextWithLabel label={props.label} value={props.value} />
+      <hr />
+    </div>
+  );
 }

@@ -4,6 +4,7 @@ import { EmployeeForm, NewEmployee } from "./EmployeeForm";
 
 export function EmployeeCreate() {
   const initialValues: NewEmployee = {
+    type: "new",
     firstName: "",
     lastName: "",
     email: "",
@@ -15,7 +16,7 @@ export function EmployeeCreate() {
 
   return (
     <Container>
-      <EmployeeForm initialValues={initialValues} isEditing={false} />
+      <EmployeeForm initialValues={initialValues} />
     </Container>
   );
 }

@@ -1,38 +1,35 @@
-import { useQuery } from "react-query";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
-import { Services } from "src/services";
-import { EmployeeForm, NewEmployee } from "./EmployeeForm";
+import { EmployeeForm, UpdateEmployee } from "./EmployeeForm";
+import { useEmployee } from "./hooks";
 
 interface Params {
   id: string;
 }
 
 export function EmployeeEdit() {
-  const match = useRouteMatch<Params>();
-  const { isLoading, data } = useEmployee(Number(match.params.id));
+  const params = useParams<Params>();
+  const { isLoading, data } = useEmployee(Number(params.id));
 
   if (isLoading || data == null) {
     return <Loading />;
   }
 
-  const initialValues: NewEmployee = {
+  const initialValues: UpdateEmployee = {
+    type: "update",
+    employeeId: data.id,
+    userId: data.userId,
     firstName: data.user.firstName,
     lastName: data.user.lastName,
     email: data.user.email,
     comissionPercentage: data.comissionPercentage,
     documentId: data.user.documentId,
     workShift: data.workShift,
-    password: "", // ignored
   };
 
   return (
     <Container>
-      <EmployeeForm initialValues={initialValues} isEditing={true} />
+      <EmployeeForm initialValues={initialValues} />
     </Container>
   );
-}
-
-function useEmployee(id: number) {
-  return useQuery("employee", () => Services.employees.get(id));
 }

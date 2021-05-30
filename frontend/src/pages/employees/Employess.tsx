@@ -1,6 +1,4 @@
-import { EmployeeDTO, UserDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
-import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
 import {
   Container,
@@ -9,12 +7,7 @@ import {
   Loading,
 } from "src/components";
 import { Routes } from "src/layout";
-import { Services } from "src/services";
-
-interface UserEmployee extends UserDTO {
-  employee?: EmployeeDTO;
-  employeeId?: number;
-}
+import { UserEmployee, useUserEmployees } from "./hooks";
 
 const columns: IDataTableColumn<UserEmployee>[] = [
   {
@@ -65,7 +58,7 @@ export function Employees() {
               <i className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"></i>
             </NavLink>
 
-            <NavLink to={`${Routes.employees.path}/:${row.employee.id}/edit`}>
+            <NavLink to={`${Routes.employees.path}/${row.employee.id}/edit`}>
               <i className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"></i>
             </NavLink>
           </div>
@@ -83,29 +76,4 @@ export function Employees() {
       <CustomDataTable columns={mergedColumns} data={data} />
     </Container>
   );
-}
-
-async function fetchUsersEmployees() {
-  const result: UserEmployee[] = [];
-
-  // Fetch users and employees
-  const users = await Services.users.getAll();
-  const employees = await Services.employees.getAll();
-
-  for (const user of users) {
-    const employee = employees.find((e) => e.userId === user.id);
-    const userEmployee: UserEmployee = {
-      ...user,
-      employee,
-      employeeId: employee?.id,
-    };
-
-    result.push(userEmployee);
-  }
-
-  return result;
-}
-
-function useUserEmployees() {
-  return useQuery("users", fetchUsersEmployees);
 }

@@ -1,5 +1,6 @@
 import { DOCUMENT_ID_LENGTH, MIN_PASSWORD_LENGTH } from "@shared/config";
 import { EmployeeDTO, UserSignup, UserUpdate, WorkShift } from "@shared/types";
+import { FormikErrors, FormikTouched } from "formik";
 import { useContext, useState } from "react";
 
 import { useHistory } from "react-router-dom";
@@ -16,17 +17,27 @@ import * as yup from "yup";
 import { TestConfig } from "yup";
 
 export interface NewEmployee extends UserSignup {
+  type: "new";
   employeeId?: number;
   comissionPercentage: number;
   workShift: WorkShift;
 }
 
-interface EmployeeFormProps {
-  initialValues: NewEmployee;
-  isEditing: boolean;
+export interface UpdateEmployee extends UserUpdate {
+  type: "update";
+  userId: number;
+  employeeId: number;
+  comissionPercentage: number;
+  workShift: WorkShift;
 }
 
-const validationSchema: yup.SchemaOf<NewEmployee> = yup.object({
+type EmployeeEntity = NewEmployee | UpdateEmployee;
+
+interface EmployeeFormProps {
+  initialValues: EmployeeEntity;
+}
+
+const newEmployeeShchema: yup.SchemaOf<Omit<NewEmployee, "type">> = yup.object({
   employeeId: yup.number().optional(),
 
   firstName: yup
@@ -68,13 +79,57 @@ const validationSchema: yup.SchemaOf<NewEmployee> = yup.object({
     .oneOf(Object.values(WorkShift), "Invalid value"),
 });
 
+const updateEmployeeShchema: yup.SchemaOf<Omit<UpdateEmployee, "type">> =
+  yup.object({
+    employeeId: yup.number().required(),
+
+    userId: yup.number().required(),
+
+    firstName: yup
+      .string()
+      .required("First name is required")
+      .test(noBlank("noblank", "First name cannot be empty")),
+
+    lastName: yup
+      .string()
+      .required("Last name is required")
+      .test(noBlank("noblank", "Last name cannot be empty")),
+
+    documentId: yup
+      .string()
+      .required("Document ID is required")
+      .min(
+        DOCUMENT_ID_LENGTH,
+        `Document ID must have at least ${DOCUMENT_ID_LENGTH} characters`
+      ),
+
+    email: yup
+      .string()
+      .required("Email is required")
+      .email("Expected an email"),
+
+    comissionPercentage: yup
+      .number()
+      .required("Number is required")
+      .min(0, "Commision percentage cannot be negative"),
+
+    workShift: yup
+      .mixed<WorkShift>()
+      .required("WorkShift is required")
+      .oneOf(Object.values(WorkShift), "Invalid value"),
+  });
+
 export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   initialValues,
-  isEditing,
 }) => {
   const [error, setError] = useState<string | null>(null);
   const authService = useContext(AuthContext);
   const history = useHistory();
+
+  const validationSchema =
+    initialValues.type === "update"
+      ? updateEmployeeShchema
+      : newEmployeeShchema;
 
   return (
     <Container>
@@ -85,17 +140,14 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         onSubmit: async (values, actions) => {
           console.log(values);
 
-          try {
-            if (isEditing) {
-              updateEmployee(values, authService, setError);
-            } else {
-              addEmployee(values, authService, setError);
-            }
-
-            history.push(Routes.employees.path);
-          } finally {
-            actions.setSubmitting(false);
+          if (initialValues.type === "update") {
+            updateEmployee(values as UpdateEmployee, authService, setError);
+          } else {
+            addEmployee(values as NewEmployee, authService, setError);
           }
+
+          history.push(Routes.employees.path);
+          actions.setSubmitting(false);
         },
         render: ({ errors, touched }) => (
           <>
@@ -117,6 +169,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <FormInput
               label="Email"
               name="email"
+              autoComplete="username"
               error={errors.email}
               touched={touched.email}
             />
@@ -134,14 +187,14 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               touched={touched.comissionPercentage}
             />
 
-            {!isEditing && (
+            {initialValues.type === "new" && (
               <FormInput
                 label="Password"
                 name="password"
                 type="password"
                 autoComplete="new-password"
-                error={errors.password}
-                touched={touched.password}
+                error={(errors as FormikErrors<NewEmployee>).password}
+                touched={(touched as FormikTouched<NewEmployee>).password}
               />
             )}
             <FormSelect
@@ -161,10 +214,11 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
 };
 
 async function updateEmployee(
-  values: NewEmployee,
+  values: UpdateEmployee,
   authService: AuthService,
   setError: (s: string | null) => void
 ) {
+  console.log(values);
   const userUpdate: UserUpdate = {
     firstName: values.firstName,
     lastName: values.lastName,
@@ -174,6 +228,7 @@ async function updateEmployee(
 
   const employee: Partial<EmployeeDTO> = {
     id: values.employeeId,
+    userId: values.userId,
     comissionPercentage: values.comissionPercentage,
     workShift: values.workShift,
   };

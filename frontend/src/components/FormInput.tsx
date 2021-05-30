@@ -13,6 +13,8 @@ type FormInputProps = Props & React.DetailedHTMLProps<React.InputHTMLAttributes<
 export const FormInput: React.FC<FormInputProps> = (props) => {
   const { error, label, name, touched, readOnly = false, ...rest } = props;
 
+  const errorClass = error && props.touched ? "border-red-600" : "";
+
   if (readOnly) {
     return (
       <div className="mb-4">
@@ -21,9 +23,7 @@ export const FormInput: React.FC<FormInputProps> = (props) => {
           {...rest}
           name={name}
           readOnly
-          className={`shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border border-gray-300 bg-gray-200 ${
-            error && props.touched && "border-red-600"
-          }`}
+          className={`shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border border-gray-300 bg-gray-200 ${errorClass}`}
         />
         {error && <p className="text-red-500 text-xs">{error}</p>}
       </div>

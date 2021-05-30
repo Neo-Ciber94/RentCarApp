@@ -8,4 +8,5 @@ export * from './NavItem';
 export * from './openSwalForm';
 export * from './ProtectedRoute';
 export * from './ReactSwal';
+export * from './TextWithLabel';
 export * from './withCustomForm';

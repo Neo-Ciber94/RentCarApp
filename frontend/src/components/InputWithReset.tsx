@@ -18,6 +18,7 @@ const styles: CSSProperties = {
 
 export const InputWithReset: React.FC<InputProps & Omit<Props, "onChange">> = ({
   onChange,
+  onReset,
   defaultValue,
   ...rest
 }) => {
@@ -45,7 +46,10 @@ export const InputWithReset: React.FC<InputProps & Omit<Props, "onChange">> = ({
       />
       <i
         className={`fas fa-times cursor-pointer ${visible ? "" : "hidden"}`}
-        onClick={() => handleChange("")}
+        onClick={() => {
+          handleChange("");
+          onReset?.();
+        }}
         style={styles}
       ></i>
     </div>

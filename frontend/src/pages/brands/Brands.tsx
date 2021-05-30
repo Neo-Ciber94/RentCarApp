@@ -13,6 +13,9 @@ import { useQuery } from "react-query";
 import { Services } from "src/services";
 import * as Yup from "yup";
 import { CSSProperties, useMemo, useState } from "react";
+import { TextWithLabel } from "src/components/TextWithLabel";
+import { Colors } from "src/layout/Colors";
+import Swal from "sweetalert2";
 
 // Redefinition due they don't work as expected
 export interface IDataTableStyles {
@@ -127,7 +130,7 @@ export function Brands() {
   const [filterText, setFilterText] = useState("");
   const subHeaderMemo = useMemo(() => {
     return <FilterComponent onChange={(e) => setFilterText(e)} />;
-  }, [filterText, setFilterText]);
+  }, [setFilterText]);
 
   const { isLoading, data, refetch } = useBrands();
   const initialValues: Omit<BrandDTO, "id"> = { name: "" };
@@ -146,7 +149,7 @@ export function Brands() {
           <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
             <i
               className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"
-              onClick={() => console.log("Info")}
+              onClick={() => openBrandDetails(row, refetch)}
             ></i>
             <i
               className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"
@@ -237,6 +240,7 @@ async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
         } else {
           result = await Services.brands.create(values);
         }
+        console.log(result);
         actions.close();
       } finally {
         actions.setSubmitting(false);
@@ -266,6 +270,31 @@ async function openBrandDelete(brand: BrandDTO) {
       const result = await Services.brands.delete(brand.id);
       console.log("DELETED", result);
     }
+  });
+}
+
+async function openBrandDetails(brand: BrandDTO, rerender: () => void) {
+  return ReactSwal.fire({
+    title: "Brand",
+    showCancelButton: true,
+    confirmButtonColor: Colors.MainColor,
+    cancelButtonText: "Ok",
+    confirmButtonText: "Edit",
+    focusCancel: true,
+    html: (
+      <div className="text-left">
+        <TextWithLabel label="ID" value={brand.id} />
+        <hr className="my-2" />
+        <TextWithLabel label="Name" value={brand.name} />
+      </div>
+    ),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.close();
+      return openBrandEditor(brand).then(rerender);
+    }
+
+    return null;
   });
 }
 

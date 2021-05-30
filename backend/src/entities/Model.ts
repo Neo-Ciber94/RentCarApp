@@ -1,4 +1,3 @@
-import { VehicleType } from "@shared/types";
 import {
   BaseEntity,
   Check,
@@ -7,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { VehicleType } from "@shared/types";
 import { Brand } from "./Brand";
 
 @Entity()

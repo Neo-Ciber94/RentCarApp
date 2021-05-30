@@ -5,13 +5,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { WorkShift } from "@shared/types";
 import { User } from "./User";
-
-export enum WorkShift {
-  Morning = "morning",
-  Evening = "evening",
-  Night = "night",
-}
 
 @Entity()
 export class Employee extends BaseEntity {

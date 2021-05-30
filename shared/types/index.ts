@@ -7,3 +7,4 @@ export * from './UserSignup';
 export * from './UserStatus';
 export * from './UserUpdate';
 export * from './VehicleType';
+export * from './WorkShift';

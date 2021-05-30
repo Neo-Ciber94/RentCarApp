@@ -5,112 +5,16 @@ import {
   Loading,
   MainButton,
   ReactSwal,
-  InputWithReset,
 } from "src/components";
-import DataTable, { IDataTableColumn } from "react-data-table-component";
+import { IDataTableColumn } from "react-data-table-component";
 import { BrandDTO } from "@shared/types";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
 import * as Yup from "yup";
-import { CSSProperties, useMemo, useState } from "react";
 import { TextWithLabel } from "src/components/TextWithLabel";
 import { Colors } from "src/layout/Colors";
 import Swal from "sweetalert2";
-
-// Redefinition due they don't work as expected
-export interface IDataTableStyles {
-  table?: {
-    style: CSSProperties;
-  };
-  tableWrapper?: {
-    style: CSSProperties;
-  };
-  header?: {
-    style: CSSProperties;
-  };
-  subHeader?: {
-    style: CSSProperties;
-  };
-  head?: {
-    style: CSSProperties;
-  };
-  headRow?: {
-    style?: CSSProperties;
-    denseStyle?: CSSProperties;
-  };
-  headCells?: {
-    style?: CSSProperties;
-    activeSortStyle?: CSSProperties;
-    inactiveSortStyle?: CSSProperties;
-  };
-  contextMenu?: {
-    style?: CSSProperties;
-    activeStyle?: CSSProperties;
-  };
-  cells?: {
-    style: CSSProperties;
-  };
-  rows?: {
-    style?: CSSProperties;
-    selectedHighlightStyle?: CSSProperties;
-    denseStyle?: CSSProperties;
-    highlightOnHoverStyle?: CSSProperties;
-    stripedStyle?: CSSProperties;
-  };
-  expanderRow?: {
-    style: CSSProperties;
-  };
-  expanderCell?: {
-    style: CSSProperties;
-  };
-  expanderButton?: {
-    style: CSSProperties;
-  };
-  pagination?: {
-    style?: CSSProperties;
-    pageButtonsStyle?: CSSProperties;
-  };
-  noData?: {
-    style: CSSProperties;
-  };
-  progress?: {
-    style: CSSProperties;
-  };
-}
-
-const customStyles: IDataTableStyles = {
-  headRow: {
-    style: {
-      backgroundColor: "rgb(220, 38, 38)",
-      borderRadius: "5px",
-    },
-  },
-  subHeader: {
-    style: {
-      padding: "10px 0 10px 0 !important",
-    },
-  },
-  headCells: {
-    style: {
-      color: "white",
-      fontSize: "18px",
-      textAlign: "center",
-      padding: "15px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  },
-  cells: {
-    style: {
-      fontSize: "18px",
-      padding: "5px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  },
-};
+import { CustomDataTable } from "src/components/CustomDataTable";
 
 const columns: IDataTableColumn<BrandDTO>[] = [
   {
@@ -127,14 +31,8 @@ const columns: IDataTableColumn<BrandDTO>[] = [
 ];
 
 export function Brands() {
-  const [filterText, setFilterText] = useState("");
-  const subHeaderMemo = useMemo(() => {
-    return <FilterComponent onChange={(e) => setFilterText(e)} />;
-  }, [setFilterText]);
-
   const { isLoading, data, refetch } = useBrands();
   const initialValues: Omit<BrandDTO, "id"> = { name: "" };
-  const filteredItems = filterObjectsByText(data || [], filterText);
 
   if (isLoading) {
     return <Loading />;
@@ -175,47 +73,9 @@ export function Brands() {
           Add Brand
         </MainButton>
       </div>
-      <DataTable
-        columns={mergedColumns}
-        data={filteredItems!}
-        customStyles={customStyles}
-        paginationComponentOptions={{ noRowsPerPage: true }}
-        paginationTotalRows={10}
-        subHeaderComponent={subHeaderMemo}
-        subHeader
-        noHeader
-        highlightOnHover
-        pagination
-        dense
-        striped
-      />
+      <CustomDataTable columns={mergedColumns} data={data || []} />
     </Container>
   );
-}
-
-function filterObjectsByText<T>(items: T[], text: string) {
-  const result: T[] = [];
-
-  // Iterate over each item of the list
-  for (const item of items) {
-    // Check if any property of the item contains the `text`
-    for (const key in item) {
-      const value = item[key] as { toString(): string };
-
-      /* prettier-ignore */
-      // We ignore case in the comparison
-      if (value && value.toString().toLowerCase().includes(text.toLowerCase())) {
-        result.push(item);
-        break;
-      }
-    }
-  }
-
-  return result;
-}
-
-function FilterComponent(props: { onChange: (s: string) => void }) {
-  return <InputWithReset placeholder="Search..." onChange={props.onChange} />;
 }
 
 async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
@@ -261,10 +121,11 @@ async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
 
 async function openBrandDelete(brand: BrandDTO) {
   return ReactSwal.fire({
-    icon: "question",
+    icon: "warning",
     title: "Delete Brand",
-    text: `Want do delete brand '${brand.name}'?`,
+    text: `Do you want to delete brand '${brand.name}'?`,
     showCancelButton: true,
+    confirmButtonColor: Colors.MainColor,
     focusCancel: true,
   }).then(async (result) => {
     if (result.isConfirmed) {

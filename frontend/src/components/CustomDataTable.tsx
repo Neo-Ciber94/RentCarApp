@@ -6,11 +6,12 @@ import DataTable, {
 import { InputWithReset } from ".";
 
 interface CustomDataTableProps<T> {
-  onDetails: (item: T) => void;
-  onEdit: (item: T) => void;
-  onDelete: (item: T) => void;
+  onDetails?: (item: T) => void;
+  onEdit?: (item: T) => void;
+  onDelete?: (item: T) => void;
 }
 
+// Redefinition due they don't work as expected
 const customStyles: IDataTableStyles = {
   headRow: {
     style: {

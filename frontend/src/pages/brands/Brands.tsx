@@ -10,9 +10,8 @@ import DataTable, { IDataTableColumn } from "react-data-table-component";
 import { BrandDTO } from "@shared/types";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
-
 import * as Yup from "yup";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo, useState } from "react";
 
 // Redefinition due they don't work as expected
 export interface IDataTableStyles {
@@ -82,6 +81,11 @@ const customStyles: IDataTableStyles = {
       borderRadius: "5px",
     },
   },
+  header: {
+    style: {
+      padding: "0px !important",
+    },
+  },
   headCells: {
     style: {
       color: "white",
@@ -119,8 +123,16 @@ const columns: IDataTableColumn<BrandDTO>[] = [
 ];
 
 export function Brands() {
+  const [filterText, setFilterText] = useState("");
+  const subHeaderMemo = useMemo(() => {
+    return <FilterComponent onChange={(e) => setFilterText(e)} />;
+  }, [filterText, setFilterText]);
+
   const { isLoading, data, refetch } = useBrands();
   const initialValues: Omit<BrandDTO, "id"> = { name: "" };
+  const filteredItems = data?.filter((s) =>
+    s.name.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -162,16 +174,29 @@ export function Brands() {
       </div>
       <DataTable
         columns={mergedColumns}
-        data={data!}
+        data={filteredItems!}
         customStyles={customStyles}
         paginationComponentOptions={{ noRowsPerPage: true }}
         paginationTotalRows={10}
+        subHeaderComponent={subHeaderMemo}
+        noHeader
+        subHeader
         highlightOnHover
         pagination
         dense
         striped
       />
     </Container>
+  );
+}
+
+function FilterComponent(props: { onChange: (s: string) => void }) {
+  return (
+    <input
+      className="rounded-lg border border-gray-200 text-lg mb-3 px-3 py-1"
+      placeholder="Search..."
+      onChange={(e) => props.onChange(e.target.value)}
+    />
   );
 }
 

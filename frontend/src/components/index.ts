@@ -1,5 +1,6 @@
 export * from './Buttons';
 export * from './Container';
+export * from './CustomDataTable';
 export * from './FormInput';
 export * from './InputWithReset';
 export * from './Loading';

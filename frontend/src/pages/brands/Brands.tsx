@@ -169,6 +169,7 @@ export function Brands() {
     <Container className="h-full lg:max-w-5xl">
       <div className="p-1">
         <MainButton
+          className="text-lg"
           onClick={() => openBrandEditor(initialValues).then(() => refetch())}
         >
           Add Brand
@@ -181,8 +182,8 @@ export function Brands() {
         paginationComponentOptions={{ noRowsPerPage: true }}
         paginationTotalRows={10}
         subHeaderComponent={subHeaderMemo}
-        noHeader
         subHeader
+        noHeader
         highlightOnHover
         pagination
         dense

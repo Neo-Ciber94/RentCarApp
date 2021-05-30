@@ -15,6 +15,8 @@ import { TextWithLabel } from "src/components/TextWithLabel";
 import { Colors } from "src/layout/Colors";
 import Swal from "sweetalert2";
 
+const brandService = Services.brands;
+
 const columns: IDataTableColumn<BrandDTO>[] = [
   {
     name: "ID",
@@ -71,9 +73,9 @@ async function openEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
       try {
         let result: BrandDTO;
         if ("id" in values) {
-          result = await Services.brands.update(values as BrandDTO);
+          result = await brandService.update(values as BrandDTO);
         } else {
-          result = await Services.brands.create(values);
+          result = await brandService.create(values);
         }
         console.log(result);
         actions.close();
@@ -93,7 +95,7 @@ async function openEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
   });
 }
 
-async function openDelete(brand: BrandDTO) {
+async function openDelete(entity: BrandDTO) {
   return ReactSwal.fire({
     icon: "warning",
     title: "Delete Brand",
@@ -102,18 +104,18 @@ async function openDelete(brand: BrandDTO) {
     focusCancel: true,
     html: (
       <p>
-        Do you want to delete brand <strong>{brand.name}</strong>?
+        Do you want to delete brand <strong>{entity.name}</strong>?
       </p>
     ),
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const result = await Services.brands.delete(brand.id);
+      const result = await brandService.delete(entity.id);
       console.log("DELETED", result);
     }
   });
 }
 
-async function openDetails(brand: BrandDTO, rerender: () => void) {
+async function openDetails(entity: BrandDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Brand",
     showCancelButton: true,
@@ -123,15 +125,15 @@ async function openDetails(brand: BrandDTO, rerender: () => void) {
     focusCancel: true,
     html: (
       <div className="text-left">
-        <TextWithLabel label="ID" value={brand.id} />
+        <TextWithLabel label="ID" value={entity.id} />
         <hr className="my-2" />
-        <TextWithLabel label="Name" value={brand.name} />
+        <TextWithLabel label="Name" value={entity.name} />
       </div>
     ),
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.close();
-      return openEditor(brand).then(rerender);
+      return openEditor(entity).then(rerender);
     }
 
     return null;
@@ -140,6 +142,6 @@ async function openDetails(brand: BrandDTO, rerender: () => void) {
 
 function useBrands() {
   return useQuery("brands", {
-    queryFn: () => Services.brands.getAll(),
+    queryFn: () => brandService.getAll(),
   });
 }

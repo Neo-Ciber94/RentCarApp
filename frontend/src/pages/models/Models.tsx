@@ -7,7 +7,7 @@ import {
   withCrudDataTable,
 } from "src/components";
 import { IDataTableColumn } from "react-data-table-component";
-import { BrandDTO, ModelDTO, VehicleType } from "@shared/types";
+import { ModelDTO, VehicleType } from "@shared/types";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { Services } from "src/services";
 import * as Yup from "yup";
@@ -15,8 +15,10 @@ import { TextWithLabel } from "src/components/TextWithLabel";
 import { Colors } from "src/layout/Colors";
 import Swal from "sweetalert2";
 import { FormikProps } from "formik";
-import { title } from "process";
 import { FormSelect } from "src/components/FormSelect";
+
+const queryClient = new QueryClient();
+const modelService = Services.models;
 
 const columns: IDataTableColumn<ModelDTO>[] = [
   {
@@ -70,15 +72,13 @@ export function Models() {
         data,
         addButtonText: "Add Model",
         onAdd: () => openEditor(initialValues).then(() => refetch()),
-        onDelete: (row) => openDelete(row).then(() => refetch),
+        onDelete: (row) => openDelete(row).then(() => refetch()),
         onDetails: (row) => openDetails(row, refetch),
         onEdit: (row) => openEditor(row).then(() => refetch()),
       })}
     </Container>
   );
 }
-
-const queryClient = new QueryClient();
 
 async function openEditor(initialValues: Partial<ModelDTO>) {
   const validationSchema = Yup.object().shape({
@@ -106,11 +106,10 @@ async function openEditor(initialValues: Partial<ModelDTO>) {
         let result: ModelDTO;
 
         if ("id" in values) {
-          result = await Services.models.update(values as ModelDTO);
+          result = await modelService.update(values as ModelDTO);
         } else {
-          result = await Services.models.create(values as ModelDTO);
+          result = await modelService.create(values as ModelDTO);
         }
-        console.log(result);
         actions.close();
       } finally {
         actions.setSubmitting(false);
@@ -142,7 +141,7 @@ async function openDelete(entity: ModelDTO) {
     ),
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const result = await Services.brands.delete(entity.id);
+      const result = await modelService.delete(entity.id);
       console.log("DELETED", result);
     }
   });
@@ -199,7 +198,6 @@ function ModelEditorForm(props: {
         options={options}
         error={errors.brandId}
         touched={touched.brandId}
-        onChange={(e) => console.log(e.target.value)}
         // defaultLabel="Select a brand..."
       />
 

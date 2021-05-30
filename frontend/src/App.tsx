@@ -20,7 +20,7 @@ import { ProtectedRoute } from "./components";
 import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrandRoutes } from "./pages";
+import { Brands } from "./pages";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
@@ -109,7 +109,7 @@ const App = observer(() => {
             <ProtectedRoute
               roles={ROLES_ADMIN}
               path={Routes.brands.path}
-              component={BrandRoutes}
+              component={withHeaderAndFooter(Brands, Routes.brands.name)}
             />
             <ProtectedRoute
               roles={ROLES_ADMIN}

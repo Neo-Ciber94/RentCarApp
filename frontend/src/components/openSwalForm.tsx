@@ -49,7 +49,7 @@ export function openSwalForm<T>(config: FormConfig<T>) {
       >
         {(props) => {
           return (
-            <Form>
+            <Form style={{ textAlign: "left" }}>
               {config.render(props)}
 
               <div className="flex flex-row w-100 gap-2 mt-10">

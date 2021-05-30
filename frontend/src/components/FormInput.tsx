@@ -48,7 +48,7 @@ export const FormInput: React.FC<FormInputProps> = (props) => {
 const Label: React.FC<{ name: string; label: string }> = (props) => {
   return (
     <label
-      className="block text-gray-700 text-sm font-bold mb-2"
+      className="block text-gray-700 text-base font-bold mb-2"
       htmlFor={props.name}
     >
       {props.label}

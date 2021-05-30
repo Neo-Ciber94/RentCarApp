@@ -43,16 +43,16 @@ export function Brands() {
         columns,
         data,
         addButtonText: "Add Brand",
-        onAdd: () => openBrandEditor(initialValues).then(() => refetch()),
-        onDelete: (row) => openBrandDelete(row).then(() => refetch),
-        onDetails: (row) => openBrandDetails(row, refetch),
-        onEdit: (row) => openBrandEditor(row).then(() => refetch()),
+        onAdd: () => openEditor(initialValues).then(() => refetch()),
+        onDelete: (row) => openDelete(row).then(() => refetch),
+        onDetails: (row) => openDetails(row, refetch),
+        onEdit: (row) => openEditor(row).then(() => refetch()),
       })}
     </Container>
   );
 }
 
-async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
+async function openEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Brand name is required")
@@ -93,7 +93,7 @@ async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
   });
 }
 
-async function openBrandDelete(brand: BrandDTO) {
+async function openDelete(brand: BrandDTO) {
   return ReactSwal.fire({
     icon: "warning",
     title: "Delete Brand",
@@ -113,7 +113,7 @@ async function openBrandDelete(brand: BrandDTO) {
   });
 }
 
-async function openBrandDetails(brand: BrandDTO, rerender: () => void) {
+async function openDetails(brand: BrandDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Brand",
     showCancelButton: true,
@@ -131,7 +131,7 @@ async function openBrandDetails(brand: BrandDTO, rerender: () => void) {
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.close();
-      return openBrandEditor(brand).then(rerender);
+      return openEditor(brand).then(rerender);
     }
 
     return null;
@@ -140,7 +140,6 @@ async function openBrandDetails(brand: BrandDTO, rerender: () => void) {
 
 function useBrands() {
   return useQuery("brands", {
-    refetchOnMount: false,
     queryFn: () => Services.brands.getAll(),
   });
 }

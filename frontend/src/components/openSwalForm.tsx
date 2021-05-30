@@ -3,7 +3,11 @@ import Swal from "sweetalert2";
 
 import { MainButton, ReactSwal } from ".";
 
-type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
+type ReactNode =
+  | React.ReactChild
+  | React.ReactFragment
+  | React.ReactPortal
+  | JSX.Element;
 type CloseCallback = { close: () => void };
 
 interface FormConfig<T> {

@@ -5,6 +5,7 @@ import {
   Loading,
   MainButton,
   ReactSwal,
+  InputWithReset,
 } from "src/components";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import { BrandDTO } from "@shared/types";
@@ -81,9 +82,9 @@ const customStyles: IDataTableStyles = {
       borderRadius: "5px",
     },
   },
-  header: {
+  subHeader: {
     style: {
-      padding: "0px !important",
+      padding: "10px 0 10px 0 !important",
     },
   },
   headCells: {
@@ -130,9 +131,7 @@ export function Brands() {
 
   const { isLoading, data, refetch } = useBrands();
   const initialValues: Omit<BrandDTO, "id"> = { name: "" };
-  const filteredItems = data?.filter((s) =>
-    s.name.toLowerCase().includes(filterText.toLowerCase())
-  );
+  const filteredItems = filterObjectsByText(data || [], filterText);
 
   if (isLoading) {
     return <Loading />;
@@ -190,14 +189,29 @@ export function Brands() {
   );
 }
 
+function filterObjectsByText<T>(items: T[], text: string) {
+  const result: T[] = [];
+
+  // Iterate over each item of the list
+  for (const item of items) {
+    // Check if any property of the item contains the `text`
+    for (const key in item) {
+      const value = item[key] as { toString(): string };
+
+      /* prettier-ignore */
+      // We ignore case in the comparison
+      if (value && value.toString().toLowerCase().includes(text.toLowerCase())) {
+        result.push(item);
+        break;
+      }
+    }
+  }
+
+  return result;
+}
+
 function FilterComponent(props: { onChange: (s: string) => void }) {
-  return (
-    <input
-      className="rounded-lg border border-gray-200 text-lg mb-3 px-3 py-1"
-      placeholder="Search..."
-      onChange={(e) => props.onChange(e.target.value)}
-    />
-  );
+  return <InputWithReset placeholder="Search..." onChange={props.onChange} />;
 }
 
 async function openBrandEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {

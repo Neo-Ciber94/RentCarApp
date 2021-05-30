@@ -1,6 +1,7 @@
 export * from './Buttons';
 export * from './Container';
 export * from './FormInput';
+export * from './InputWithReset';
 export * from './Loading';
 export * from './NavDropdown';
 export * from './NavItem';

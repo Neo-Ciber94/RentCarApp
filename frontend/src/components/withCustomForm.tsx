@@ -25,21 +25,21 @@ export function withCustomForm<T>(props: FormConfig<T>) {
       {(formikProps) => {
         return (
           <Container className="flex flex-row justify-center">
-            <div className="w-full md:w-5/6 lg:w-4/6 px-6 py-12">
+            <div className="w-full md:w-5/6 lg:w-4/6 px-6 py-3">
               {/* Actual form  */}
               <Form>
                 {props.render(formikProps)}
-                <div className="flex flex-row w-100 gap-2">
+                <div className="flex flex-row w-100 gap-2 mt-10">
                   {/* Buttons  */}
                   <MainButton
                     onClick={props.onCancel}
                     type="button"
                     color="secondary"
-                    className="w-full"
+                    className="w-full text-lg"
                   >
                     Cancel
                   </MainButton>
-                  <MainButton type="submit" className="w-full">
+                  <MainButton type="submit" className="w-full text-lg">
                     Save
                   </MainButton>
                 </div>

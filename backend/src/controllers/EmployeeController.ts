@@ -7,6 +7,7 @@ export class EmployeeController extends AbstractController<Employee> {
   constructor() {
     super({
       repository: Employee.getRepository(),
+      relations: ["user"],
     });
   }
 }

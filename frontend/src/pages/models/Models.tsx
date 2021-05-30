@@ -103,12 +103,10 @@ async function openEditor(initialValues: Partial<ModelDTO>) {
     validationSchema,
     onSubmit: async (values, actions) => {
       try {
-        let result: ModelDTO;
-
         if ("id" in values) {
-          result = await modelService.update(values as ModelDTO);
+          await modelService.update(values as ModelDTO);
         } else {
-          result = await modelService.create(values as ModelDTO);
+          await modelService.create(values as ModelDTO);
         }
         actions.close();
       } finally {

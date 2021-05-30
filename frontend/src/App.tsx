@@ -13,14 +13,13 @@ import { AuthContext } from "./context/AuthContext";
 import { Clients } from "./pages/clients/Clients";
 import { Inspections } from "./pages/inspections/Inspections";
 import { Rents } from "./pages/rents/Rents";
-import { Employees } from "./pages/employees/Employess";
 import { Fuels } from "./pages/fuels/Fuels";
 import { Models } from "./pages/models/Models";
 import { ProtectedRoute } from "./components";
 import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Brands } from "./pages";
+import { Brands, EmployeeRoutes } from "./pages";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
@@ -104,7 +103,7 @@ const App = observer(() => {
             <ProtectedRoute
               roles={ROLES_ADMIN}
               path={Routes.employees.path}
-              component={withHeaderAndFooter(Employees, Routes.employees.name)}
+              component={EmployeeRoutes}
             />
             <ProtectedRoute
               roles={ROLES_ADMIN}

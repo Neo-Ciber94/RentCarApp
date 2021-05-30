@@ -99,19 +99,18 @@ export const Login = observer(() => {
         return errors;
       }}
       onSubmit={async (values, actions) => {
-        try {
-          const result = await authService.login(values);
+        const result = await authService.login(values);
 
-          if (result.isOk) {
-            history.push("/");
-          } else {
-            actions.setErrors({
-              password: result.getError(),
-            });
-          }
-        } finally {
-          actions.setSubmitting(false);
+        if (result.isOk) {
+          history.push("/");
+          return;
+        } else {
+          actions.setErrors({
+            password: result.getError(),
+          });
         }
+
+        actions.setSubmitting(false);
       }}
     >
       {(props) => (

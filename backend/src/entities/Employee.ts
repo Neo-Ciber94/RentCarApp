@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -16,7 +17,10 @@ export class Employee extends BaseEntity {
   @Column()
   userId!: number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
   user!: User;
 
   @Column({ type: "decimal" })

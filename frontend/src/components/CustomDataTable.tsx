@@ -5,12 +5,6 @@ import DataTable, {
 } from "react-data-table-component";
 import { InputWithReset } from ".";
 
-interface CustomDataTableProps<T> {
-  onDetails?: (item: T) => void;
-  onEdit?: (item: T) => void;
-  onDelete?: (item: T) => void;
-}
-
 // Redefinition due they don't work as expected
 const customStyles: IDataTableStyles = {
   headRow: {
@@ -46,9 +40,7 @@ const customStyles: IDataTableStyles = {
   },
 };
 
-type Props<T = any> = CustomDataTableProps<T> & IDataTableProps<T>;
-
-export function CustomDataTable<T = any>(props: Props<T>) {
+export function CustomDataTable<T = any>(props: IDataTableProps<T>) {
   const { data, columns, ...rest } = props;
 
   const [filterText, setFilterText] = useState("");

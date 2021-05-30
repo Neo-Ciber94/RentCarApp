@@ -3,8 +3,8 @@ import {
   openSwalForm,
   FormInput,
   Loading,
-  MainButton,
   ReactSwal,
+  withCrudDataTable,
 } from "src/components";
 import { IDataTableColumn } from "react-data-table-component";
 import { BrandDTO } from "@shared/types";
@@ -14,7 +14,6 @@ import * as Yup from "yup";
 import { TextWithLabel } from "src/components/TextWithLabel";
 import { Colors } from "src/layout/Colors";
 import Swal from "sweetalert2";
-import { CustomDataTable } from "src/components/CustomDataTable";
 
 const columns: IDataTableColumn<BrandDTO>[] = [
   {
@@ -31,49 +30,24 @@ const columns: IDataTableColumn<BrandDTO>[] = [
 ];
 
 export function Brands() {
-  const { isLoading, data, refetch } = useBrands();
+  const { isLoading, data = [], refetch } = useBrands();
   const initialValues: Omit<BrandDTO, "id"> = { name: "" };
 
   if (isLoading) {
     return <Loading />;
   }
 
-  const mergedColumns: IDataTableColumn<BrandDTO>[] = [
-    ...columns,
-    {
-      name: "Actions",
-      cell: (row) => {
-        return (
-          <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
-            <i
-              className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"
-              onClick={() => openBrandDetails(row, refetch)}
-            ></i>
-            <i
-              className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"
-              onClick={() => openBrandEditor(row).then(() => refetch())}
-            ></i>
-            <i
-              className="fas fa-trash-alt text-red-600 hover:text-red-800 cursor-pointer"
-              onClick={() => openBrandDelete(row).then(() => refetch())}
-            ></i>
-          </div>
-        );
-      },
-    },
-  ];
-
   return (
     <Container className="h-full lg:max-w-5xl">
-      <div className="p-1">
-        <MainButton
-          className="text-lg"
-          onClick={() => openBrandEditor(initialValues).then(() => refetch())}
-        >
-          Add Brand
-        </MainButton>
-      </div>
-      <CustomDataTable columns={mergedColumns} data={data || []} />
+      {withCrudDataTable({
+        columns,
+        data,
+        addButtonText: "Add Brand",
+        onAdd: () => openBrandEditor(initialValues).then(() => refetch()),
+        onDelete: (row) => openBrandDelete(row).then(() => refetch),
+        onDetails: (row) => openBrandDetails(row, refetch),
+        onEdit: (row) => openBrandEditor(row).then(() => refetch()),
+      })}
     </Container>
   );
 }
@@ -123,10 +97,14 @@ async function openBrandDelete(brand: BrandDTO) {
   return ReactSwal.fire({
     icon: "warning",
     title: "Delete Brand",
-    text: `Do you want to delete brand '${brand.name}'?`,
     showCancelButton: true,
     confirmButtonColor: Colors.MainColor,
     focusCancel: true,
+    html: (
+      <p>
+        Do you want to delete brand <strong>{brand.name}</strong>?
+      </p>
+    ),
   }).then(async (result) => {
     if (result.isConfirmed) {
       const result = await Services.brands.delete(brand.id);

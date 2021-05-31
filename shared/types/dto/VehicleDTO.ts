@@ -1,4 +1,3 @@
-import { VehicleType } from "..";
 import { GearBox } from "../GearBox";
 import { FuelDTO } from "./FuelDTO";
 import { ModelDTO } from "./ModelDTO";

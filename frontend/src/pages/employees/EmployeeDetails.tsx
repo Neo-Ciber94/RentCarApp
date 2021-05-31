@@ -9,7 +9,6 @@ interface Params {
 
 export function EmployeeDetails() {
   const params = useParams<Params>();
-  console.log(params);
   const { isLoading, data } = useEmployee(Number(params.id));
 
   if (isLoading || data == null) {
@@ -17,7 +16,7 @@ export function EmployeeDetails() {
   }
 
   return (
-    <Container>
+    <Container className="lg:w-3/6 md:w-5/6">
       <TextField label="ID" value={data.id} />
       <TextField label="First Name" value={data.user.firstName} />
       <TextField label="Last Name" value={data.user.lastName} />

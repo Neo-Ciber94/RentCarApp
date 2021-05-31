@@ -4,6 +4,7 @@ import {
   Check,
   Column,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -19,12 +20,14 @@ export class Vehicle extends BaseEntity {
   modelId!: number;
 
   @OneToOne(() => Model)
+  @JoinColumn()
   model!: Model;
 
   @Column()
   fuelId!: number;
 
   @OneToOne(() => Fuel)
+  @JoinColumn()
   fuel!: Fuel;
 
   @Column({ unique: true })

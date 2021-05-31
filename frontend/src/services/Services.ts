@@ -4,6 +4,7 @@ import {
   FuelDTO,
   ModelDTO,
   UserDTO,
+  VehicleDTO,
 } from "@shared/types";
 import { ApiService } from "./ApiService";
 
@@ -13,4 +14,5 @@ export module Services {
   export const fuels = new ApiService<FuelDTO>("/fuels");
   export const users = new ApiService<UserDTO>("/users");
   export const employees = new ApiService<EmployeeDTO>("/employees");
+  export const vehicles = new ApiService<VehicleDTO>("/vehicles");
 }

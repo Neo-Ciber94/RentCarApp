@@ -38,6 +38,14 @@ const customStyles: IDataTableStyles = {
       justifyContent: "center",
     },
   },
+  noData: {
+    style: {
+      color: "rgb(248, 113, 113)",
+      fontSize: "calc(14px + 1vw)",
+      marginTop: 100,
+      fontWeight: 300,
+    },
+  },
 };
 
 export function CustomDataTable<T = any>(props: IDataTableProps<T>) {
@@ -59,8 +67,8 @@ export function CustomDataTable<T = any>(props: IDataTableProps<T>) {
       paginationComponentOptions={{ noRowsPerPage: true }}
       paginationTotalRows={10}
       subHeaderComponent={subHeaderMemo}
+      subHeader={data.length > 0}
       noHeader
-      subHeader
       highlightOnHover
       pagination
       dense

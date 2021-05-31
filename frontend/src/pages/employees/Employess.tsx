@@ -69,7 +69,7 @@ export function Employees() {
   return (
     <Container className="h-full lg:max-w-5xl">
       <div className="p-2">
-        <LinkButton className="text-lg" to={`${Routes.employees.path}/new`}>
+        <LinkButton className="text-lg p-1" to={`${Routes.employees.path}/new`}>
           Add Employee
         </LinkButton>
       </div>

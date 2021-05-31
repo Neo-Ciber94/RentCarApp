@@ -10,7 +10,7 @@ interface Props {
   options: SelectOption[] | Record<string, string | number>;
   error?: string;
   touched?: boolean;
-  defaultLabel?: string;
+  defaultOption?: string;
 }
 
 // prettier-ignore
@@ -19,9 +19,11 @@ type SelectProps = Props & React.DetailedHTMLProps<React.SelectHTMLAttributes<HT
 export const FormSelect: React.FC<SelectProps> = ({
   error,
   touched,
+  defaultOption,
   ...props
 }) => {
   let options: JSX.Element[] = [];
+  const errorClass = error && touched ? "border-red-600" : "";
 
   if (Array.isArray(props.options)) {
     options = props.options.map((opt, index) => (
@@ -44,15 +46,10 @@ export const FormSelect: React.FC<SelectProps> = ({
       <Field
         as="select"
         name={props.name}
-        className={`w-full shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          error && touched && "border-red-600"
-        }`}
+        {...props}
+        className={`w-full shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorClass}`}
       >
-        {props.defaultLabel && (
-          <option value="" selected>
-            {props.defaultLabel}
-          </option>
-        )}
+        {defaultOption && <option label={defaultOption} hidden />}
         {options}
       </Field>
       {error && <p className="text-red-500 text-xs">{error}</p>}

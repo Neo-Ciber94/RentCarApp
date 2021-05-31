@@ -8,10 +8,11 @@ export interface VehicleDTO {
   model: ModelDTO;
   fuelId: number;
   fuel: FuelDTO;
+  rentPrice: number;
   engineNumber: string;
   chassisNumber: string;
   licensePlate: string;
   gearBox: GearBox;
-  status: string;
+  status: string | null;
   description: string | null;
 }

@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { Container, LinkButton, Loading } from "src/components";
+import { Container, Loading } from "src/components";
+import { BottomButtonGroup } from "src/components/BottomButtonGroup";
 import { TextInfo } from "src/components/TextInfo";
 import { useEmployee } from "src/hooks/employeeHooks";
 import { Routes } from "src/layout";
@@ -23,21 +24,11 @@ export function EmployeeDetails() {
       <TextInfo label="Comission Percentage" value={data.comissionPercentage} />
       <TextInfo label="Work Shift" value={data.workShift} />
       <TextInfo label="Created At" value={data.user.createdAt} />
-      <div className="flex flex-row gap-4 mt-4">
-        <LinkButton
-          className="w-full"
-          color="secondary"
-          to={Routes.employees.path}
-        >
-          Cancel
-        </LinkButton>
-        <LinkButton
-          className="w-full"
-          to={`${Routes.employees.path}/${data.id}/edit`}
-        >
-          Edit
-        </LinkButton>
-      </div>
+      <BottomButtonGroup
+        cancelPath={Routes.employees.path}
+        confirmPath={`${Routes.employees.path}/${data.id}/edit`}
+        confirmText="Edit"
+      />
     </Container>
   );
 }

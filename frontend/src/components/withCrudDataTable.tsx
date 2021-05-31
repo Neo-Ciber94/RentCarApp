@@ -102,7 +102,7 @@ const DetailsButton = (props: {props: CrudDataTableProps<any>, row: any} ) => {
 
   if (detailsPath) {
     return (
-      <NavLink to={detailsPath}>
+      <NavLink to={detailsPath(props.row)}>
         <i className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"></i>
       </NavLink>
     );
@@ -122,7 +122,7 @@ const EditButton = (props: {props: CrudDataTableProps<any>, row: any} ) => {
 
   if (editPath) {
     return (
-      <NavLink to={editPath}>
+      <NavLink to={editPath(props.row)}>
         <i className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"></i>
       </NavLink>
     );
@@ -142,7 +142,7 @@ const DeleteButton = (props: {props: CrudDataTableProps<any>, row: any} ) => {
   
   if (deletePath) {
     return (
-      <NavLink to={deletePath}>
+      <NavLink to={deletePath(props.row)}>
         <i className="fas fa-trash-alt text-red-600 hover:text-red-800 cursor-pointer"></i>
       </NavLink>
     );

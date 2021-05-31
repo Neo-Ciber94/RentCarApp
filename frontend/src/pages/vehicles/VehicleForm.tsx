@@ -7,15 +7,20 @@ import { Services } from "src/services";
 import * as yup from "yup";
 
 interface VehicleFormProps {
-  initialValues: VehicleDTO;
+  initialValues: Partial<VehicleDTO>;
 }
 
 const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
   id: yup.number().optional(),
 
-  modelId: yup.number().required("Model is required"),
+  modelId: yup.number().min(1, "Model is required"),
 
-  fuelId: yup.number().required("Fuel is required"),
+  fuelId: yup.number().min(1, "Fuel is required"),
+
+  rentPrice: yup
+    .number()
+    .required("Rent price is required")
+    .min(1, "Rent price must be greater than 0"),
 
   gearBox: yup.mixed<GearBox>().required().oneOf(Object.values(GearBox)),
 
@@ -49,19 +54,21 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
     validationSchema,
     onCancel: () => history.push(Routes.vehicles.path),
     onSubmit: async (values, actions) => {
+      console.log(values);
       if ("id" in values) {
-        const result = await Services.vehicles.update(values);
+        const result = await Services.vehicles.update(values as VehicleDTO);
         console.log(result);
       } else {
-        const result = await Services.vehicles.create(values);
+        const result = await Services.vehicles.create(values as VehicleDTO);
         console.log(result);
       }
 
+      history.push(Routes.vehicles.path);
       actions.setSubmitting(false);
     },
     render: ({ errors, touched }) => {
       const models = modelsResult.data?.map((e) => ({
-        label: e.name,
+        label: `${e.brand.name} ${e.name}`,
         value: e.id,
       }));
 
@@ -79,6 +86,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
             options={models || []}
             error={errors.modelId}
             touched={touched.modelId}
+            defaultOption={"Select an model..."}
           />
           <FormSelect
             label="Fuel"
@@ -86,6 +94,14 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
             options={fuels || []}
             error={errors.fuelId}
             touched={touched.fuelId}
+            defaultOption={"Select an model..."}
+          />
+          <FormInput
+            label="Rent Price"
+            name="rentPrice"
+            type="number"
+            error={errors.rentPrice}
+            touched={touched.rentPrice}
           />
           <FormInput
             label="Engine Number"
@@ -105,7 +121,6 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
             error={errors.licensePlate}
             touched={touched.licensePlate}
           />
-          <FormInput label="Engine Number" name="engineNumber" />
           <FormSelect
             label="GearBox"
             name="gearBox"

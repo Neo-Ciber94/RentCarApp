@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
-import { TextInfo } from "src/components/TextInfo";
+import { BottomButtonGroup } from "src/components/BottomButtonGroup";
 import { useVehicle } from "src/hooks";
+import { Routes } from "src/layout";
+import { VehicleInfo } from "./VehicleInfo";
 
 export function VehicleDetails() {
   const params = useParams<{ id?: string }>();
@@ -13,7 +15,12 @@ export function VehicleDetails() {
 
   return (
     <Container className="lg:w-3/6 md:w-5/6">
-      <TextInfo label="ID" value={data!.id} />
+      <VehicleInfo vehicle={data!} />
+      <BottomButtonGroup
+        cancelPath={Routes.vehicles.path}
+        confirmPath={`${Routes.vehicles.path}/${data!.id}/edit`}
+        confirmText="Edit"
+      />
     </Container>
   );
 }

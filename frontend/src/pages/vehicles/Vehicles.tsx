@@ -1,6 +1,5 @@
 import { Container, Loading, withCrudDataTable } from "src/components";
 import { VehicleDTO } from "@shared/types";
-import { MainButton } from "src/components/Buttons";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
 import { IDataTableColumn } from "react-data-table-component";
@@ -13,7 +12,7 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
 
   {
     name: "Model",
-    selector: (e) => e.model,
+    selector: (e) => `${e.model.brand.name} ${e.model.name}`,
   },
 
   {
@@ -34,16 +33,17 @@ export default function Vehicles() {
     return <Loading />;
   }
 
+  console.log(data);
   return (
-    <Container className="h-full">
+    <Container className="h-full lg:max-w-5xl">
       {withCrudDataTable({
         columns,
         data: data || [],
         addButtonText: "Add Vehicle",
         addPath: "/vehicles/new",
-        editPath: (e) => `/vehicle/${e.id}/edit`,
-        deletePath: (e) => `/vehicle/${e.id}/delete`,
-        detailsPath: (e) => `/vehicle/${e.id}`,
+        editPath: (e) => `/vehicles/${e.id}/edit`,
+        deletePath: (e) => `/vehicles/${e.id}/delete`,
+        detailsPath: (e) => `/vehicles/${e.id}`,
       })}
     </Container>
   );

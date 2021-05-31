@@ -4,7 +4,6 @@ import Home from "./pages/common/Home";
 import { Login } from "./pages/common/Login";
 import NotFound from "./pages/common/NotFound";
 import Reservation from "./pages/reservations/Reservation";
-import Vehicles from "./pages/vehicles/Vehicles";
 import { NavbarProvider } from "./context/NavbarContext";
 import { Routes, withHeaderAndFooter } from "./layout";
 import { useContext, useEffect, useState } from "react";
@@ -20,6 +19,7 @@ import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Brands, EmployeeRoutes } from "./pages";
+import { VehicleRoutes } from "./pages/vehicles/VehicleRoutes";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
 const ROLES_ADMIN = [UserRole.Admin];
@@ -64,10 +64,7 @@ const App = observer(() => {
                 Routes.reservations.name
               )}
             />
-            <Route
-              path={Routes.vehicles.path}
-              component={withHeaderAndFooter(Vehicles, Routes.vehicles.name)}
-            />
+            <Route path={Routes.vehicles.path} component={VehicleRoutes} />
             <Route
               path={Routes.login.path}
               component={withHeaderAndFooter(Login, Routes.login.name)}

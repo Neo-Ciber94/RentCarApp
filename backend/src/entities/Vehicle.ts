@@ -5,6 +5,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -12,6 +13,7 @@ import { Fuel } from "./Fuel";
 import { Model } from "./Model";
 
 @Entity()
+@Check("chk_rentPrice", "rentPrice > 0")
 export class Vehicle extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -48,8 +50,11 @@ export class Vehicle extends BaseEntity {
   @Column({ type: "decimal" })
   rentPrice!: number;
 
-  @Column() // TODO: Use an enum?
-  status!: string;
+  @Column({
+    type: "text",
+    nullable: true,
+  }) // TODO: Use an enum?
+  status!: string | null;
 
   @Column({
     type: "text",

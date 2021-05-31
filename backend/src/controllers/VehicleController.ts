@@ -7,7 +7,7 @@ export class VehicleController extends AbstractController<Vehicle> {
   constructor() {
     super({
       repository: Vehicle.getRepository(),
-      relations: ["fuel", "model"],
+      relations: ["fuel", "model", "model.brand"],
     });
   }
 }

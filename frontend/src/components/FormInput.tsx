@@ -1,10 +1,15 @@
-import { Field } from "formik";
+import { Field, FieldProps } from "formik";
 
 interface Props {
   name: string;
   label: string;
   touched?: boolean;
   error?: string;
+  as?:
+    | React.ComponentType<FieldProps<any>["field"]>
+    | string
+    | React.ComponentType
+    | React.ForwardRefExoticComponent<any>;
 }
 
 // prettier-ignore

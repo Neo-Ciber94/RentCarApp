@@ -1,14 +1,11 @@
 import { useParams } from "react-router-dom";
-import { Container, LinkButton, Loading, TextWithLabel } from "src/components";
+import { Container, LinkButton, Loading } from "src/components";
+import { TextInfo } from "src/components/TextInfo";
+import { useEmployee } from "src/hooks/employeeHooks";
 import { Routes } from "src/layout";
-import { useEmployee } from "./hooks";
-
-interface Params {
-  id: string;
-}
 
 export function EmployeeDetails() {
-  const params = useParams<Params>();
+  const params = useParams<{ id: string }>();
   const { isLoading, data } = useEmployee(Number(params.id));
 
   if (isLoading || data == null) {
@@ -17,18 +14,15 @@ export function EmployeeDetails() {
 
   return (
     <Container className="lg:w-3/6 md:w-5/6">
-      <TextField label="ID" value={data.id} />
-      <TextField label="First Name" value={data.user.firstName} />
-      <TextField label="Last Name" value={data.user.lastName} />
-      <TextField label="Document ID" value={data.user.documentId} />
-      <TextField label="Email" value={data.user.email} />
-      <TextField label="Role" value={data.user.role} />
-      <TextField
-        label="Comission Percentage"
-        value={data.comissionPercentage}
-      />
-      <TextField label="Work Shift" value={data.workShift} />
-      <TextField label="Created At" value={data.user.createdAt} />
+      <TextInfo label="ID" value={data.id} />
+      <TextInfo label="First Name" value={data.user.firstName} />
+      <TextInfo label="Last Name" value={data.user.lastName} />
+      <TextInfo label="Document ID" value={data.user.documentId} />
+      <TextInfo label="Email" value={data.user.email} />
+      <TextInfo label="Role" value={data.user.role} />
+      <TextInfo label="Comission Percentage" value={data.comissionPercentage} />
+      <TextInfo label="Work Shift" value={data.workShift} />
+      <TextInfo label="Created At" value={data.user.createdAt} />
       <div className="flex flex-row gap-4 mt-4">
         <LinkButton
           className="w-full"
@@ -45,14 +39,5 @@ export function EmployeeDetails() {
         </LinkButton>
       </div>
     </Container>
-  );
-}
-
-function TextField(props: { label: string; value: string | number | Date }) {
-  return (
-    <div className="mb-4">
-      <TextWithLabel label={props.label} value={props.value} />
-      <hr />
-    </div>
   );
 }

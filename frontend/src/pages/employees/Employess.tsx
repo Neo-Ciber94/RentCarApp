@@ -6,8 +6,8 @@ import {
   LinkButton,
   Loading,
 } from "src/components";
+import { UserEmployee, useUserEmployees } from "src/hooks/employeeHooks";
 import { Routes } from "src/layout";
-import { UserEmployee, useUserEmployees } from "./hooks";
 
 const columns: IDataTableColumn<UserEmployee>[] = [
   {

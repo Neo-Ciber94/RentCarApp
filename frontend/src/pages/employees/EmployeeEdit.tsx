@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
+import { useEmployee } from "src/hooks/employeeHooks";
 import { EmployeeForm, UpdateEmployee } from "./EmployeeForm";
-import { useEmployee } from "./hooks";
 
 interface Params {
   id: string;
 }
 
 export function EmployeeEdit() {
-  const params = useParams<Params>();
+  const params = useParams<{ id: string }>();
   const { isLoading, data } = useEmployee(Number(params.id));
 
   if (isLoading || data == null) {

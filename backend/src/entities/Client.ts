@@ -1,9 +1,5 @@
+import { LegalPerson } from "@shared/types/LegalPerson";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
-export enum LegalPerson {
-  Physical = "physical",
-  Juridical = "juridical",
-}
 
 @Entity()
 export class Client extends BaseEntity {

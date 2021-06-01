@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -19,18 +20,21 @@ export class Rent extends BaseEntity {
   vehicleId!: number;
 
   @OneToOne(() => Vehicle)
+  @JoinColumn()
   vehicle!: Vehicle;
 
   @Column()
   employeeId!: number;
 
   @OneToOne(() => Employee)
+  @JoinColumn()
   employee!: Employee;
 
   @Column()
   clientId!: number;
 
   @OneToOne(() => Client)
+  @JoinColumn()
   client!: Client;
 
   @CreateDateColumn()

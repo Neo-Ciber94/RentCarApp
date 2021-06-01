@@ -44,7 +44,6 @@ export const Vehicles = observer(() => {
   const authService = useContext(AuthContext);
   const [showKind, setShowKind] = useState(ShowKind.Table);
   const { isLoading, data = [] } = useAllVehicles();
-
   const buttonGroup = useMemo(
     () => (
       <ButtonShowKind
@@ -66,17 +65,15 @@ export const Vehicles = observer(() => {
     ));
 
     return (
-      <div>
-        <Container className="h-full lg:max-w-5xl">
-          {authService.currentUser != null && buttonGroup}
-          <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
-        </Container>
-      </div>
+      <Container className="lg:max-w-5xl">
+        {authService.currentUser != null && buttonGroup}
+        <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
+      </Container>
     );
   }
 
   return (
-    <Container className="h-full lg:max-w-5xl">
+    <Container className="lg:max-w-5xl">
       {buttonGroup}
       {withCrudDataTable({
         columns,
@@ -100,7 +97,7 @@ const ButtonShowKind: React.FC<ButtonShowKind> = ({
     "text-white font-bold py-2 px-10  hover:bg-red-800 focus:outline-none";
 
   return (
-    <div className="flex flex-row py-2 w-full justify-end">
+    <div className="flex flex-row py-2 justify-end">
       <button
         onClick={onGrid}
         className={`${className} rounded-l ${

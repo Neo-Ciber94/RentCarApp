@@ -6,10 +6,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Fuel } from "./Fuel";
+import { Inspection } from "./Inspection";
 import { Model } from "./Model";
 
 @Entity()
@@ -61,4 +63,7 @@ export class Vehicle extends BaseEntity {
     nullable: true,
   })
   description!: string | null;
+
+  @OneToMany(() => Inspection, (inspection) => inspection.vehicle)
+  inspections!: Inspection[];
 }

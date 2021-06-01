@@ -1,18 +1,15 @@
+import { ReservationStatus } from "@shared/types";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Client } from "./Client";
 import { Rent } from "./Rent";
-
-export enum ReservationStatus {
-  Active = "active",
-  Completed = "completed",
-  Cancelled = "cancelled",
-}
 
 @Entity()
 export class Reservation extends BaseEntity {
@@ -22,6 +19,10 @@ export class Reservation extends BaseEntity {
   @Column()
   clientId!: number;
 
+  @OneToOne(() => Client)
+  @JoinColumn()
+  client!: Client;
+
   @Column({
     type: "int",
     nullable: true,
@@ -29,6 +30,7 @@ export class Reservation extends BaseEntity {
   rentId!: number | null;
 
   @OneToOne(() => Rent)
+  @JoinColumn()
   rent!: Rent | null;
 
   @CreateDateColumn()

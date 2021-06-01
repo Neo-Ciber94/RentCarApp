@@ -1,8 +1,11 @@
+import { TireStatus } from "@shared/types";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -17,13 +20,14 @@ export class Inspection extends BaseEntity {
   @Column()
   vehicleId!: number;
 
-  @OneToOne(() => Vehicle)
+  @ManyToOne(() => Vehicle)
   vehicle!: Vehicle;
 
   @Column()
   clientId!: number;
 
   @OneToOne(() => Client)
+  @JoinColumn()
   client!: Client;
 
   @CreateDateColumn()
@@ -41,8 +45,11 @@ export class Inspection extends BaseEntity {
   @Column()
   haveTires!: boolean;
 
-  @Column()
-  tireStatus!: boolean;
+  @Column({
+    enum: TireStatus,
+    default: TireStatus.Normal,
+  })
+  tireStatus!: TireStatus;
 
   @Column({
     type: "mediumtext",

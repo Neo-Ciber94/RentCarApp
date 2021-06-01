@@ -15,6 +15,10 @@ interface Props<T> {
   detailsPath?: (item: T) => string;
   editPath?: (item: T) => string;
   deletePath?: (item: T) => string;
+  canAdd?: boolean;
+  canEdit?: boolean;
+  canView?: boolean;
+  canDelete?: boolean;
 }
 
 type CrudDataTableProps<T = AnyARecord> = Props<T> & IDataTableProps<T>;
@@ -32,23 +36,27 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     editPath,
     onDelete,
     deletePath,
+    canAdd,
+    canView,
+    canEdit,
+    canDelete,
   } = props;
 
-  if (onAdd == null && addPath == null) {
+  if (canAdd && onAdd == null && addPath == null) {
     throw new Error("`withCrudDataTable` requires 1: 'onAdd' or 'addPath'");
   }
 
-  if (onDetails == null && detailsPath == null) {
+  if (canView && onDetails == null && detailsPath == null) {
     throw new Error(
       "`withCrudDataTable` requires 1: 'onDetails' or 'detailsPath'"
     );
   }
 
-  if (onEdit == null && editPath == null) {
+  if (canEdit && onEdit == null && editPath == null) {
     throw new Error("`withCrudDataTable` requires 1: 'onEdit' or 'editPath'");
   }
 
-  if (onDelete == null && deletePath == null) {
+  if (canDelete && onDelete == null && deletePath == null) {
     throw new Error(
       "`withCrudDataTable` requires 1: 'onDelete' or 'deletePath'"
     );
@@ -61,9 +69,9 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
       cell: (row) => {
         return (
           <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
-            <DetailsButton props={props} row={row} />
-            <EditButton props={props} row={row} />
-            <DeleteButton props={props} row={row} />
+            {canView && <DetailsButton props={props} row={row} />}
+            {canEdit && <EditButton props={props} row={row} />}
+            {canDelete && <DeleteButton props={props} row={row} />}
           </div>
         );
       },
@@ -72,8 +80,8 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
 
   return (
     <>
-      <AddButtom props={props} />
-      <CustomDataTable columns={mergedColumns} data={data || []} />
+      {canAdd && <AddButtom props={props} />}
+      <CustomDataTable columns={mergedColumns} data={data} />
     </>
   );
 }

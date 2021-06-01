@@ -7,4 +7,3 @@ export * from './VehicleForm';
 export * from './VehicleInfo';
 export * from './VehicleRoutes';
 export * from './Vehicles';
-export * from './VehiclesGrid';

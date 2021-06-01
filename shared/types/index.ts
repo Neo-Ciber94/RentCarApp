@@ -1,5 +1,7 @@
 export * from './dto';
 export * from './GearBox';
+export * from './ReservationStatus';
+export * from './TireStatus';
 export * from './UserChangePassword';
 export * from './UserLogin';
 export * from './UserRole';

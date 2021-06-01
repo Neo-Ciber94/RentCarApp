@@ -36,10 +36,10 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     editPath,
     onDelete,
     deletePath,
-    canAdd,
-    canView,
-    canEdit,
-    canDelete,
+    canAdd = true,
+    canView = true,
+    canEdit = true,
+    canDelete = true,
   } = props;
 
   if (canAdd && onAdd == null && addPath == null) {

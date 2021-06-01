@@ -3,7 +3,6 @@ export * from './ClientDTO';
 export * from './EmployeeDTO';
 export * from './FuelDTO';
 export * from './InspectionDTO';
-export * from './LegalPerson';
 export * from './ModelDTO';
 export * from './RentDTO';
 export * from './ReservationDTO';

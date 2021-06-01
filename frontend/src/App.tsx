@@ -10,15 +10,13 @@ import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { AuthContext } from "./context/AuthContext";
 import { Clients } from "./pages/clients/Clients";
-import { Inspections } from "./pages/inspections/Inspections";
-import { Rents } from "./pages/rents/Rents";
 import { Fuels } from "./pages/fuels/Fuels";
 import { Models } from "./pages/models/Models";
 import { ProtectedRoute } from "./components";
 import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Brands, EmployeeRoutes, InspectionRoutes } from "./pages";
+import { Brands, EmployeeRoutes, InspectionRoutes, RentRoutes } from "./pages";
 import { VehicleRoutes } from "./pages/vehicles/VehicleRoutes";
 
 const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
@@ -90,7 +88,7 @@ const App = observer(() => {
             <ProtectedRoute
               roles={ROLES_ALL}
               path={Routes.rent.path}
-              component={withHeaderAndFooter(Rents)}
+              component={RentRoutes}
             />
 
             {/* Admin */}

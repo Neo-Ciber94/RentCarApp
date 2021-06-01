@@ -46,6 +46,7 @@ export class Inspection extends BaseEntity {
   haveTires!: boolean;
 
   @Column({
+    type: "enum",
     enum: TireStatus,
     default: TireStatus.Normal,
   })

@@ -33,14 +33,15 @@ export function Rents() {
   }
 
   return (
-    <Container>
+    <Container className="lg:max-w-5xl">
       {withCrudDataTable({
         columns,
         data,
-        canAdd: false,
-        canDelete: false,
-        canEdit: false,
+        addButtonText: "Rent Vehicle",
+        onAdd: () => console.log("Add"),
         onEdit: (row) => console.log("Edit", row),
+        onDelete: (row) => console.log("Delete", row),
+        onDetails: (row) => console.log("View", row),
       })}
     </Container>
   );

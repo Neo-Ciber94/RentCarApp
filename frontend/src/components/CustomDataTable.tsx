@@ -99,5 +99,9 @@ function filterObjectsByText<T>(items: T[], text: string) {
 }
 
 function FilterComponent(props: { onChange: (s: string) => void }) {
-  return <InputWithReset placeholder="Search..." onChange={props.onChange} />;
+  return (
+    <div className="w-full sm:w-auto">
+      <InputWithReset placeholder="Search..." onChange={props.onChange} />
+    </div>
+  );
 }

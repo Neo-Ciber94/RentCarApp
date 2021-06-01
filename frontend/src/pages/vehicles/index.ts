@@ -5,6 +5,6 @@ export * from './VehicleDetails';
 export * from './VehicleEdit';
 export * from './VehicleForm';
 export * from './VehicleInfo';
-export * from './VehicleList';
 export * from './VehicleRoutes';
 export * from './Vehicles';
+export * from './VehiclesGrid';

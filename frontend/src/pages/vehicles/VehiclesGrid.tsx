@@ -1,14 +1,12 @@
-import { Container, Loading } from "src/components";
-import { useAllVehicles } from "src/hooks";
+import { VehicleDTO } from "@shared/types";
+import { Container } from "src/components";
 import { VehicleCard } from "./VehicleCard";
 
-export function VehicleList() {
-  const { isLoading, data = [] } = useAllVehicles();
+interface VehicleGridProps {
+  data: VehicleDTO[];
+}
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
+export const VehiclesGrid = ({ data }: VehicleGridProps) => {
   const vehicles = data.map((e, index) => (
     <VehicleCard key={index} vehicle={e} />
   ));
@@ -18,4 +16,4 @@ export function VehicleList() {
       <div className="flex flex-row gap-4">{vehicles}</div>
     </Container>
   );
-}
+};

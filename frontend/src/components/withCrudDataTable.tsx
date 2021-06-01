@@ -72,9 +72,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
 
   return (
     <>
-      <div className="p-1">
-        <AddButtom props={props} />
-      </div>
+      <AddButtom props={props} />
       <CustomDataTable columns={mergedColumns} data={data || []} />
     </>
   );
@@ -84,7 +82,7 @@ const AddButtom = (props: { props: CrudDataTableProps<any> }) => {
   const { addPath, onAdd, addButtonText } = props.props;
 
   return addPath ? (
-    <div className="p-1">
+    <div className="py-2">
       <LinkButton to={addPath} className="text-lg inline-block">
         {addButtonText || "Add"}
       </LinkButton>

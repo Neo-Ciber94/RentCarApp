@@ -5,7 +5,7 @@ import { Request } from "express";
 
 // prettier-ignore
 export async function authenticateUser(request: Request, allowedRoles: UserRole[] = []) {
-  if (needsAuthentication(BASE_API, request.url)) {
+  if (needsAuthentication(request, request.url)) {
     const sessionId = request.sessionID;
     const userId = request.session.userId;
 
@@ -38,8 +38,13 @@ function hasValidRole(user: User, roles: UserRole[]) {
   return roles.includes(user.role);
 }
 
-function needsAuthentication(apiUrl: string, url: string) {
-  const authUrl = `${apiUrl}/auth`;
+function needsAuthentication(request: Request, url: string) {
+  const authUrl = `${BASE_API}/auth`;
+
+  // GET from vehicles don't need authentication
+  if (url === `${BASE_API}/vehicles` && request.method === "GET") {
+    return false;
+  }
 
   if (url.startsWith(authUrl)) {
     // Split the string removing any query params

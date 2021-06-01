@@ -3,6 +3,10 @@ import { VehicleDTO } from "@shared/types";
 import { useQuery } from "react-query";
 import { Services } from "src/services";
 import { IDataTableColumn } from "react-data-table-component";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { AuthContext } from "src/context/AuthContext";
+import { VehicleList } from "./VehicleList";
 
 const columns: IDataTableColumn<VehicleDTO>[] = [
   {
@@ -26,7 +30,13 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
   },
 ];
 
-export default function Vehicles() {
+export const Vehicles = observer(() => {
+  const authService = useContext(AuthContext);
+
+  if (authService.currentUser == null) {
+    return <VehicleList />;
+  }
+
   const { isLoading, data } = useVehicles();
 
   if (isLoading) {
@@ -47,7 +57,7 @@ export default function Vehicles() {
       })}
     </Container>
   );
-}
+});
 
 function useVehicles() {
   return useQuery("vehicles", () => {

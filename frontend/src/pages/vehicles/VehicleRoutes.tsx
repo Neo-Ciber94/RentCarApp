@@ -5,7 +5,7 @@ import { VehicleCreate } from "./VehicleCreate";
 import { VehicleDelete } from "./VehicleDelete";
 import { VehicleDetails } from "./VehicleDetails";
 import { VehicleEdit } from "./VehicleEdit";
-import Vehicles from "./Vehicles";
+import { Vehicles } from "./Vehicles";
 
 export function VehicleRoutes() {
   const match = useRouteMatch();

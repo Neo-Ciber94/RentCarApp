@@ -17,7 +17,7 @@ const PRIMARY_COLOR =
 const SECONDARY_COLOR =
   "bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white ring ring-transparent focus:ring-gray-400";
 const INFO_COLOR =
-  "bg-blue-400 hover:bg-blue-500 active:bg-blue-500 text-black ring ring-transparent focus:ring-blue-200";
+  "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white ring ring-transparent focus:ring-blue-200";
 const WARNING_COLOR =
   "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-500 text-black ring ring-transparent focus:ring-yellow-200";
 

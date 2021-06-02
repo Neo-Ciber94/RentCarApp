@@ -1,7 +1,7 @@
 import { makeStyles, Step, StepLabel, Stepper } from "@material-ui/core";
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
 import { ClientDTO, LegalPerson, VehicleDTO } from "@shared/types";
-import { Formik, FormikErrors, FormikTouched } from "formik";
+import { Form, Formik, FormikErrors, FormikProps, FormikTouched } from "formik";
 import { useState } from "react";
 import {
   ButtonProps,
@@ -10,6 +10,7 @@ import {
   FormSelect,
   Loading,
   MainButton,
+  withCustomForm,
 } from "src/components";
 import { useAllVehicles } from "src/hooks";
 import { Colors } from "src/layout";
@@ -88,7 +89,10 @@ const validationSchema: yup.SchemaOf<RentValues> = yup.object({
     .oneOf(Object.values(LegalPerson))
     .required("Legal Person type is required"),
 
-  vehicleId: yup.number().min(1).required("Vehicle is required"),
+  vehicleId: yup
+    .number()
+    .min(1, "Select a vehicle")
+    .required("Vehicle is required"),
 });
 
 const steps = ["Vehicle", "Client", "Confirmation"];
@@ -98,15 +102,29 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
   const [currentStep, setStep] = useState(0);
   const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
 
-  const nextStep = () => {
-    setStep(currentStep + 1);
+  const nextStep = async (formikProps: FormikProps<RentValues>) => {
+    let next = false;
+    if (currentStep === 0) {
+      // Formik don't validate if the field don't exist
+      formikProps.setFieldValue("vehicleId", selectedVehicle?.id);
+      formikProps.validateField("vehicleId");
+      next = !!selectedVehicle?.id;
+    }
+
+    if (currentStep === 1) {
+      await formikProps.validateForm();
+      next = formikProps.isValid;
+    }
+
+    console.log(next);
+    if (next === true) {
+      setStep(currentStep + 1);
+    }
   };
 
   const prevStep = () => {
     setStep(currentStep - 1);
   };
-
-  const canAdvance = () => {};
 
   return (
     <Container className="lg:max-w-5xl">
@@ -135,11 +153,15 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
         onSubmit={(values, actions) => {
           console.log(values);
         }}
       >
-        {({ errors, touched, validateForm, isValid }) => {
+        {(formikProps) => {
+          const { errors, touched } = formikProps;
+
           const currentContent = () => {
             switch (currentStep) {
               case 0:
@@ -161,30 +183,28 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
 
           const formButton =
             currentStep === steps.length - 1 ? (
-              <FormButton type="submit" text="Submit" />
+              <FormButton color="info" type="submit" text="Submit" />
             ) : (
               <FormButton
                 type="button"
-                onClick={async () => {
-                  await validateForm();
-                  if (isValid || currentStep < steps.length) {
-                    nextStep();
-                  }
-                }}
+                onClick={() => nextStep(formikProps)}
                 text="Next"
               />
             );
 
+          const showPrevBtn = currentStep > 0;
+          const showNextBtn = currentStep < steps.length;
+
           return (
-            <>
+            <Form>
               {currentContent()}
               <div className="flex flex-row w-full gap-4 mt-4 justify-end">
-                {currentStep > 0 && (
+                {showPrevBtn && (
                   <FormButton type="button" onClick={prevStep} text="Prev" />
                 )}
-                {currentStep < steps.length && formButton}
+                {showNextBtn && formButton}
               </div>
-            </>
+            </Form>
           );
         }}
       </Formik>
@@ -247,7 +267,7 @@ function ClientForm({ errors, touched }: ClientFormProps) {
   );
 }
 
-function VehicleSelection(props: VehicleSelectionProps) {
+function VehicleSelection({ errors, ...props }: VehicleSelectionProps) {
   const { isLoading, data = [] } = useAllVehicles();
 
   if (isLoading) {
@@ -270,7 +290,11 @@ function VehicleSelection(props: VehicleSelectionProps) {
 
   return (
     <Container className="lg:max-w-5xl">
+      <FormInput label="Vehicle" name="vehicleId" hidden />
       <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
+      {errors.vehicleId && (
+        <p className="text-red-500 text-xs mt-4">{errors.vehicleId}</p>
+      )}
     </Container>
   );
 }

@@ -1,27 +1,43 @@
 import { makeStyles, Step, StepLabel, Stepper } from "@material-ui/core";
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
 import { ClientDTO, LegalPerson, VehicleDTO } from "@shared/types";
+import { Formik, FormikErrors, FormikTouched } from "formik";
 import { useState } from "react";
-import { Container } from "src/components";
+import {
+  ButtonProps,
+  Container,
+  FormInput,
+  FormSelect,
+  Loading,
+  MainButton,
+} from "src/components";
 import { useAllVehicles } from "src/hooks";
 import { Colors } from "src/layout";
 import * as yup from "yup";
+import { VehicleCard } from "..";
 
 export interface RentValues extends PartialBy<ClientDTO, "id"> {
   vehicleId: number;
 }
 
+type FormButtomProps = ButtonProps & { onClick?: () => void; text: string };
+
 interface RentFormProps {
   initialValues: RentValues;
 }
 
-const stepperStyles = makeStyles({
-  circle: {
-    width: 20,
-    height: 20,
-    color: Colors.MainColor,
-  },
+interface VehicleSelectionProps {
+  onSelect: (vehicle: VehicleDTO) => void;
+  selected?: VehicleDTO;
+  errors: FormikErrors<RentValues>;
+}
 
+interface ClientFormProps {
+  errors: FormikErrors<RentValues>;
+  touched: FormikTouched<RentValues>;
+}
+
+const stepperStyles = makeStyles({
   icon: {
     width: 30,
     height: 30,
@@ -77,14 +93,23 @@ const validationSchema: yup.SchemaOf<RentValues> = yup.object({
 
 const steps = ["Vehicle", "Client", "Confirmation"];
 
-export const RentForm: React.FC<RentFormProps> = (props) => {
+export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
   const classes = stepperStyles();
   const [currentStep, setStep] = useState(0);
   const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
-  const {} = useAllVehicles();
+
+  const nextStep = () => {
+    setStep(currentStep + 1);
+  };
+
+  const prevStep = () => {
+    setStep(currentStep - 1);
+  };
+
+  const canAdvance = () => {};
 
   return (
-    <Container>
+    <Container className="lg:max-w-5xl">
       <Stepper activeStep={currentStep}>
         {steps.map((label, index) => {
           const completed = currentStep > index;
@@ -107,11 +132,145 @@ export const RentForm: React.FC<RentFormProps> = (props) => {
         })}
       </Stepper>
 
-      <div>{getStepContent(currentStep)}</div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(values, actions) => {
+          console.log(values);
+        }}
+      >
+        {({ errors, touched, validateForm, isValid }) => {
+          const currentContent = () => {
+            switch (currentStep) {
+              case 0:
+                return (
+                  <VehicleSelection
+                    onSelect={setVehicle}
+                    selected={selectedVehicle}
+                    errors={errors}
+                  />
+                );
+              case 1:
+                return <ClientForm errors={errors} touched={touched} />;
+              case 2:
+                return <h1>Completed</h1>;
+              default:
+                throw new Error("Invalid step");
+            }
+          };
+
+          const formButton =
+            currentStep === steps.length - 1 ? (
+              <FormButton type="submit" text="Submit" />
+            ) : (
+              <FormButton
+                type="button"
+                onClick={async () => {
+                  await validateForm();
+                  if (isValid || currentStep < steps.length) {
+                    nextStep();
+                  }
+                }}
+                text="Next"
+              />
+            );
+
+          return (
+            <>
+              {currentContent()}
+              <div className="flex flex-row w-full gap-4 mt-4 justify-end">
+                {currentStep > 0 && (
+                  <FormButton type="button" onClick={prevStep} text="Prev" />
+                )}
+                {currentStep < steps.length && formButton}
+              </div>
+            </>
+          );
+        }}
+      </Formik>
     </Container>
   );
 };
 
-function getStepContent(step: number) {
-  return <h1>{steps[step]}</h1>;
+function FormButton(props: FormButtomProps) {
+  return (
+    <MainButton {...props} className="w-full  sm:w-1/6" onClick={props.onClick}>
+      {props.text}
+    </MainButton>
+  );
+}
+
+function ClientForm({ errors, touched }: ClientFormProps) {
+  return (
+    <>
+      {/* <FormInput label="ID" name="id" /> */}
+      <FormInput
+        label="Name"
+        name="name"
+        error={errors.name}
+        touched={touched.name}
+      />
+      <FormInput
+        label="Email"
+        name="email"
+        type="email"
+        error={errors.email}
+        touched={touched.email}
+      />
+      <FormInput
+        label="Document ID"
+        name="documentId"
+        error={errors.documentId}
+        touched={touched.documentId}
+      />
+      <FormInput
+        label="Credit Card"
+        name="creditCard"
+        error={errors.creditCard}
+        touched={touched.creditCard}
+      />
+      <FormInput
+        label="Credit Limit"
+        name="creditLimit"
+        type="number"
+        error={errors.creditLimit}
+        touched={touched.creditLimit}
+      />
+      <FormSelect
+        label="Legal Person"
+        name="legalPerson"
+        options={LegalPerson}
+        error={errors.legalPerson}
+        touched={touched.legalPerson}
+      />
+    </>
+  );
+}
+
+function VehicleSelection(props: VehicleSelectionProps) {
+  const { isLoading, data = [] } = useAllVehicles();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const vehicles = data.map((e, index) => {
+    const isSelected = props.selected?.id === e.id;
+    return (
+      <VehicleCard
+        key={index}
+        vehicle={e}
+        onClick={() => props.onSelect(e)}
+        className={`cursor-pointer ${
+          isSelected ? "ring-4 ring-red-500 ring-opacity-90" : ""
+        }`}
+      />
+    );
+  });
+
+  return (
+    <Container className="lg:max-w-5xl">
+      <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
+    </Container>
+  );
 }

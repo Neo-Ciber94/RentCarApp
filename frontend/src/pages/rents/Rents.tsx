@@ -2,7 +2,6 @@ import { RentDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllRents } from "src/hooks/rentHooks";
-import { Routes } from "src/layout";
 
 const columns: IDataTableColumn<RentDTO>[] = [
   {

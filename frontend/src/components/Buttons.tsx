@@ -22,10 +22,10 @@ const WARNING_COLOR =
   "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-500 text-black ring ring-transparent focus:ring-yellow-200";
 
 // prettier-ignore
-type ButtonProps = ColoredButton & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+export type ButtonProps = ColoredButton & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 // prettier-ignore
-type LinkProps<S = unknown> = ColoredButton & LinkButtonProps & React.PropsWithoutRef<Partial<NavLinkProps<S>>> & React.RefAttributes<HTMLAnchorElement>;
+export type LinkProps<S = unknown> = ColoredButton & LinkButtonProps & React.PropsWithoutRef<Partial<NavLinkProps<S>>> & React.RefAttributes<HTMLAnchorElement>;
 
 export const MainButton: React.FC<ButtonProps> = ({
   className,

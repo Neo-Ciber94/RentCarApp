@@ -5,17 +5,20 @@ interface VehicleCardProps {
   photo?: string;
   vehicle: VehicleDTO;
   className?: string;
+  onClick?: () => void;
 }
 
 export const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
   photo,
   className,
+  onClick,
 }) => {
   const vehicleName = `${vehicle.model.brand.name} ${vehicle.model.name}`;
 
   return (
     <div
+      onClick={onClick}
       className={`flex flex-col shadow-md ring-1 ring-gray-300 rounded-lg overflow-hidden sm:w-64 w-full ${
         className || ""
       }`}

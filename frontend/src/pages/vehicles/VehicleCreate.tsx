@@ -1,7 +1,7 @@
 import { GearBox } from "@shared/types";
 import { Container } from "src/components";
+import { randomString } from "src/utils/randomString";
 import { VehicleForm } from "./VehicleForm";
-import crypto from "crypto";
 
 export function VehicleCreate() {
   return (
@@ -21,8 +21,4 @@ export function VehicleCreate() {
       />
     </Container>
   );
-}
-
-function randomString(length: number) {
-  return crypto.randomBytes(length).toString("hex");
 }

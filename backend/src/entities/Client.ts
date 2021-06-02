@@ -1,7 +1,16 @@
+import { CREDIT_CARD_LENGTH } from "@shared/config";
 import { LegalPerson } from "@shared/types/LegalPerson";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Check,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity()
+@Check("check_credit_card_length", `LENGTH(creditCard) = ${CREDIT_CARD_LENGTH}`)
+@Check("check_credit_limit", "creditLimit = NULL OR creditLimit > 0")
 export class Client extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -18,8 +27,8 @@ export class Client extends BaseEntity {
   @Column()
   creditCard!: string;
 
-  @Column({ type: "decimal" })
-  creditLimit!: number;
+  @Column({ type: "decimal", nullable: true })
+  creditLimit!: number | null;
 
   @Column({
     type: "enum",

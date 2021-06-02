@@ -12,7 +12,7 @@ enum ShowKind {
   Table,
 }
 
-interface ButtonShowKind {
+interface ButtonShowKindProps {
   kind: ShowKind;
   onGrid: () => void;
   onTable: () => void;
@@ -88,7 +88,7 @@ export const Vehicles = observer(() => {
   );
 });
 
-const ButtonShowKind: React.FC<ButtonShowKind> = ({
+const ButtonShowKind: React.FC<ButtonShowKindProps> = ({
   onGrid,
   onTable,
   kind,

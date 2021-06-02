@@ -6,6 +6,6 @@ export interface ClientDTO {
   email: string;
   documentId: string;
   creditCard: string;
-  creditLimit: number;
+  creditLimit?: number;
   legalPerson: LegalPerson;
 }

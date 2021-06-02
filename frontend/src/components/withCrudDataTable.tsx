@@ -90,13 +90,13 @@ const AddButtom = (props: { props: CrudDataTableProps<any> }) => {
   const { addPath, onAdd, addButtonText } = props.props;
 
   return addPath ? (
-    <div className="py-2">
+    <div className="py-2 overflow-visible">
       <LinkButton to={addPath} className="text-lg inline-block">
         {addButtonText || "Add"}
       </LinkButton>
     </div>
   ) : (
-    <MainButton className="text-lg" onClick={onAdd}>
+    <MainButton className="text-lg m-1 overflow-visible" onClick={onAdd}>
       {addButtonText || "Add"}
     </MainButton>
   );

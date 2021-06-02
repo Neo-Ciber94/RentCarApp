@@ -2,6 +2,7 @@ import { RentDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllRents } from "src/hooks/rentHooks";
+import { Routes } from "src/layout";
 
 const columns: IDataTableColumn<RentDTO>[] = [
   {
@@ -38,10 +39,10 @@ export function Rents() {
         columns,
         data,
         addButtonText: "Rent Vehicle",
-        onAdd: () => console.log("Add"),
-        onEdit: (row) => console.log("Edit", row),
-        onDelete: (row) => console.log("Delete", row),
-        onDetails: (row) => console.log("View", row),
+        addPath: "/rents/new",
+        editPath: (row) => `/rents/${row.id}/edit`,
+        detailsPath: (row) => `/rents/${row.id}`,
+        deletePath: (row) => `/rents/${row.id}/delete`,
       })}
     </Container>
   );

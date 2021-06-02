@@ -11,7 +11,7 @@ export function RentRoutes() {
 
   return (
     <>
-      <Header />
+      <Header title="Rents" />
       <Switch>
         <Route exact path={match.url} component={Rents} />
         <Route exact path={`${match.url}/new`} component={RentCreate} />

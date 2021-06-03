@@ -1,5 +1,10 @@
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
-import { ClientDTO, LegalPerson, VehicleDTO } from "@shared/types";
+import {
+  ClientDTO,
+  InspectionDTO,
+  LegalPerson,
+  VehicleDTO,
+} from "@shared/types";
 import { Form, Formik, FormikProps } from "formik";
 import { useState } from "react";
 import { ButtonProps, Container, MainButton } from "src/components";
@@ -11,6 +16,7 @@ import { RentVehicleSelection } from "./RentVehicleSelection";
 
 export interface RentValues extends PartialBy<ClientDTO, "id"> {
   vehicleId: number;
+  inspection: InspectionDTO;
 }
 
 type FormButtomProps = ButtonProps & { onClick?: () => void; text: string };
@@ -59,6 +65,9 @@ const validationSchema: yup.SchemaOf<RentValues> = yup.object({
     .number()
     .min(1, "Select a vehicle")
     .required("Vehicle is required"),
+
+  // TODO
+  inspection: yup.object({}) as yup.SchemaOf<InspectionDTO>,
 });
 
 const steps = ["Vehicle", "Client", "Inspection", "Confirmation"];
@@ -69,7 +78,10 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
 
   const nextStep = async (formikProps: FormikProps<RentValues>) => {
     let next = false;
+
     if (currentStep === 0) {
+      formikProps.validateField("vehicleId");
+      console.log(formikProps);
       next = !!selectedVehicle?.id;
     }
 
@@ -116,7 +128,6 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                   <RentVehicleSelection
                     onSelect={(v) => {
                       setVehicle(v);
-                      formikProps.validateField("vehicleId");
                       formikProps.setFieldValue("vehicleId", v.id);
                     }}
                     selected={selectedVehicle}
@@ -126,7 +137,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
               case 1:
                 return <RentClientForm errors={errors} touched={touched} />;
               case 2:
-                return <RentInspectionForm />;
+                return <RentInspectionForm errors={errors} touched={touched} />;
               case 3:
                 return <h1>Completed</h1>;
               default:

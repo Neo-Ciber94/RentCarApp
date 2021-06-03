@@ -15,6 +15,7 @@ export function RentCreate() {
         creditCard: randomString(CREDIT_CARD_LENGTH),
         documentId: randomString(DOCUMENT_ID_LENGTH),
         legalPerson: LegalPerson.Physical,
+        inspection: {} as any,
       }}
     />
   );

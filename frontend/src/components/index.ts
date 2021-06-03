@@ -2,6 +2,7 @@ export * from './BottomButtonGroup';
 export * from './Buttons';
 export * from './Container';
 export * from './CustomDataTable';
+export * from './FormCheckbox';
 export * from './FormInput';
 export * from './FormSelect';
 export * from './FormStepper';

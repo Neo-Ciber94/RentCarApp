@@ -44,9 +44,9 @@ export const FormSelect: React.FC<SelectProps> = ({
         {props.label}
       </label>
       <Field
+        {...props}
         as="select"
         name={props.name}
-        {...props}
         className={`w-full shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorClass}`}
       >
         {defaultOption && <option label={defaultOption} hidden />}

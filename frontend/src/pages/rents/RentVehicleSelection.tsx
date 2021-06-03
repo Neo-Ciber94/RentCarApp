@@ -39,7 +39,12 @@ export function RentVehicleSelection({
   return (
     <Container className="lg:max-w-5xl">
       {/* We use a hidden field for the id */}
-      <FormInput label="Vehicle" name="vehicleId" value={selected?.id || 0} />
+      <FormInput
+        label="Vehicle"
+        name="vehicleId"
+        type="hidden"
+        value={selected?.id || 0}
+      />
 
       <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
       {errors.vehicleId && (

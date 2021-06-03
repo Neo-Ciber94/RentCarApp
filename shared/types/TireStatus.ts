@@ -1,5 +1,5 @@
 export enum TireStatus {
-  Normal,
-  NeedAir,
-  Damaged,
+  Normal = "normal",
+  NeedAir = "needAir",
+  Damaged = "damaged",
 }

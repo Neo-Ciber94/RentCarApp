@@ -30,6 +30,15 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
   },
 
   {
+    name: "Available",
+    cell: (row) => (
+      <p className={row.isAvailable ? "text-green-600" : "text-red-600"}>
+        {row.isAvailable ? "Available" : "Rented"}
+      </p>
+    ),
+  },
+
+  {
     name: "Fuel",
     selector: (e) => e.fuel.name,
   },

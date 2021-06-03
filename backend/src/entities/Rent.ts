@@ -1,5 +1,7 @@
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -63,4 +65,14 @@ export class Rent extends BaseEntity {
     nullable: true,
   })
   comments!: string | null;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async checkVehicleIsAvailable() {
+    const vehicle = await Vehicle.findOne(this.vehicleId);
+
+    if (vehicle!.isAvailable === false) {
+      throw new Error(`Vehicle with id ${vehicle?.id} is not available`);
+    }
+  }
 }

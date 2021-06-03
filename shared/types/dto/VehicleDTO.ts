@@ -14,5 +14,6 @@ export interface VehicleDTO {
   licensePlate: string;
   gearBox: GearBox;
   status: string | null;
+  isAvailable: boolean;
   description: string | null;
 }

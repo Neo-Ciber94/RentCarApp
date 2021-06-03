@@ -33,6 +33,8 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
   licensePlate: yup.string().required("License plate number is required"),
 
   // Fields bellow are ignored
+  isAvailable: yup.bool().optional(),
+
   model: yup.mixed().optional(),
 
   fuel: yup.mixed().optional(),

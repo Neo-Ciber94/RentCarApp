@@ -157,6 +157,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         validateOnBlur={false}
         onSubmit={(values, actions) => {
           console.log(values);
+          actions.setSubmitting(false);
         }}
       >
         {(formikProps) => {
@@ -183,10 +184,16 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
 
           const formButton =
             currentStep === steps.length - 1 ? (
-              <FormButton color="info" type="submit" text="Submit" />
+              <FormButton
+                key="submit" // Key needed to allow react know when is submitting
+                color="info"
+                type="submit"
+                text="Submit"
+              />
             ) : (
               <FormButton
                 type="button"
+                key="button"
                 onClick={() => nextStep(formikProps)}
                 text="Next"
               />

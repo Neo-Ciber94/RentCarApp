@@ -11,7 +11,7 @@ export function RentCreate() {
         name: "",
         email: "",
         vehicleId: 0,
-        creditLimit: undefined,
+        creditLimit: 0,
         creditCard: randomString(CREDIT_CARD_LENGTH),
         documentId: randomString(DOCUMENT_ID_LENGTH),
         legalPerson: LegalPerson.Physical,

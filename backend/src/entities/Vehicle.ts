@@ -64,6 +64,11 @@ export class Vehicle extends BaseEntity {
   })
   description!: string | null;
 
+  @Column({
+    default: true
+  })
+  isAvailable!: boolean;
+
   @OneToMany(() => Inspection, (inspection) => inspection.vehicle)
   inspections!: Inspection[];
 }

@@ -1,9 +1,17 @@
 import { InspectionDTO, TireStatus } from "@shared/types";
+import { useHistory } from "react-router-dom";
+import { withCustomForm } from "src/components";
 import * as yup from "yup";
 
-interface InspectionValues extends PartialBy<InspectionDTO, "id"> {}
+type InspectionEntity = Omit<
+  PartialBy<InspectionDTO, "id">,
+  "client" | "vehicle"
+>;
+export interface InspectionFormProps {
+  initialValues: InspectionEntity;
+}
 
-const validationSchema: yup.SchemaOf<InspectionValues> = yup.object({
+const validationSchema: yup.SchemaOf<InspectionEntity> = yup.object({
   id: yup.number().optional(),
 
   clientId: yup
@@ -11,13 +19,13 @@ const validationSchema: yup.SchemaOf<InspectionValues> = yup.object({
     .min(1, "Client is required")
     .required("Client is required"),
 
-  haveBrokenGlass: yup.bool().required("Required"),
+  haveBrokenGlass: yup.bool().optional().default(false),
 
-  haveCarJack: yup.bool().required("Required"),
+  haveCarJack: yup.bool().optional().default(false),
 
-  haveScratches: yup.bool().required("Required"),
+  haveScratches: yup.bool().optional().default(false),
 
-  haveTires: yup.bool().required("Is Required"),
+  haveTires: yup.bool().optional().default(false),
 
   status: yup.string().optional(),
 
@@ -31,13 +39,22 @@ const validationSchema: yup.SchemaOf<InspectionValues> = yup.object({
     .oneOf(Object.values(TireStatus))
     .required("Tire status is required"),
 
-  // Known bug: https://github.com/jquense/yup/issues/1183
+  // Date type is giving an error: https://github.com/jquense/yup/issues/1183
   inspectionDate: yup.date().required("Inspection date is required") as any,
-
-  // Ignored fields
-  client: yup.mixed().optional(),
-
-  vehicle: yup.mixed().optional(),
 });
 
-export function InspectionForm() {}
+export function InspectionForm({ initialValues }: InspectionFormProps) {
+  const history = useHistory();
+
+  return withCustomForm({
+    initialValues,
+    validationSchema,
+    onCancel: () => history.goBack(),
+    onSubmit: (values, actions) => {
+      console.log(values);
+    },
+    render: ({ errors, touched }) => {
+      return <h1>Hello World</h1>;
+    },
+  });
+}

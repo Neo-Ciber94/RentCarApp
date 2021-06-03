@@ -4,6 +4,7 @@ export * from './Container';
 export * from './CustomDataTable';
 export * from './FormInput';
 export * from './FormSelect';
+export * from './FormStepper';
 export * from './InputWithReset';
 export * from './Loading';
 export * from './NavDropdown';

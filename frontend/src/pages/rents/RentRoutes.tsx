@@ -4,6 +4,7 @@ import { RentCreate } from "./RentCreate";
 import { RentDelete } from "./RentDelete";
 import { RentDetails } from "./RentDetails";
 import { RentEdit } from "./RentEdit";
+import { RentReturn } from "./RentReturn";
 import { Rents } from "./Rents";
 
 export function RentRoutes() {
@@ -15,6 +16,7 @@ export function RentRoutes() {
       <Switch>
         <Route exact path={match.url} component={Rents} />
         <Route exact path={`${match.url}/new`} component={RentCreate} />
+        <Route exact path={`${match.url}/return`} component={RentReturn} />
         <Route exact path={`${match.url}/:id`} component={RentDetails} />
         <Route exact path={`${match.url}/:id/edit`} component={RentEdit} />
         <Route exact path={`${match.url}/:id/delete`} component={RentDelete} />

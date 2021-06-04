@@ -15,5 +15,6 @@ export * from './ProtectedRoute';
 export * from './ReactSwal';
 export * from './TextInfo';
 export * from './TextWithLabel';
+export * from './Title';
 export * from './withCrudDataTable';
 export * from './withCustomForm';

@@ -22,12 +22,12 @@ export class AbstractController<T, R = T> {
   }
 
   @Get()
-  getAll(): Promise<R[]> {
+  find(): Promise<R[]> {
     return this.repository.find({ relations: this.relations });
   }
 
   @Get("/:id")
-  getById(@Param("id") id: number): Promise<R | undefined> {
+  findById(@Param("id") id: number): Promise<R | undefined> {
     return this.repository.findById(id, { relations: this.relations });
   }
 

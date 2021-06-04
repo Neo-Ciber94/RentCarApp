@@ -1,6 +1,6 @@
 import { webClient } from "./http";
 
-type Create<T> = Omit<T, "id">;
+type Create<T> = Partial<Omit<T, "id">>;
 
 /**
  * A RestAPI client.

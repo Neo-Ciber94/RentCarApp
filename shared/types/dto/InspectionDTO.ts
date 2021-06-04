@@ -1,12 +1,12 @@
-import { ClientDTO, VehicleDTO } from ".";
+import { RentDTO, VehicleDTO } from ".";
 import { TireStatus } from "../TireStatus";
 
 export interface InspectionDTO {
   id: number;
   vehicleId: number;
   vehicle: VehicleDTO;
-  clientId: number;
-  client: ClientDTO;
+  rentId: number;
+  rent: RentDTO;
   inspectionDate: Date;
   haveScratches: boolean;
   haveBrokenGlass: boolean;

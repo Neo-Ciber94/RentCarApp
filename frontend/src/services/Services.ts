@@ -1,5 +1,6 @@
 import {
   BrandDTO,
+  ClientDTO,
   EmployeeDTO,
   FuelDTO,
   InspectionDTO,
@@ -21,4 +22,5 @@ export module Services {
   export const rents = new RentService();
   export const inspections = new ApiService<InspectionDTO>("/inspections");
   export const reservations = new ApiService<ReservationDTO>("/reservations");
+  export const clients = new ApiService<ClientDTO>("/clients");
 }

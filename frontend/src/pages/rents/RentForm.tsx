@@ -1,9 +1,12 @@
 import { VehicleDTO } from "@shared/types";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { ButtonProps, Container, MainButton } from "src/components";
 import { FormStepper } from "src/components/FormStepper";
-import { RentFormValues, RentView } from ".";
+import { Routes } from "src/layout";
+import { Services } from "src/services";
+import { RentFormValues, RentConfirmation } from ".";
 import { RentClientForm } from "./RentClientForm";
 import { RentInspectionForm } from "./RentInspectionForm";
 import { RentVehicleSelection } from "./RentVehicleSelection";
@@ -21,6 +24,7 @@ interface RentFormProps {
 const steps = ["Vehicle", "Client", "Inspection", "Confirmation"];
 
 export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
+  const history = useHistory();
   const [currentStep, setStep] = useState(0);
   const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
 
@@ -56,9 +60,9 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         validationSchema={getValidationSchema(currentStep)}
         validateOnChange={false}
         validateOnBlur={false}
-        onSubmit={(values, actions) => {
-          console.log(values);
-          actions.setSubmitting(false);
+        onSubmit={async (values, actions) => {
+          submitRent(values, actions);
+          history.push(Routes.rent.path);
         }}
       >
         {(formikProps) => {
@@ -94,7 +98,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                   />
                 );
               case 3:
-                return <RentView values={values} />;
+                return <RentConfirmation values={values} />;
               default:
                 throw new Error("Invalid step");
             }
@@ -140,6 +144,42 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
     </Container>
   );
 };
+
+async function submitRent(
+  values: RentFormValues,
+  actions: FormikHelpers<RentFormValues>
+) {
+  const client = await Services.clients.create({
+    name: values.name,
+    email: values.email,
+    creditCard: values.creditCard,
+    creditLimit: values.creditLimit,
+    documentId: values.documentId,
+    legalPerson: values.legalPerson,
+  });
+
+  const rent = await Services.rents.create({
+    clientId: client.id,
+    employeeId: values.employeeId,
+    vehicleId: values.vehicleId,
+    comments: values.comments,
+  });
+
+  const inspection = await Services.inspections.create({
+    vehicleId: values.vehicleId,
+    rentId: rent.id,
+    haveBrokenGlass: values.haveBrokenGlass,
+    haveCarJack: values.haveCarJack,
+    haveScratches: values.haveScratches,
+    haveTires: values.haveTires,
+    tireStatus: values.tireStatus,
+    status: values.status,
+  });
+
+  console.log(client, rent, inspection);
+
+  actions.setSubmitting(false);
+}
 
 function getValidationSchema(step: number) {
   if (step === 0 || step === 1) {

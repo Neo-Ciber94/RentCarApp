@@ -5,14 +5,23 @@ import { DeepPartial } from "typeorm";
 import { err, ok, Result } from "@shared/result";
 import { Mapper } from "src/utils";
 
+const INCLUDES = [
+  "vehicle",
+  "vehicle.model",
+  "vehicle.model.brand",
+  "client",
+  "employee",
+  "employee.user",
+];
+
 export class RentRespository {
   async find() {
-    const result = await Rent.find({ relations: ["vehicle"] });
+    const result = await Rent.find({ relations: INCLUDES });
     return result.map(this.withDaysAndPrice);
   }
 
   async findById(id: number) {
-    const result = await Rent.findOne(id, { relations: ["vehicle"] });
+    const result = await Rent.findOne(id, { relations: INCLUDES });
     if (result) {
       return this.withDaysAndPrice(result);
     } else {

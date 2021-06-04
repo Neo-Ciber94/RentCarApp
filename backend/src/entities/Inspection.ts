@@ -9,7 +9,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Client } from "./Client";
+import { Rent } from "./Rent";
 import { Vehicle } from "./Vehicle";
 
 @Entity()
@@ -17,6 +17,7 @@ export class Inspection extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  // FIXME: Remove vehicle due can be accessed in `rent`
   @Column()
   vehicleId!: number;
 
@@ -24,11 +25,11 @@ export class Inspection extends BaseEntity {
   vehicle!: Vehicle;
 
   @Column()
-  clientId!: number;
+  rentId!: number;
 
-  @OneToOne(() => Client)
+  @OneToOne(() => Rent)
   @JoinColumn()
-  client!: Client;
+  rent!: Rent;
 
   @CreateDateColumn()
   inspectionDate!: Date;

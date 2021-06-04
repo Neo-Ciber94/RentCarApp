@@ -1,4 +1,5 @@
 export * from './RentClientForm';
+export * from './RentConfirmation';
 export * from './RentCreate';
 export * from './RentDelete';
 export * from './RentDetails';

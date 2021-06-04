@@ -4,21 +4,15 @@ import { FormInput, FormSelect } from "src/components";
 import { RentFormValues } from ".";
 
 export interface ClientFormProps {
-  initialValues: RentFormValues;
+  values: RentFormValues;
   errors: FormikErrors<RentFormValues>;
   touched: FormikTouched<RentFormValues>;
 }
 
-export function RentClientForm({
-  errors,
-  touched,
-  initialValues,
-}: ClientFormProps) {
+export function RentClientForm({ errors, touched, values }: ClientFormProps) {
   return (
     <>
-      {initialValues.clientId && (
-        <FormInput label="Client ID" name="clientId" />
-      )}
+      {values.clientId && <FormInput label="Client ID" name="clientId" />}
       <FormInput
         label="Name"
         name="name"

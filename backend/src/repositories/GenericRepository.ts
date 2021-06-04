@@ -7,14 +7,19 @@ import {
   Repository,
 } from "typeorm";
 
+export interface RepositoryOptions<T, R = T> {
+  repository: Repository<T>;
+  mapper?: Mapper<T, R> | MapperFn<T, R>;
+}
+
 export class GenericRepository<T, R = T> {
   #repository: Repository<T>;
   #mapper: Mapper<T, R>;
 
   // prettier-ignore
-  constructor(repository: Repository<T>, mapper?: Mapper<T, R> | MapperFn<T,R>) {
-    this.#repository = repository;
-    this.#mapper = mapper ? Mapper.from(mapper) : Mapper.IDENTITY;
+  constructor(options: RepositoryOptions<T, R>) {
+    this.#repository = options.repository;
+    this.#mapper =  options.mapper ? Mapper.from(options.mapper) : Mapper.IDENTITY;
   }
 
   async find(options?: FindManyOptions<T>): Promise<R[]> {

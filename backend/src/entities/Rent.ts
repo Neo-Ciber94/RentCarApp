@@ -1,4 +1,6 @@
 import {
+  AfterInsert,
+  AfterUpdate,
   BaseEntity,
   BeforeInsert,
   BeforeUpdate,

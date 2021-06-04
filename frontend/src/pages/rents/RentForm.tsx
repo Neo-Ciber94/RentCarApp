@@ -82,7 +82,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                   <RentClientForm
                     errors={errors}
                     touched={touched}
-                    initialValues={initialValues}
+                    values={values}
                   />
                 );
               case 2:
@@ -90,7 +90,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                   <RentInspectionForm
                     errors={errors}
                     touched={touched}
-                    initialValues={initialValues}
+                    values={values}
                   />
                 );
               case 3:

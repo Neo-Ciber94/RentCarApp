@@ -5,7 +5,7 @@ import { FormCheckbox } from "src/components/FormCheckbox";
 import { RentFormValues } from ".";
 
 interface InspectionProps {
-  initialValues: RentFormValues;
+  values: RentFormValues;
   errors: FormikErrors<RentFormValues>;
   touched: FormikTouched<RentFormValues>;
 }
@@ -13,14 +13,14 @@ interface InspectionProps {
 export function RentInspectionForm({
   errors,
   touched,
-  initialValues,
+  values,
 }: InspectionProps) {
   return (
     <>
-      {initialValues.inspectionId && (
+      {values.inspectionId && (
         <FormInput label="Inspection ID" name="inspectionId" readOnly />
       )}
-      {initialValues.inspectionDate && (
+      {values.inspectionDate && (
         <FormInput
           label="Inspection Date"
           name="inspectionDate"

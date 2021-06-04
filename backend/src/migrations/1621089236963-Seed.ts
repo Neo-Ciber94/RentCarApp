@@ -6,7 +6,9 @@ import { MigrationInterface } from "typeorm";
 export class Seed1621089236963 implements MigrationInterface {
   public async up(): Promise<void> {
     const authRepository = new AuthRepository();
-    const employeeRepository = new GenericRepository(Employee.getRepository());
+    const employeeRepository = new GenericRepository({
+      repository: Employee.getRepository(),
+    });
 
     // Boostrap with an admin user
     const result = await authRepository.signupWithRole({

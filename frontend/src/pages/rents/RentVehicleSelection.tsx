@@ -2,13 +2,13 @@ import { VehicleDTO } from "@shared/types";
 import { FormikErrors } from "formik";
 import { Loading, Container, FormInput } from "src/components";
 import { useAllVehicles } from "src/hooks";
-import { RentValues } from ".";
+import { RentFormValues } from ".";
 import { VehicleCard } from "..";
 
 export interface VehicleSelectionProps {
   onSelect: (vehicle: VehicleDTO) => void;
   selected?: VehicleDTO;
-  errors: FormikErrors<RentValues>;
+  errors: FormikErrors<RentFormValues>;
 }
 
 export function RentVehicleSelection({

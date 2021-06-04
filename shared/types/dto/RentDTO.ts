@@ -11,5 +11,6 @@ export interface RentDTO {
   rentDate: Date;
   returnDate?: Date;
   totalDays?: number;
+  totalPrice?: number;
   comments?: string;
 }

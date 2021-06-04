@@ -152,7 +152,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         render: ({ errors, touched }) => (
           <>
             {initialValues.employeeId && (
-              <FormInput label="ID" name="id" readOnly />
+              <FormInput label="ID" name="employeeId" readOnly />
             )}
             <FormInput
               label="First Name"

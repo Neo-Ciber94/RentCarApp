@@ -1,22 +1,39 @@
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
-import { LegalPerson } from "@shared/types";
+import { LegalPerson, TireStatus } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { AuthContext } from "src/context/AuthContext";
 import { randomString } from "src/utils/randomString";
 import { RentForm } from "./RentForm";
 
-export function RentCreate() {
+export const RentCreate = observer(() => {
+  const authService = useContext(AuthContext);
+  const currentUser = authService.currentUser!;
+
   return (
     <RentForm
       initialValues={{
-        id: 0,
+        // Rent
+        vehicleId: 0,
+        employeeId: currentUser.id,
+        comments: "",
+
+        // Client
         name: "",
         email: "",
-        vehicleId: 0,
         creditLimit: 0,
         creditCard: randomString(CREDIT_CARD_LENGTH),
         documentId: randomString(DOCUMENT_ID_LENGTH),
         legalPerson: LegalPerson.Physical,
-        inspection: {} as any,
+
+        // Inspection
+        haveScratches: false,
+        haveBrokenGlass: false,
+        haveCarJack: false,
+        haveTires: false,
+        tireStatus: TireStatus.Normal,
+        status: "",
       }}
     />
   );
-}
+});

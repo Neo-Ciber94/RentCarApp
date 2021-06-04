@@ -7,9 +7,10 @@ import {
   UserUpdate,
   UserChangePassword,
   UserRole,
+  WorkShift,
 } from "@shared/types";
 import { Request } from "express";
-import { User, UserSession } from "../entities";
+import { Employee, User, UserSession } from "../entities";
 import { BCryptHasher, PasswordHasher } from "../utils";
 import { resolve } from "path";
 import { UserMapper } from "src/mapper/UserMapper";
@@ -35,6 +36,7 @@ export class AuthRepository {
     const { hash, salt } = await this.hasher.hash(userSignup.password);
 
     const user = User.create(userSignup);
+
     if (userSignup.role) {
       user.role = userSignup.role;
     }

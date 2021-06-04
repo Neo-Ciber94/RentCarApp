@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Check,
   Column,
   Entity,
   JoinColumn,
@@ -10,6 +11,7 @@ import { WorkShift } from "@shared/types";
 import { User } from "./User";
 
 @Entity()
+@Check("check_comission_percentage", "comissionPercentage >= 0")
 export class Employee extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

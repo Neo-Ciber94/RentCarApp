@@ -1,17 +1,24 @@
 import { LegalPerson } from "@shared/types";
 import { FormikErrors, FormikTouched } from "formik";
 import { FormInput, FormSelect } from "src/components";
-import { RentValues } from ".";
+import { RentFormValues } from ".";
 
 export interface ClientFormProps {
-  errors: FormikErrors<RentValues>;
-  touched: FormikTouched<RentValues>;
+  initialValues: RentFormValues;
+  errors: FormikErrors<RentFormValues>;
+  touched: FormikTouched<RentFormValues>;
 }
 
-export function RentClientForm({ errors, touched }: ClientFormProps) {
+export function RentClientForm({
+  errors,
+  touched,
+  initialValues,
+}: ClientFormProps) {
   return (
     <>
-      {/* <FormInput label="ID" name="id" /> */}
+      {initialValues.clientId && (
+        <FormInput label="Client ID" name="clientId" />
+      )}
       <FormInput
         label="Name"
         name="name"
@@ -50,6 +57,13 @@ export function RentClientForm({ errors, touched }: ClientFormProps) {
         options={LegalPerson}
         error={errors.legalPerson}
         touched={touched.legalPerson}
+      />
+      <FormInput
+        label="Comments"
+        name="comments"
+        as="textarea"
+        error={errors.comments}
+        touched={touched.comments}
       />
     </>
   );

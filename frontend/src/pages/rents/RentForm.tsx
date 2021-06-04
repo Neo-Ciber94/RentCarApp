@@ -1,74 +1,22 @@
-import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
-import {
-  ClientDTO,
-  InspectionDTO,
-  LegalPerson,
-  VehicleDTO,
-} from "@shared/types";
+import { VehicleDTO } from "@shared/types";
 import { Form, Formik, FormikProps } from "formik";
 import { useState } from "react";
 import { ButtonProps, Container, MainButton } from "src/components";
 import { FormStepper } from "src/components/FormStepper";
-import * as yup from "yup";
+import { RentFormValues, RentView } from ".";
 import { RentClientForm } from "./RentClientForm";
 import { RentInspectionForm } from "./RentInspectionForm";
 import { RentVehicleSelection } from "./RentVehicleSelection";
-
-export interface RentValues extends PartialBy<ClientDTO, "id"> {
-  vehicleId: number;
-  inspection: InspectionDTO;
-}
+import {
+  inspectionValidationSchema,
+  rentValidationSchema,
+} from "./validationSchemas";
 
 type FormButtomProps = ButtonProps & { onClick?: () => void; text: string };
 
 interface RentFormProps {
-  initialValues: RentValues;
+  initialValues: RentFormValues;
 }
-
-const validationSchema: yup.SchemaOf<RentValues> = yup.object({
-  id: yup.number().optional(),
-
-  name: yup.string().required("Name is required"),
-
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .required("Email is required"),
-
-  creditCard: yup
-    .string()
-    .required("Credit Card is required")
-    .length(
-      CREDIT_CARD_LENGTH,
-      `Credit card expect ${CREDIT_CARD_LENGTH} digits`
-    ),
-
-  creditLimit: yup
-    .number()
-    .optional()
-    .min(1000, "Min credit limit is 1000 RD$"),
-
-  documentId: yup
-    .string()
-    .required("Document ID is required")
-    .length(
-      DOCUMENT_ID_LENGTH,
-      `Document ID expected ${DOCUMENT_ID_LENGTH} digits`
-    ),
-
-  legalPerson: yup
-    .mixed<LegalPerson>()
-    .oneOf(Object.values(LegalPerson))
-    .required("Legal Person type is required"),
-
-  vehicleId: yup
-    .number()
-    .min(1, "Select a vehicle")
-    .required("Vehicle is required"),
-
-  // TODO
-  inspection: yup.object({}) as yup.SchemaOf<InspectionDTO>,
-});
 
 const steps = ["Vehicle", "Client", "Inspection", "Confirmation"];
 
@@ -76,26 +24,21 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
   const [currentStep, setStep] = useState(0);
   const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
 
-  const nextStep = async (formikProps: FormikProps<RentValues>) => {
+  const nextStep = async (formikProps: FormikProps<RentFormValues>) => {
     let next = false;
+    console.log(formikProps.values);
 
     if (currentStep === 0) {
       formikProps.validateField("vehicleId");
-      console.log(formikProps);
       next = !!selectedVehicle?.id;
     }
 
-    if (currentStep === 1) {
+    if (currentStep >= 1) {
       await formikProps.validateForm();
       next = formikProps.isValid;
     }
 
-    if (currentStep === 2) {
-      // Validates inspection
-    }
-
-    console.log(next);
-    if (next === true) {
+    if (next) {
       setStep(currentStep + 1);
     }
   };
@@ -110,7 +53,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
 
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={getValidationSchema(currentStep)}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={(values, actions) => {
@@ -119,7 +62,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         }}
       >
         {(formikProps) => {
-          const { errors, touched } = formikProps;
+          const { errors, touched, values } = formikProps;
 
           const currentContent = () => {
             switch (currentStep) {
@@ -135,11 +78,23 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                   />
                 );
               case 1:
-                return <RentClientForm errors={errors} touched={touched} />;
+                return (
+                  <RentClientForm
+                    errors={errors}
+                    touched={touched}
+                    initialValues={initialValues}
+                  />
+                );
               case 2:
-                return <RentInspectionForm errors={errors} touched={touched} />;
+                return (
+                  <RentInspectionForm
+                    errors={errors}
+                    touched={touched}
+                    initialValues={initialValues}
+                  />
+                );
               case 3:
-                return <h1>Completed</h1>;
+                return <RentView values={values} />;
               default:
                 throw new Error("Invalid step");
             }
@@ -185,6 +140,18 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
     </Container>
   );
 };
+
+function getValidationSchema(step: number) {
+  if (step === 0 || step === 1) {
+    return rentValidationSchema;
+  }
+
+  if (step === 2) {
+    return inspectionValidationSchema;
+  }
+
+  return undefined;
+}
 
 function FormButton(props: FormButtomProps) {
   return (

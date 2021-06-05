@@ -16,12 +16,12 @@ export function RentView(props: RentViewProps) {
       <TextInfo label="Rent ID" value={rent.id} />
       <TextInfo label="Vehicle ID" value={rent.vehicleId} />
       <TextInfo label="Employee ID" value={rent.employeeId} />
-      {rent.rentDate && <TextInfo label="Rent Date" value={rent.rentDate} />}
-      {rent.totalDays && (
+      <TextInfo label="Rent Date" value={rent.rentDate} />
+      {rent.totalDays != null && (
         <TextInfo label="Totals Days" value={rent.totalDays} />
       )}
-      {rent.totalPrice && (
-        <TextInfo label="Totals Price" value={rent.totalPrice} />
+      {rent.totalPrice != null && (
+        <TextInfo label="Totals Price" value={`${rent.totalPrice} RD$`} />
       )}
       <TextInfo label="Comments" value={rent.comments || ""} />
 

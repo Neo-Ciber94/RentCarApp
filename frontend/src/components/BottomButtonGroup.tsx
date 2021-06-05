@@ -26,7 +26,7 @@ export const BottomButtonGroup: React.FC<BottomButtonGroupProps> = (props) => {
   }
 
   return (
-    <div className="flex flex-row gap-4 mt-4">
+    <div className="flex flex-row gap-4 mt-4 w-full">
       <CancelButton {...props} />
       <ConfirmButton {...props} />
     </div>
@@ -36,13 +36,21 @@ export const BottomButtonGroup: React.FC<BottomButtonGroupProps> = (props) => {
 const CancelButton = (props: BottomButtonGroupProps) => {
   if (props.cancelPath) {
     return (
-      <LinkButton className="w-full" color="secondary" to={props.cancelPath}>
+      <LinkButton
+        className="w-full text-center"
+        color="secondary"
+        to={props.cancelPath}
+      >
         {props.cancelText || "Cancel"}
       </LinkButton>
     );
   } else {
     return (
-      <MainButton className="w-full" color="secondary" onClick={props.onCancel}>
+      <MainButton
+        className="w-full text-center"
+        color="secondary"
+        onClick={props.onCancel!}
+      >
         {props.cancelText || "Cancel"}
       </MainButton>
     );
@@ -52,13 +60,13 @@ const CancelButton = (props: BottomButtonGroupProps) => {
 const ConfirmButton = (props: BottomButtonGroupProps) => {
   if (props.confirmPath) {
     return (
-      <LinkButton className="w-full" to={props.confirmPath}>
+      <LinkButton className="w-full text-center" to={props.confirmPath}>
         {props.confirmText || "OK"}
       </LinkButton>
     );
   } else {
     return (
-      <MainButton className="w-full" onClick={props.onConfirm}>
+      <MainButton className="w-full text-center" onClick={props.onConfirm!}>
         {props.confirmText || "OK"}
       </MainButton>
     );

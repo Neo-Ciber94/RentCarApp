@@ -49,11 +49,6 @@ export const rentValidationSchema: yup.SchemaOf<RentValues & RentClientValues> =
       .min(1, "Select a vehicle")
       .required("Vehicle is required"),
 
-    clientId: yup
-      .number()
-      .min(1, "Client is required")
-      .required("Client is required"),
-
     comments: yup.string().optional(),
 
     employeeId: yup.number().required("Employee is required"),
@@ -65,6 +60,9 @@ export const rentValidationSchema: yup.SchemaOf<RentValues & RentClientValues> =
     totalDays: yup.number().optional(),
 
     totalPrice: yup.number().optional(),
+
+    // Ignored
+    clientId: yup.number().optional(),
   });
 
 export const inspectionValidationSchema: yup.SchemaOf<RentInspectionValues> =

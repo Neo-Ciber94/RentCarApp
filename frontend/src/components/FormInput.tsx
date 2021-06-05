@@ -3,8 +3,8 @@ import { Field, FieldProps } from "formik";
 interface Props {
   name: string;
   label: string;
-  touched?: boolean;
-  error?: string;
+  touched?: boolean | undefined;
+  error?: string | undefined;
   as?:
     | React.ComponentType<FieldProps<any>["field"]>
     | string

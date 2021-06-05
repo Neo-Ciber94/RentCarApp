@@ -8,9 +8,9 @@ type SelectOption = {
 interface Props {
   label: string;
   options: SelectOption[] | Record<string, string | number>;
-  error?: string;
-  touched?: boolean;
-  defaultOption?: string;
+  error?: string | undefined;
+  touched?: boolean | undefined;
+  defaultOption?: string | undefined;
 }
 
 // prettier-ignore

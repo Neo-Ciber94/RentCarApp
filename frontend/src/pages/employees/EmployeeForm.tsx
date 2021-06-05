@@ -3,7 +3,7 @@ import { EmployeeDTO, UserSignup, UserUpdate, WorkShift } from "@shared/types";
 import { FormikErrors, FormikTouched } from "formik";
 import { useContext, useState } from "react";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import {
   Container,
   FormInput,
@@ -125,6 +125,9 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   const [error, setError] = useState<string | null>(null);
   const authService = useContext(AuthContext);
   const history = useHistory();
+  const match = useRouteMatch();
+
+  const isEditing = match.url.endsWith("edit");
 
   const validationSchema =
     initialValues.type === "update"
@@ -170,12 +173,14 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               label="Email"
               name="email"
               autoComplete="username"
+              readOnly={isEditing}
               error={errors.email}
               touched={touched.email}
             />
             <FormInput
               label="Document ID"
               name="documentId"
+              autoComplete="off"
               error={errors.documentId}
               touched={touched.documentId}
             />
@@ -183,6 +188,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               label="Comission Percentage"
               name="comissionPercentage"
               type="number"
+              step={0.1}
               error={errors.comissionPercentage}
               touched={touched.comissionPercentage}
             />

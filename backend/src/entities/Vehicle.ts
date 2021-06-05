@@ -23,14 +23,14 @@ export class Vehicle extends BaseEntity {
   @Column()
   modelId!: number;
 
-  @OneToOne(() => Model)
+  @ManyToOne(() => Model)
   @JoinColumn()
   model!: Model;
 
   @Column()
   fuelId!: number;
 
-  @OneToOne(() => Fuel)
+  @ManyToOne(() => Fuel)
   @JoinColumn()
   fuel!: Fuel;
 
@@ -65,7 +65,7 @@ export class Vehicle extends BaseEntity {
   description!: string | null;
 
   @Column({
-    default: true
+    default: true,
   })
   isAvailable!: boolean;
 

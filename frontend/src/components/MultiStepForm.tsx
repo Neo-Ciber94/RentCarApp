@@ -32,16 +32,29 @@ export function MultiStepForm<T>({
   ...props
 }: MultiStepFormProps<T>) {
   const [currentStep, setStep] = useState(0);
+  // const [validationSchema, setValidationSchema] = useState(
+  //   props.steps[0]?.validationSchema
+  // );
+
+  // if (validationSchema != props.steps[currentStep]?.validationSchema) {
+  //   setValidationSchema(props.steps[currentStep]?.validationSchema);
+  // }
 
   const validationSchema = props.steps[currentStep].validationSchema;
   const stepLabels = props.steps.map((e) => e.label);
 
   const nextStep = (formikProps: FormikProps<T>) => {
-    onMove(onNext, currentStep, formikProps, () => setStep(currentStep + 1));
+    onMove(onNext, currentStep, formikProps, () => {
+      //setValidationSchema(props.steps[currentStep + 1]?.validationSchema);
+      setStep(currentStep + 1);
+    });
   };
 
   const prevStep = (formikProps: FormikProps<T>) => {
-    onMove(onNext, currentStep, formikProps, () => setStep(currentStep - 1));
+    onMove(onPrev, currentStep, formikProps, () => {
+      //setValidationSchema(props.steps[currentStep - 1]?.validationSchema);
+      setStep(currentStep - 1);
+    });
   };
 
   return (
@@ -113,6 +126,7 @@ function onMove<T>(
   if (isPromise(result)) {
     result.then((v) => {
       if (v) {
+        console.log(v);
         success();
       }
     });

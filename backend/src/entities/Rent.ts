@@ -1,6 +1,4 @@
 import {
-  AfterInsert,
-  AfterUpdate,
   BaseEntity,
   BeforeInsert,
   BeforeUpdate,
@@ -9,11 +7,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Client } from "./Client";
 import { Employee } from "./Employee";
+import { Inspection } from "./Inspection";
 import { Vehicle } from "./Vehicle";
 
 @Entity()
@@ -68,6 +68,9 @@ export class Rent extends BaseEntity {
     nullable: true,
   })
   comments!: string | null;
+
+  @OneToMany(() => Inspection, (inspetion) => inspetion.rent)
+  inspections!: Inspection[];
 
   @BeforeInsert()
   @BeforeUpdate()

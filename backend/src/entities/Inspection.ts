@@ -10,26 +10,16 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Rent } from "./Rent";
-import { Vehicle } from "./Vehicle";
 
 @Entity()
 export class Inspection extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // FIXME: Remove vehicle due can be accessed in `rent`
-  @Column()
-  vehicleId!: number;
-
-  @ManyToOne(() => Vehicle)
-  vehicle!: Vehicle;
-
-  // FIXME: Or remove rent instead?
   @Column()
   rentId!: number;
 
-  @OneToOne(() => Rent)
-  @JoinColumn()
+  @ManyToOne(() => Rent)
   rent!: Rent;
 
   @CreateDateColumn()

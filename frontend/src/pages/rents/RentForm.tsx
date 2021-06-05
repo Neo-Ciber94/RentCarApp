@@ -2,12 +2,7 @@ import { VehicleDTO } from "@shared/types";
 import { FormikHelpers } from "formik";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  ButtonProps,
-  Container,
-  FormStep,
-  MultiStepForm,
-} from "src/components";
+import { Container, FormStep, MultiStepForm } from "src/components";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
 import { RentFormValues, RentConfirmation } from ".";
@@ -96,7 +91,7 @@ async function submitRent(
   values: RentFormValues,
   actions: FormikHelpers<RentFormValues>
 ) {
-  // FIXME: This should happen in a transation
+  // FIXME: This should happen in a DB transation
   const client = await Services.clients.create({
     name: values.name,
     email: values.email,
@@ -114,7 +109,6 @@ async function submitRent(
   });
 
   const inspection = await Services.inspections.create({
-    vehicleId: values.vehicleId,
     rentId: rent.id,
     haveBrokenGlass: values.haveBrokenGlass,
     haveCarJack: values.haveCarJack,

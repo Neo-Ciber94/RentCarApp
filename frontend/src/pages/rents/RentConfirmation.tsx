@@ -1,4 +1,5 @@
 import { TextInfo, Title } from "src/components";
+import { bool2YesNo } from "src/utils/bool2YesNo";
 import { RentFormValues } from "./RentFormValues";
 
 interface RentConfirmationProps {
@@ -46,19 +47,18 @@ export function RentConfirmation({ values }: RentConfirmationProps) {
         <TextInfo label="Inspection Date" value={values.inspectionDate} />
       )}
 
-      <TextInfo label="Have Scratches" value={yesOrNot(values.haveScratches)} />
+      <TextInfo
+        label="Have Scratches"
+        value={bool2YesNo(values.haveScratches)}
+      />
       <TextInfo
         label="Have Broken Class"
-        value={yesOrNot(values.haveBrokenGlass)}
+        value={bool2YesNo(values.haveBrokenGlass)}
       />
-      <TextInfo label="Have CarJack" value={yesOrNot(values.haveCarJack)} />
-      <TextInfo label="Have Tires" value={yesOrNot(values.haveTires)} />
+      <TextInfo label="Have CarJack" value={bool2YesNo(values.haveCarJack)} />
+      <TextInfo label="Have Tires" value={bool2YesNo(values.haveTires)} />
       <TextInfo label="Tire Status" value={values.tireStatus} />
       <TextInfo label="Status" value={values.status || ""} />
     </>
   );
-}
-
-function yesOrNot(value: boolean) {
-  return value ? "Yes" : "No";
 }

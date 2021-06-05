@@ -68,7 +68,4 @@ export class Vehicle extends BaseEntity {
     default: true,
   })
   isAvailable!: boolean;
-
-  @OneToMany(() => Inspection, (inspection) => inspection.vehicle)
-  inspections!: Inspection[];
 }

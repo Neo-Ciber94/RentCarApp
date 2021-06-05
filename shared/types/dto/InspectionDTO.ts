@@ -1,10 +1,8 @@
-import { RentDTO, VehicleDTO } from ".";
+import { RentDTO } from ".";
 import { TireStatus } from "../TireStatus";
 
 export interface InspectionDTO {
   id: number;
-  vehicleId: number;
-  vehicle: VehicleDTO;
   rentId: number;
   rent: RentDTO;
   inspectionDate: Date;

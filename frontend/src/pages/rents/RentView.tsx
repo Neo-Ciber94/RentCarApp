@@ -9,13 +9,25 @@ export function RentView(props: RentViewProps) {
   const { rent } = props;
   const client = rent.client;
 
+  const vehicle = rent.vehicle;
+  const employee = rent.employee;
+
   return (
     <>
       {/* Rent */}
       <Title title="Vehicle" />
       <TextInfo label="Rent ID" value={rent.id} />
-      <TextInfo label="Vehicle ID" value={rent.vehicleId} />
-      <TextInfo label="Employee ID" value={rent.employeeId} />
+      <TextInfo label="Vehicle ID" value={vehicle.id} />
+      <TextInfo
+        label="Vehicle"
+        value={`${vehicle.model.brand.name} ${vehicle.model.name}`}
+      />
+      <TextInfo label="Employee ID" value={employee.id} />
+      <TextInfo
+        label="Employee"
+        value={`${employee.user.firstName} ${employee.user.lastName}`}
+      />
+
       <TextInfo label="Rent Date" value={rent.rentDate} />
       {rent.totalDays != null && (
         <TextInfo label="Totals Days" value={rent.totalDays} />

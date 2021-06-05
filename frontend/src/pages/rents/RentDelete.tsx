@@ -25,7 +25,13 @@ export function RentDelete() {
           Cancel
         </MainButton>
         {data.returnDate == null && (
-          <MainButton className="w-full" color="primary" onClick={() => {}}>
+          <MainButton
+            className="w-full"
+            color="primary"
+            onClick={() => {
+              /** Delete rent */
+            }}
+          >
             Delete
           </MainButton>
         )}

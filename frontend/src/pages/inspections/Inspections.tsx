@@ -1,5 +1,4 @@
-import { BrandDTO, InspectionDTO, TireStatus } from "@shared/types";
-import { values } from "lodash";
+import { InspectionDTO, TireStatus } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
@@ -10,14 +9,16 @@ import {
   openSwalForm,
   ReactSwal,
   TextInfo,
-  TextWithLabel,
   withCrudDataTable,
 } from "src/components";
 import { useAllInspections } from "src/hooks/inspectionHooks";
 import { Colors } from "src/layout";
 import { Services } from "src/services";
+import { bool2YesNo } from "src/utils/bool2YesNo";
 import Swal from "sweetalert2";
 import * as yup from "yup";
+
+type InspectionSchemaType = Partial<Omit<InspectionDTO, "rent" | "vehicle">>;
 
 const inspectionService = Services.inspections;
 
@@ -48,12 +49,11 @@ const initialValues: Partial<InspectionDTO> = {
   haveTires: false,
   inspectionDate: new Date(),
   rentId: 0,
-  vehicleId: 0,
   status: "",
   tireStatus: TireStatus.Normal,
 };
 
-const validationSchema: yup.SchemaOf<Partial<InspectionDTO>> = yup.object({
+const validationSchema: yup.SchemaOf<InspectionSchemaType> = yup.object({
   id: yup.number(),
 
   haveBrokenGlass: yup.bool().default(false),
@@ -82,11 +82,6 @@ const validationSchema: yup.SchemaOf<Partial<InspectionDTO>> = yup.object({
     .number()
     .min(1, "Vehicle id is required")
     .required("Vehicle id is required"),
-
-  // Ignore fields
-  rent: yup.mixed().optional(),
-
-  vehicle: yup.mixed().optional(),
 });
 
 export function Inspections() {
@@ -236,8 +231,4 @@ async function openDetails(entity: InspectionDTO, rerender: () => void) {
 
     return null;
   });
-}
-
-function bool2YesNo(value: boolean) {
-  return value ? "Yes" : "No";
 }

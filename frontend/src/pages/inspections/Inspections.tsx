@@ -1,9 +1,243 @@
-import { Container } from "src/components";
+import { BrandDTO, InspectionDTO, TireStatus } from "@shared/types";
+import { values } from "lodash";
+import { IDataTableColumn } from "react-data-table-component";
+import {
+  Container,
+  FormCheckbox,
+  FormInput,
+  FormSelect,
+  Loading,
+  openSwalForm,
+  ReactSwal,
+  TextInfo,
+  TextWithLabel,
+  withCrudDataTable,
+} from "src/components";
+import { useAllInspections } from "src/hooks/inspectionHooks";
+import { Colors } from "src/layout";
+import { Services } from "src/services";
+import Swal from "sweetalert2";
+import * as yup from "yup";
+
+const inspectionService = Services.inspections;
+
+const columns: IDataTableColumn<InspectionDTO>[] = [
+  {
+    name: "ID",
+    sortable: true,
+    selector: (e) => e.id,
+  },
+
+  {
+    name: "Rent ID",
+    sortable: true,
+    selector: (e) => e.rentId,
+  },
+
+  {
+    name: "Date",
+    sortable: true,
+    selector: (e) => e.inspectionDate,
+  },
+];
+
+const initialValues: Partial<InspectionDTO> = {
+  haveBrokenGlass: false,
+  haveCarJack: false,
+  haveScratches: false,
+  haveTires: false,
+  inspectionDate: new Date(),
+  rentId: 0,
+  vehicleId: 0,
+  status: "",
+  tireStatus: TireStatus.Normal,
+};
+
+const validationSchema: yup.SchemaOf<Partial<InspectionDTO>> = yup.object({
+  id: yup.number(),
+
+  haveBrokenGlass: yup.bool().default(false),
+
+  haveCarJack: yup.bool().default(false),
+
+  haveScratches: yup.bool().default(false),
+
+  haveTires: yup.bool().default(false),
+
+  inspectionDate: yup.date().optional() as any,
+
+  rentId: yup
+    .number()
+    .min(0, "Rent id is required")
+    .required("Rent id is required"),
+
+  status: yup.string().optional(),
+
+  tireStatus: yup
+    .mixed<TireStatus>()
+    .oneOf(Object.values(TireStatus))
+    .required("Tire status is required"),
+
+  vehicleId: yup
+    .number()
+    .min(1, "Vehicle id is required")
+    .required("Vehicle id is required"),
+
+  // Ignore fields
+  rent: yup.mixed().optional(),
+
+  vehicle: yup.mixed().optional(),
+});
 
 export function Inspections() {
+  const { isLoading, data = [], refetch } = useAllInspections();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <Container>
-      <h1>Inspections</h1>
+    <Container className="h-full lg:max-w-5xl">
+      {withCrudDataTable({
+        columns,
+        data,
+        addButtonText: "Add Inspection",
+        onAdd: () => openEditor(initialValues).then(() => refetch()),
+        onDelete: (row) => openDelete(row).then(() => refetch),
+        onDetails: (row) => openDetails(row, refetch),
+        onEdit: (row) => openEditor(row).then(() => refetch()),
+      })}
     </Container>
   );
+}
+
+async function openEditor(initialValues: Partial<InspectionDTO>) {
+  return openSwalForm({
+    title: "Add Inspection",
+    initialValues: initialValues,
+    validationSchema,
+    onSubmit: async (values, actions) => {
+      try {
+        let result: InspectionDTO;
+        if ("id" in values) {
+          result = await inspectionService.update(values as InspectionDTO);
+        } else {
+          result = await inspectionService.create(values);
+        }
+        console.log(result);
+        actions.close();
+      } finally {
+        actions.setSubmitting(false);
+      }
+    },
+    render: ({ errors, touched }) => (
+      <>
+        {initialValues.id && (
+          <FormInput label="Inspection ID" name="id" readOnly />
+        )}
+        {initialValues.inspectionDate && (
+          <FormInput
+            label="Inspection Date"
+            name="inspectionDate"
+            type="date"
+            readOnly
+          />
+        )}
+        <FormCheckbox
+          label="Have Scratches"
+          name="haveScratches"
+          error={errors.haveScratches!}
+          touched={touched.haveScratches!}
+        />
+        <FormCheckbox
+          label="Have Broken Glass"
+          name="haveBrokenGlass"
+          error={errors.haveBrokenGlass!}
+          touched={touched.haveBrokenGlass!}
+        />
+        <FormCheckbox
+          label="Have CarJack"
+          name="haveCarJack"
+          error={errors.haveCarJack!}
+          touched={touched.haveCarJack!}
+        />
+        <FormCheckbox
+          label="Have Tires"
+          name="haveTires"
+          error={errors.haveTires!}
+          touched={touched.haveTires!}
+        />
+        <FormSelect
+          label="Tire Status"
+          name="tireStatus"
+          options={TireStatus}
+          error={errors.tireStatus}
+          touched={touched.tireStatus}
+        />
+        <FormInput
+          label="Status"
+          name="status"
+          as="textarea"
+          error={errors.status}
+          touched={touched.status}
+        />
+      </>
+    ),
+  });
+}
+
+async function openDelete(entity: InspectionDTO) {
+  return ReactSwal.fire({
+    icon: "warning",
+    title: "Delete Inspection",
+    showCancelButton: true,
+    confirmButtonColor: Colors.MainColor,
+    focusCancel: true,
+    html: <p>Do you want to delete this inspection?</p>,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const result = await inspectionService.delete(entity.id);
+      console.log("DELETED", result);
+    }
+  });
+}
+
+async function openDetails(entity: InspectionDTO, rerender: () => void) {
+  return ReactSwal.fire({
+    title: "Inspection",
+    showCancelButton: true,
+    confirmButtonColor: Colors.MainColor,
+    cancelButtonText: "Ok",
+    confirmButtonText: "Edit",
+    focusCancel: true,
+    html: (
+      <div className="text-left">
+        <TextInfo label="Inspection ID" value={entity.id} />
+        <TextInfo label="Rent ID" value={entity.rentId} />
+        <TextInfo label="Inspection Date" value={entity.inspectionDate} />
+        <TextInfo
+          label="Have Broken Glass"
+          value={bool2YesNo(entity.haveBrokenGlass)}
+        />
+        <TextInfo label="Have CarJack" value={bool2YesNo(entity.haveCarJack)} />
+        <TextInfo
+          label="Have Scratches"
+          value={bool2YesNo(entity.haveScratches)}
+        />
+        <TextInfo label="Have Tires" value={bool2YesNo(entity.haveTires)} />
+        <TextInfo label="Tire Status" value={entity.tireStatus} />
+      </div>
+    ),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.close();
+      return openEditor(entity).then(rerender);
+    }
+
+    return null;
+  });
+}
+
+function bool2YesNo(value: boolean) {
+  return value ? "Yes" : "No";
 }

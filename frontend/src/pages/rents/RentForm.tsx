@@ -71,7 +71,6 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         initialValues={initialValues}
         steps={steps}
         onNext={async (step, formik) => {
-          console.log(step);
           if (step === 0) {
             formik.validateField("vehicleId");
             return !!selectedVehicle?.id;
@@ -97,6 +96,7 @@ async function submitRent(
   values: RentFormValues,
   actions: FormikHelpers<RentFormValues>
 ) {
+  // FIXME: This should happen in a transation
   const client = await Services.clients.create({
     name: values.name,
     email: values.email,

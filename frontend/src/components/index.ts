@@ -8,6 +8,7 @@ export * from './FormSelect';
 export * from './FormStepper';
 export * from './InputWithReset';
 export * from './Loading';
+export * from './MultiStepForm';
 export * from './NavDropdown';
 export * from './NavItem';
 export * from './openSwalForm';

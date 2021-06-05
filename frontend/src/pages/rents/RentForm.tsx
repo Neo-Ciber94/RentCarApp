@@ -2,7 +2,13 @@ import { VehicleDTO } from "@shared/types";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { ButtonProps, Container, MainButton } from "src/components";
+import {
+  ButtonProps,
+  Container,
+  FormStep,
+  MainButton,
+  MultiStepForm,
+} from "src/components";
 import { FormStepper } from "src/components/FormStepper";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
@@ -21,9 +27,78 @@ interface RentFormProps {
   initialValues: RentFormValues;
 }
 
+export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
+  const history = useHistory();
+  const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
+
+  const steps: FormStep<RentFormValues>[] = [
+    {
+      label: "Vehicle",
+      validationSchema: rentValidationSchema,
+      render: ({ errors, ...formik }) => (
+        <RentVehicleSelection
+          onSelect={(v) => {
+            setVehicle(v);
+            formik.setFieldValue("vehicleId", v.id);
+          }}
+          selected={selectedVehicle!}
+          errors={errors}
+        />
+      ),
+    },
+
+    {
+      label: "Client",
+      validationSchema: rentValidationSchema,
+      render: ({ errors, touched, values }) => (
+        <RentClientForm errors={errors} touched={touched} values={values} />
+      ),
+    },
+
+    {
+      label: "Inspection",
+      validationSchema: inspectionValidationSchema,
+      render: ({ errors, touched, values }) => (
+        <RentInspectionForm errors={errors} touched={touched} values={values} />
+      ),
+    },
+
+    {
+      label: "Confirmation",
+      render: ({ values }) => <RentConfirmation values={values} />,
+    },
+  ];
+
+  return (
+    <Container className="lg:max-w-5xl">
+      <MultiStepForm
+        initialValues={initialValues}
+        steps={steps}
+        onNext={async (step, formik) => {
+          if (step === 0) {
+            formik.validateField("vehicleId");
+            return !!selectedVehicle?.id;
+          }
+
+          if (step >= 1) {
+            await formik.validateForm();
+            return formik.isValid;
+          }
+
+          return false;
+        }}
+        onSubmit={async (values, actions) => {
+          submitRent(values, actions);
+          history.push(Routes.rent.path);
+        }}
+      />
+    </Container>
+  );
+};
+
 const steps = ["Vehicle", "Client", "Inspection", "Confirmation"];
 
-export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
+export const RentForm2: React.FC<RentFormProps> = ({ initialValues }) => {
   const history = useHistory();
   const [currentStep, setStep] = useState(0);
   const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
@@ -77,7 +152,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
                       setVehicle(v);
                       formikProps.setFieldValue("vehicleId", v.id);
                     }}
-                    selected={selectedVehicle}
+                    selected={selectedVehicle!}
                     errors={errors}
                   />
                 );
@@ -153,7 +228,7 @@ async function submitRent(
     name: values.name,
     email: values.email,
     creditCard: values.creditCard,
-    creditLimit: values.creditLimit,
+    creditLimit: values.creditLimit!,
     documentId: values.documentId,
     legalPerson: values.legalPerson,
   });
@@ -162,7 +237,7 @@ async function submitRent(
     clientId: client.id,
     employeeId: values.employeeId,
     vehicleId: values.vehicleId,
-    comments: values.comments,
+    comments: values.comments!,
   });
 
   const inspection = await Services.inspections.create({
@@ -173,7 +248,7 @@ async function submitRent(
     haveScratches: values.haveScratches,
     haveTires: values.haveTires,
     tireStatus: values.tireStatus,
-    status: values.status,
+    status: values.status!,
   });
 
   console.log(client, rent, inspection);
@@ -195,7 +270,11 @@ function getValidationSchema(step: number) {
 
 function FormButton(props: FormButtomProps) {
   return (
-    <MainButton {...props} className="w-full  sm:w-1/6" onClick={props.onClick}>
+    <MainButton
+      {...props}
+      className="w-full  sm:w-1/6"
+      onClick={props.onClick!}
+    >
       {props.text}
     </MainButton>
   );

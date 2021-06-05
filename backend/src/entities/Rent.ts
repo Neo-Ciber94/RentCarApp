@@ -8,6 +8,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -23,14 +24,14 @@ export class Rent extends BaseEntity {
   @Column()
   vehicleId!: number;
 
-  @OneToOne(() => Vehicle)
+  @ManyToOne(() => Vehicle)
   @JoinColumn()
   vehicle!: Vehicle;
 
   @Column()
   employeeId!: number;
 
-  @OneToOne(() => Employee)
+  @ManyToOne(() => Employee)
   @JoinColumn()
   employee!: Employee;
 

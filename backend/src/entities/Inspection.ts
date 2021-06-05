@@ -24,6 +24,7 @@ export class Inspection extends BaseEntity {
   @ManyToOne(() => Vehicle)
   vehicle!: Vehicle;
 
+  // FIXME: Or remove rent instead?
   @Column()
   rentId!: number;
 

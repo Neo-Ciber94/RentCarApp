@@ -75,7 +75,7 @@ export function Clients() {
   }
 
   return (
-    <Container>
+    <Container className="lg:max-w-5xl">
       {withCrudDataTable({
         columns,
         data,

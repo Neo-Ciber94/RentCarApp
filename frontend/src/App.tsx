@@ -13,14 +13,11 @@ import { Clients } from "./pages/clients/Clients";
 import { Fuels } from "./pages/fuels/Fuels";
 import { Models } from "./pages/models/Models";
 import { ProtectedRoute } from "./components";
-import { UserRole } from "@shared/types";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Brands, EmployeeRoutes, Inspections, RentRoutes } from "./pages";
 import { VehicleRoutes } from "./pages/vehicles/VehicleRoutes";
-
-const ROLES_ALL = [UserRole.Admin, UserRole.Employee];
-const ROLES_ADMIN = [UserRole.Admin];
+import { ROLES_ALL, ROLES_ADMIN } from "./roles";
 
 const queryClient = new QueryClient();
 

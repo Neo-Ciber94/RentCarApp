@@ -38,7 +38,7 @@ const columns: IDataTableColumn<InspectionDTO>[] = [
   },
 
   {
-    name: "Date",
+    name: "Inspection Date",
     sortable: true,
     selector: (e) => new Date(e.inspectionDate).toLocaleString(),
   },

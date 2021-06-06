@@ -5,7 +5,7 @@ import { useAllVehicles } from "src/hooks";
 
 export default function Reservation() {
   const { isLoading, data = [] } = useAllVehicles();
-  const [vehicle, setVehicle] = useState<VehicleDTO | null>(null);
+  const [vehicle, setVehicle] = useState<VehicleDTO>();
 
   if (isLoading) {
     return <Loading />;

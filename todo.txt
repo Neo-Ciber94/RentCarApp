@@ -1,0 +1,3 @@
+[] Change display dates to 'toLocaleString'
+[] Add export to csv in datatables
+[] Add export to pdf in datatables

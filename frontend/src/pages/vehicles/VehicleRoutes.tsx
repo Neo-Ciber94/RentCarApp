@@ -1,5 +1,7 @@
 import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { ProtectedRoute } from "src/components";
 import { Footer, Header } from "src/layout";
+import { ROLES_ALL } from "src/roles";
 import NotFound from "../common/NotFound";
 import { VehicleCreate } from "./VehicleCreate";
 import { VehicleDelete } from "./VehicleDelete";
@@ -15,12 +17,28 @@ export function VehicleRoutes() {
       <Header title="Vehicles" />
       <Switch>
         <Route exact path={match.url} component={Vehicles} />
-        <Route exact path={`${match.url}/new`} component={VehicleCreate} />
-        <Route exact path={`${match.url}/:id`} component={VehicleDetails} />
-        <Route exact path={`${match.url}/:id/edit`} component={VehicleEdit} />
-        <Route
+        <ProtectedRoute
+          exact
+          path={`${match.url}/new`}
+          roles={ROLES_ALL}
+          component={VehicleCreate}
+        />
+        <ProtectedRoute
+          exact
+          path={`${match.url}/:id`}
+          roles={ROLES_ALL}
+          component={VehicleDetails}
+        />
+        <ProtectedRoute
+          exact
+          path={`${match.url}/:id/edit`}
+          roles={ROLES_ALL}
+          component={VehicleEdit}
+        />
+        <ProtectedRoute
           exact
           path={`${match.url}/:id/delete`}
+          roles={ROLES_ALL}
           component={VehicleDelete}
         />
 

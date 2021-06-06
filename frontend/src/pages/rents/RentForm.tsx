@@ -114,7 +114,10 @@ async function submitRent(
     haveCarJack: values.haveCarJack,
     haveScratches: values.haveScratches,
     haveTires: values.haveTires,
-    tireStatus: values.tireStatus,
+    frontLeftTire: values.frontLeftTire,
+    frontRightTire: values.frontRightTire,
+    backLeftTire: values.backLeftTire,
+    backRightTire: values.backRightTire,
     status: values.status!,
   });
 

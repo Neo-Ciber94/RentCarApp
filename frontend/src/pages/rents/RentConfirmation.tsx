@@ -91,7 +91,14 @@ export function RentConfirmation({ values }: RentConfirmationProps) {
         />
       </div>
 
-      <TextInfo label="Tire Status" value={values.tireStatus} />
+      {/* prettier-ignore */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+        <TextInfo label="Front left tire Status" value={values.frontLeftTire} />
+        <TextInfo label="Front right tire Status" value={values.frontRightTire} />
+        <TextInfo label="Back left tire Status" value={values.backLeftTire} />
+        <TextInfo label="Back right tire Status" value={values.backRightTire} />
+      </div>
+
       <TextInfo label="Status" value={values.status || ""} />
     </>
   );

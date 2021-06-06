@@ -50,7 +50,7 @@ const initialValues: Partial<InspectionDTO> = {
   inspectionDate: new Date(),
   rentId: 0,
   status: "",
-  tireStatus: TireStatus.Normal,
+  frontLeftTire: TireStatus.Normal,
 };
 
 const validationSchema: yup.SchemaOf<InspectionSchemaType> = yup.object({
@@ -73,10 +73,25 @@ const validationSchema: yup.SchemaOf<InspectionSchemaType> = yup.object({
 
   status: yup.string().optional(),
 
-  tireStatus: yup
+  frontLeftTire: yup
     .mixed<TireStatus>()
     .oneOf(Object.values(TireStatus))
-    .required("Tire status is required"),
+    .required("Front left tire status is required"),
+
+  frontRightTire: yup
+    .mixed<TireStatus>()
+    .oneOf(Object.values(TireStatus))
+    .required("Front right tire status is required"),
+
+  backLeftTire: yup
+    .mixed<TireStatus>()
+    .oneOf(Object.values(TireStatus))
+    .required("Back left tire status is required"),
+
+  backRightTire: yup
+    .mixed<TireStatus>()
+    .oneOf(Object.values(TireStatus))
+    .required("Back right tire status is required"),
 
   vehicleId: yup
     .number()
@@ -166,8 +181,8 @@ async function openEditor(initialValues: Partial<InspectionDTO>) {
           label="Tire Status"
           name="tireStatus"
           options={TireStatus}
-          error={errors.tireStatus}
-          touched={touched.tireStatus}
+          error={errors.frontLeftTire}
+          touched={touched.frontLeftTire}
         />
         <FormInput
           label="Status"
@@ -220,7 +235,7 @@ async function openDetails(entity: InspectionDTO, rerender: () => void) {
           value={bool2YesNo(entity.haveScratches)}
         />
         <TextInfo label="Have Tires" value={bool2YesNo(entity.haveTires)} />
-        <TextInfo label="Tire Status" value={entity.tireStatus} />
+        <TextInfo label="Tire Status" value={entity.frontLeftTire} />
       </div>
     ),
   }).then((result) => {

@@ -31,7 +31,10 @@ export const RentCreate = observer(() => {
         haveBrokenGlass: false,
         haveCarJack: false,
         haveTires: false,
-        tireStatus: TireStatus.Normal,
+        frontLeftTire: TireStatus.Normal,
+        frontRightTire: TireStatus.Normal,
+        backLeftTire: TireStatus.Normal,
+        backRightTire: TireStatus.Normal,
         status: "",
       }}
     />

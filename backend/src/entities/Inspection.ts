@@ -2,6 +2,7 @@ import { TireStatus } from "@shared/types";
 import {
   BaseEntity,
   Column,
+  ColumnOptions,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -10,6 +11,12 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Rent } from "./Rent";
+
+const DEFAULT_TIRE_STATUS: ColumnOptions = {
+  type: "enum",
+  enum: TireStatus,
+  default: TireStatus.Normal,
+};
 
 @Entity()
 export class Inspection extends BaseEntity {
@@ -37,12 +44,17 @@ export class Inspection extends BaseEntity {
   @Column()
   haveTires!: boolean;
 
-  @Column({
-    type: "enum",
-    enum: TireStatus,
-    default: TireStatus.Normal,
-  })
-  tireStatus!: TireStatus;
+  @Column(DEFAULT_TIRE_STATUS)
+  frontLeftTire!: TireStatus;
+
+  @Column(DEFAULT_TIRE_STATUS)
+  frontRightTire!: TireStatus;
+
+  @Column(DEFAULT_TIRE_STATUS)
+  backLeftTire!: TireStatus;
+
+  @Column(DEFAULT_TIRE_STATUS)
+  backRightTire!: TireStatus;
 
   @Column({
     type: "mediumtext",

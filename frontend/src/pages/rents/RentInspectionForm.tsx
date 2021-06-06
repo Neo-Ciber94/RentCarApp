@@ -52,13 +52,41 @@ export function RentInspectionForm({
         error={errors.haveTires}
         touched={touched.haveTires}
       />
-      <FormSelect
-        label="Tire Status"
-        name="tireStatus"
-        options={TireStatus}
-        error={errors.tireStatus}
-        touched={touched.tireStatus}
-      />
+
+      <div className="flex flex-col sm:flex-row gap-4 w-full justify-between">
+        <FormSelect
+          label="Front Left Tire"
+          name="frontLeftTire"
+          options={TireStatus}
+          error={errors.frontLeftTire}
+          touched={touched.frontLeftTire}
+        />
+
+        <FormSelect
+          label="Front Right Tire"
+          name="frontRightTire"
+          options={TireStatus}
+          error={errors.frontRightTire}
+          touched={touched.frontRightTire}
+        />
+
+        <FormSelect
+          label="Back Left Tire"
+          name="backLeftTire"
+          options={TireStatus}
+          error={errors.backLeftTire}
+          touched={touched.backLeftTire}
+        />
+
+        <FormSelect
+          label="Back Right Tire"
+          name="backRightTire"
+          options={TireStatus}
+          error={errors.backRightTire}
+          touched={touched.backRightTire}
+        />
+      </div>
+
       <FormInput
         label="Status"
         name="status"

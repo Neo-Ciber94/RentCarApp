@@ -14,6 +14,7 @@ export * from './NavItem';
 export * from './openSwalForm';
 export * from './ProtectedRoute';
 export * from './ReactSwal';
+export * from './Row';
 export * from './TextInfo';
 export * from './TextWithLabel';
 export * from './Title';

@@ -6,11 +6,14 @@ import { ButtonProps, FormStepper, MainButton } from ".";
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
 type FormButtomProps = ButtonProps & { onClick?: () => void; text: string };
 
-type OnMove<T> = (step: number, formikProps: FormikProps<T>) => boolean;
+type OnMove<T> = (
+  step: number,
+  formikProps: FormikProps<T>
+) => boolean | undefined | void;
 type AsyncOnMove<T> = (
   step: number,
   formikProps: FormikProps<T>
-) => Promise<boolean>;
+) => Promise<boolean | undefined | void>;
 
 export interface FormStep<T> {
   label: string;

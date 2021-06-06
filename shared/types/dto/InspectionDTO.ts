@@ -10,6 +10,9 @@ export interface InspectionDTO {
   haveBrokenGlass: boolean;
   haveCarJack: boolean;
   haveTires: boolean;
-  tireStatus: TireStatus;
+  frontLeftTire: TireStatus;
+  frontRightTire: TireStatus;
+  backLeftTire: TireStatus;
+  backRightTire: TireStatus;
   status?: string;
 }

@@ -81,8 +81,23 @@ export const inspectionValidationSchema: yup.SchemaOf<RentInspectionValues> =
 
     inspectionDate: yup.date().optional() as any,
 
-    tireStatus: yup
+    frontLeftTire: yup
       .mixed<TireStatus>()
       .oneOf(Object.values(TireStatus))
-      .required("Tire status is required"),
+      .required("Front left tire status is required"),
+
+    frontRightTire: yup
+      .mixed<TireStatus>()
+      .oneOf(Object.values(TireStatus))
+      .required("Front right tire status is required"),
+
+    backLeftTire: yup
+      .mixed<TireStatus>()
+      .oneOf(Object.values(TireStatus))
+      .required("Back left tire status is required"),
+
+    backRightTire: yup
+      .mixed<TireStatus>()
+      .oneOf(Object.values(TireStatus))
+      .required("Back right tire status is required"),
   });

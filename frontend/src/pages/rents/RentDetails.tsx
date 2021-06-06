@@ -1,5 +1,10 @@
 import { useHistory, useParams } from "react-router-dom";
-import { Container, Loading, MainButton } from "src/components";
+import {
+  BottomButtonGroup,
+  Container,
+  Loading,
+  MainButton,
+} from "src/components";
 import { useRent } from "src/hooks/rentHooks";
 import { RentView } from ".";
 
@@ -16,20 +21,11 @@ export function RentDetails() {
     <Container className="lg:w-3/6 md:w-5/6">
       <RentView rent={data} />
 
-      <div className="mt-4 flex flex-row w-full gap-4">
-        <MainButton
-          className="w-full"
-          color="secondary"
-          onClick={() => history.goBack()}
-        >
-          Cancel
-        </MainButton>
-        {data.returnDate == null && (
-          <MainButton className="w-full" color="primary" onClick={() => {}}>
-            Return
-          </MainButton>
-        )}
-      </div>
+      <BottomButtonGroup
+        onCancel={() => history.goBack()}
+        confirmText="Return"
+        confirmPath={`/rents/${data.id}/return`}
+      />
     </Container>
   );
 }

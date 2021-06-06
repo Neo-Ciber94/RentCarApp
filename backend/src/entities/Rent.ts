@@ -1,6 +1,10 @@
 import {
+  AfterInsert,
+  AfterRemove,
+  AfterUpdate,
   BaseEntity,
   BeforeInsert,
+  BeforeRemove,
   BeforeUpdate,
   Column,
   CreateDateColumn,
@@ -80,5 +84,22 @@ export class Rent extends BaseEntity {
     if (vehicle!.isAvailable === false) {
       throw new Error(`Vehicle with id ${vehicle?.id} is not available`);
     }
+  }
+
+  @AfterRemove()
+  async markVehicleAsAvailable() {
+    const vehicle = await Vehicle.findOne(this.vehicleId);
+
+    vehicle!.isAvailable = true;
+    await Vehicle.save(vehicle!);
+  }
+
+  @AfterInsert()
+  @AfterUpdate()
+  async markVehicleAsNotAvailable() {
+    const vehicle = await Vehicle.findOne(this.vehicleId);
+
+    vehicle!.isAvailable = false;
+    await Vehicle.save(vehicle!);
   }
 }

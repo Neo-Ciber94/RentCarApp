@@ -8,15 +8,15 @@ import { RentView } from ".";
 export function RentDelete() {
   const params = useParams<{ id: string }>();
   const history = useHistory();
-  const { isLoading, data } = useRent(Number(params.id));
+  const { isLoading, data: rent } = useRent(Number(params.id));
 
-  if (isLoading || data == null) {
+  if (isLoading || rent == null) {
     return <Loading />;
   }
 
   return (
-    <Container className="lg:w-3/6 md:w-5/6">
-      <RentView rent={data} />
+    <Container className="lg:w-4/6 md:w-5/6">
+      <RentView rent={rent} />
 
       <div className="flex flex-row w-full mt-4 gap-4">
         <MainButton
@@ -26,12 +26,12 @@ export function RentDelete() {
         >
           Cancel
         </MainButton>
-        {data.returnDate == null && (
+        {rent.returnDate == null && (
           <MainButton
             className="w-full"
             color="primary"
             onClick={async () => {
-              await Services.rents.delete(data.id);
+              await Services.rents.delete(rent.id);
               history.push(Routes.rent.path);
             }}
           >

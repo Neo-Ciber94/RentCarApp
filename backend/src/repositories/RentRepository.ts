@@ -42,6 +42,7 @@ export class RentRespository {
     // Mark the vehicle as not available
     const rentedVehicle = await Vehicle.findOne(rent.vehicleId);
     rentedVehicle!.isAvailable = false;
+    await Vehicle.save(rentedVehicle!);
 
     // Return the rent
     return resultRent;
@@ -67,8 +68,9 @@ export class RentRespository {
 
       // If is changing vehicle, mark the old as available
       if (rentToUpdate.vehicleId !== rent.vehicleId) {
-        const vehicle = await Vehicle.findOne(rentToUpdate.vehicleId);
-        vehicle!.isAvailable = false;
+        const oldVehicle = await Vehicle.findOne(rentToUpdate.vehicleId);
+        oldVehicle!.isAvailable = true;
+        await Vehicle.save(oldVehicle!);
       }
 
       const result = await Rent.save(newRent);
@@ -85,9 +87,6 @@ export class RentRespository {
       const totalDays = calculateDaysPassed(rentToReturn.rentDate);
       const totalPrice = calculateRentPrice(vehicle!.rentPrice, totalDays);
 
-      // Mark the vehicle as available
-      vehicle!.isAvailable = true;
-
       // Sets the total price and days
       rentToReturn.returnDate = new Date();
       rentToReturn.totalDays = totalDays;
@@ -102,10 +101,6 @@ export class RentRespository {
   async delete(id: number) {
     const entityToDelete = await Rent.findOne(id);
     if (entityToDelete) {
-      // Set the vehicle of the rent as avaiable
-      const vehicle = await Vehicle.findOne(entityToDelete.vehicleId);
-      vehicle!.isAvailable = true;
-
       // Removes the rent
       const result = await Rent.remove(entityToDelete);
       return result;

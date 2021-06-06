@@ -1,4 +1,5 @@
 import { InspectionDTO, TireStatus } from "@shared/types";
+import React from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
@@ -11,6 +12,7 @@ import {
   TextInfo,
   withCrudDataTable,
 } from "src/components";
+import { Row } from "src/components/Row";
 import { useAllInspections } from "src/hooks/inspectionHooks";
 import { Colors } from "src/layout";
 import { Services } from "src/services";
@@ -177,13 +179,41 @@ async function openEditor(initialValues: Partial<InspectionDTO>) {
           error={errors.haveTires!}
           touched={touched.haveTires!}
         />
-        <FormSelect
-          label="Tire Status"
-          name="tireStatus"
-          options={TireStatus}
-          error={errors.frontLeftTire}
-          touched={touched.frontLeftTire}
-        />
+
+        <Row>
+          <FormSelect
+            label="Front left tire"
+            name="frontLeftTire"
+            options={TireStatus}
+            error={errors.frontLeftTire}
+            touched={touched.frontLeftTire}
+          />
+
+          <FormSelect
+            label="Front right tire"
+            name="frontRightTire"
+            options={TireStatus}
+            error={errors.frontRightTire}
+            touched={touched.frontRightTire}
+          />
+
+          <FormSelect
+            label="Back left tire"
+            name="backLeftTire"
+            options={TireStatus}
+            error={errors.backLeftTire}
+            touched={touched.backLeftTire}
+          />
+
+          <FormSelect
+            label="Back right tire"
+            name="backRightTire"
+            options={TireStatus}
+            error={errors.backRightTire}
+            touched={touched.backRightTire}
+          />
+        </Row>
+
         <FormInput
           label="Status"
           name="status"

@@ -3,6 +3,7 @@ import { RentReturn } from "@shared/types";
 import { Response } from "express";
 import {
   Body,
+  Delete,
   Get,
   JsonController,
   Param,
@@ -47,5 +48,10 @@ export class RentController {
   @Post("/return")
   async rentReturn(@Body() rent: RentReturn) {
     return this.repository.rentReturn(rent);
+  }
+
+  @Delete("/:id")
+  async delete(@Param("id") id: number) {
+    return this.repository.delete(id);
   }
 }

@@ -4,7 +4,11 @@ import { useState } from "react";
 import { ButtonProps, FormStepper, MainButton } from ".";
 
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
-type FormButtomProps = ButtonProps & { onClick?: () => void; text: string };
+interface FormButtomProps extends ButtonProps {
+  onClick?: () => void;
+  text: string;
+  className?: string;
+}
 
 type OnMove<T> = (
   step: number,
@@ -23,6 +27,11 @@ export interface FormStep<T> {
 
 interface MultiStepFormProps<T> {
   initialValues: T;
+  submitButtonText?: string;
+  buttonsClassName?: string;
+  submitButtonClassName?: string;
+  nextButtonClassName?: string;
+  prevButtonClassName?: string;
   onNext?: OnMove<T> | AsyncOnMove<T>;
   onPrev?: OnMove<T> | AsyncOnMove<T>;
   onSubmit: (values: T, actions: FormikHelpers<T>) => void;
@@ -32,6 +41,11 @@ interface MultiStepFormProps<T> {
 export function MultiStepForm<T>({
   onNext,
   onPrev,
+  submitButtonText,
+  submitButtonClassName,
+  buttonsClassName,
+  nextButtonClassName,
+  prevButtonClassName,
   ...props
 }: MultiStepFormProps<T>) {
   const [currentStep, setStep] = useState(0);
@@ -60,6 +74,10 @@ export function MultiStepForm<T>({
     });
   };
 
+  const buttonClassNames = (classNames?: string) => {
+    return `${classNames || ""} ${buttonsClassName || ""}`;
+  };
+
   return (
     <>
       <FormStepper currentStep={currentStep} steps={stepLabels} />
@@ -81,7 +99,8 @@ export function MultiStepForm<T>({
               <FormButton
                 key="submit" // Key needed to allow react know when is submitting
                 type="submit"
-                text="Complete"
+                text={`${submitButtonText || "Complete"}`}
+                className={buttonClassNames(submitButtonClassName)}
               />
             ) : (
               <FormButton
@@ -89,6 +108,7 @@ export function MultiStepForm<T>({
                 key="button"
                 onClick={() => nextStep(formikProps)}
                 text="Next"
+                className={buttonClassNames(nextButtonClassName)}
               />
             );
 
@@ -102,6 +122,7 @@ export function MultiStepForm<T>({
                     color="secondary"
                     onClick={() => prevStep(formikProps)}
                     text="Previous"
+                    className={buttonClassNames(prevButtonClassName)}
                   />
                 )}
                 {showNextBtn && nextOrSubmitBtn}
@@ -142,7 +163,7 @@ function FormButton(props: FormButtomProps) {
   return (
     <MainButton
       {...props}
-      className="w-full  sm:w-1/6"
+      className={`w-full sm:w-1/6 ${props.className || ""}`}
       onClick={props.onClick!}
     >
       {props.text}

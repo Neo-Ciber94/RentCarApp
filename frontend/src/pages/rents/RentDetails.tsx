@@ -18,14 +18,23 @@ export function RentDetails() {
   }
 
   return (
-    <Container className="lg:w-3/6 md:w-5/6">
+    <Container className="lg:w-4/6 md:w-5/6">
       <RentView rent={data} />
 
-      <BottomButtonGroup
-        onCancel={() => history.goBack()}
-        confirmText="Return"
-        confirmPath={`/rents/${data.id}/return`}
-      />
+      <div className="mt-4 flex flex-row w-full gap-4">
+        <MainButton
+          className="w-full"
+          color="secondary"
+          onClick={() => history.goBack()}
+        >
+          Back
+        </MainButton>
+        {data.returnDate == null && (
+          <MainButton className="w-full" color="primary" onClick={() => {}}>
+            Return
+          </MainButton>
+        )}
+      </div>
     </Container>
   );
 }

@@ -14,7 +14,7 @@ export function VehicleDetails() {
   }
 
   return (
-    <Container className="lg:w-3/6 md:w-5/6">
+    <Container className="lg:w-4/6 md:w-5/6">
       <VehicleInfo vehicle={data!} />
       <BottomButtonGroup
         cancelPath={Routes.vehicles.path}

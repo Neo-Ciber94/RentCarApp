@@ -14,7 +14,7 @@ export function EmployeeDetails() {
   }
 
   return (
-    <Container className="lg:w-3/6 md:w-5/6">
+    <Container className="lg:w-4/6 md:w-5/6">
       <TextInfo label="ID" value={data.id} />
       <TextInfo label="First Name" value={data.user.firstName} />
       <TextInfo label="Last Name" value={data.user.lastName} />

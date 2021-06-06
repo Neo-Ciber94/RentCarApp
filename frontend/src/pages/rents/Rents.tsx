@@ -23,6 +23,15 @@ const columns: IDataTableColumn<RentDTO>[] = [
     name: "Rent Date",
     selector: (e) => e.rentDate,
   },
+
+  {
+    name: "Status",
+    cell: (row) => (
+      <p className={`${row.returnDate ? "text-green-600" : "text-red-600"}`}>
+        {row.returnDate ? "Returned" : "Rented"}
+      </p>
+    ),
+  },
 ];
 
 export function Rents() {
@@ -41,7 +50,7 @@ export function Rents() {
         addPath: "/rents/new",
         editPath: (row) => `/rents/${row.id}/edit`,
         detailsPath: (row) => `/rents/${row.id}`,
-        deletePath: (row) => `/rents/${row.id}/delete`,
+        canDelete: false,
       })}
     </Container>
   );

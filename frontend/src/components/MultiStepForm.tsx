@@ -49,28 +49,27 @@ export function MultiStepForm<T>({
   ...props
 }: MultiStepFormProps<T>) {
   const [currentStep, setStep] = useState(0);
-  // const [validationSchema, setValidationSchema] = useState(
-  //   props.steps[0]?.validationSchema
-  // );
-
-  // if (validationSchema != props.steps[currentStep]?.validationSchema) {
-  //   setValidationSchema(props.steps[currentStep]?.validationSchema);
-  // }
-
-  const validationSchema = props.steps[currentStep].validationSchema;
+  const [validationSchema, setValidationSchema] = useState(
+    props.steps[0]?.validationSchema
+  );
   const stepLabels = props.steps.map((e) => e.label);
 
   const nextStep = (formikProps: FormikProps<T>) => {
     onMove(onNext, currentStep, formikProps, () => {
-      //setValidationSchema(props.steps[currentStep + 1]?.validationSchema);
-      setStep(currentStep + 1);
+      formikProps.validateForm().then((errors) => {
+        console.log(errors);
+        if (Object.keys(errors).length === 0) {
+          setStep(currentStep + 1);
+          setValidationSchema(props.steps[currentStep + 1]?.validationSchema);
+        }
+      });
     });
   };
 
   const prevStep = (formikProps: FormikProps<T>) => {
-    onMove(onPrev, currentStep, formikProps, () => {
-      //setValidationSchema(props.steps[currentStep - 1]?.validationSchema);
+    onMove(onPrev, currentStep, formikProps, async () => {
       setStep(currentStep - 1);
+      setValidationSchema(props.steps[currentStep - 1]?.validationSchema);
     });
   };
 

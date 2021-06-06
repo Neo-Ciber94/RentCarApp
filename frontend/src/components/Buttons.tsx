@@ -61,7 +61,9 @@ export const LinkButton: React.FC<LinkProps> = ({
     <NavLink
       {...props}
       to={location}
-      className={getClassNames(btnColor, className) + " inline-block"}
+      className={
+        getClassNames(btnColor, className) + " inline-block text-center"
+      }
     >
       {props.children}
     </NavLink>

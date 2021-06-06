@@ -12,7 +12,7 @@ import { RentVehicleSelection } from "./RentVehicleSelection";
 import {
   inspectionValidationSchema,
   rentValidationSchema,
-} from "./validationSchemas";
+} from "./rentValidationSchemas";
 
 interface RentFormProps {
   initialValues: RentFormValues;
@@ -33,7 +33,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
             formik.setFieldValue("vehicleId", v.id);
           }}
           selected={selectedVehicle!}
-          errors={errors}
+          error={errors.vehicleId}
         />
       ),
     },

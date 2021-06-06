@@ -12,7 +12,9 @@ export interface ClientFormProps {
 export function RentClientForm({ errors, touched, values }: ClientFormProps) {
   return (
     <>
-      {values.clientId && <FormInput label="Client ID" name="clientId" />}
+      {values.clientId && (
+        <FormInput label="Client ID" name="clientId" readOnly />
+      )}
       <FormInput
         label="Name"
         name="name"

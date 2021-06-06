@@ -1,7 +1,7 @@
 import { GearBox } from "@shared/types";
 import { Container } from "src/components";
-import { randomString } from "src/utils/randomString";
 import { VehicleForm } from "./VehicleForm";
+import { RandomString } from "src/utils/RandomString";
 
 export function VehicleCreate() {
   return (
@@ -14,9 +14,9 @@ export function VehicleCreate() {
           gearBox: GearBox.Automatic,
           status: "",
           description: "",
-          licensePlate: randomString(6),
-          engineNumber: randomString(6),
-          chassisNumber: randomString(6),
+          licensePlate: RandomString.hex(6),
+          engineNumber: RandomString.hex(6),
+          chassisNumber: RandomString.hex(6),
         }}
       />
     </Container>

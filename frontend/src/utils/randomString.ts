@@ -1,5 +1,13 @@
 import crypto from "crypto";
 
-export function randomString(length: number) {
-  return crypto.randomBytes(length / 2).toString("hex");
+export class RandomString {
+  private constructor() {}
+
+  static hex(length: number) {
+    return crypto.randomBytes(length / 2).toString("hex");
+  }
+
+  static number(length: number) {
+    return crypto.randomBytes(length).toString();
+  }
 }

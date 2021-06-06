@@ -1,11 +1,5 @@
 import { useHistory, useParams } from "react-router-dom";
-import {
-  BottomButtonGroup,
-  Container,
-  LinkButton,
-  Loading,
-  MainButton,
-} from "src/components";
+import { Container, LinkButton, Loading, MainButton } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
 import { RentView } from ".";
 

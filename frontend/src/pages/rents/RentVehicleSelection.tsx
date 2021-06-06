@@ -1,18 +1,16 @@
 import { VehicleDTO } from "@shared/types";
-import { FormikErrors } from "formik";
 import { Loading, Container, FormInput } from "src/components";
 import { useAllVehicles } from "src/hooks";
-import { RentFormValues } from ".";
 import { VehicleCard } from "..";
 
 export interface VehicleSelectionProps {
   onSelect: (vehicle: VehicleDTO) => void;
   selected?: VehicleDTO;
-  errors: FormikErrors<RentFormValues>;
+  error?: string;
 }
 
 export function RentVehicleSelection({
-  errors,
+  error,
   onSelect,
   selected,
 }: VehicleSelectionProps) {
@@ -47,9 +45,7 @@ export function RentVehicleSelection({
       />
 
       <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>
-      {errors.vehicleId && (
-        <p className="text-red-500 text-xs mt-4">{errors.vehicleId}</p>
-      )}
+      {error && <p className="text-red-500 text-xs mt-4">{error}</p>}
     </Container>
   );
 }

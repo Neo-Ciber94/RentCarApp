@@ -3,7 +3,7 @@ import { LegalPerson, TireStatus } from "@shared/types";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { AuthContext } from "src/context/AuthContext";
-import { randomString } from "src/utils/randomString";
+import { RandomString } from "src/utils/RandomString";
 import { RentForm } from "./RentForm";
 
 export const RentCreate = observer(() => {
@@ -22,8 +22,8 @@ export const RentCreate = observer(() => {
         name: "",
         email: "",
         creditLimit: 0,
-        creditCard: randomString(CREDIT_CARD_LENGTH),
-        documentId: randomString(DOCUMENT_ID_LENGTH),
+        creditCard: RandomString.number(CREDIT_CARD_LENGTH),
+        documentId: RandomString.number(DOCUMENT_ID_LENGTH),
         legalPerson: LegalPerson.Physical,
 
         // Inspection

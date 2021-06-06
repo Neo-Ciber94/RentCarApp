@@ -1,7 +1,6 @@
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
 import { ClientDTO, LegalPerson } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
-import { useHistory } from "react-router";
 import {
   Container,
   Loading,

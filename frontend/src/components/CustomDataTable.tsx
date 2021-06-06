@@ -5,7 +5,7 @@ import DataTable, {
 } from "react-data-table-component";
 import { InputWithReset } from ".";
 
-interface DataBaseProps<T> extends IDataTableProps<T> {
+export interface CustomDataTableProps<T> extends IDataTableProps<T> {
   sortable?: boolean;
 }
 
@@ -52,7 +52,7 @@ const customStyles: IDataTableStyles = {
   },
 };
 
-export function CustomDataTable<T = any>(props: DataBaseProps<T>) {
+export function CustomDataTable<T = any>(props: CustomDataTableProps<T>) {
   const { data, columns, sortable, ...rest } = props;
 
   // Mark the columns as sortable

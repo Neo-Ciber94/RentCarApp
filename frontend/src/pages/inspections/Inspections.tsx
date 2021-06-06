@@ -231,7 +231,7 @@ async function openDelete(entity: InspectionDTO) {
     icon: "warning",
     title: "Delete Inspection",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     focusCancel: true,
     html: <p>Do you want to delete this inspection?</p>,
   }).then(async (result) => {
@@ -246,7 +246,7 @@ async function openDetails(entity: InspectionDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Inspection",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     cancelButtonText: "Ok",
     confirmButtonText: "Edit",
     focusCancel: true,

@@ -17,7 +17,7 @@ const stepperStyles = makeStyles({
     width: 30,
     height: 30,
     borderRadius: "50%",
-    color: `${Colors.MainColor} !important`,
+    color: `${Colors.Main} !important`,
   },
 });
 

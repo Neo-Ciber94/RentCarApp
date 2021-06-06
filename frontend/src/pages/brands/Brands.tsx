@@ -103,7 +103,7 @@ async function openDelete(entity: BrandDTO) {
     icon: "warning",
     title: "Delete Brand",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     focusCancel: true,
     html: (
       <p>
@@ -122,7 +122,7 @@ async function openDetails(entity: BrandDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Brand",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     cancelButtonText: "Ok",
     confirmButtonText: "Edit",
     focusCancel: true,

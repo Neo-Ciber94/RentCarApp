@@ -1,8 +1,8 @@
 import { AnyARecord } from "dns";
-import { IDataTableColumn, IDataTableProps } from "react-data-table-component";
+import { IDataTableColumn } from "react-data-table-component";
 import { NavLink } from "react-router-dom";
 import { LinkButton, MainButton } from ".";
-import { CustomDataTable } from "./CustomDataTable";
+import { CustomDataTable, CustomDataTableProps } from "./CustomDataTable";
 
 interface Props<T> {
   addButtonText?: string;
@@ -21,7 +21,7 @@ interface Props<T> {
   canDelete?: boolean;
 }
 
-type CrudDataTableProps<T = AnyARecord> = Props<T> & IDataTableProps<T>;
+type CrudDataTableProps<T = AnyARecord> = Props<T> & CustomDataTableProps<T>;
 
 export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
   const {

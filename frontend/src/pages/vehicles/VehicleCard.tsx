@@ -39,7 +39,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
       </div>
 
       <div
-        style={{ backgroundColor: Colors.MainColor, height: 15, width: "100%" }}
+        style={{ backgroundColor: Colors.Main, height: 15, width: "100%" }}
       />
       <div className="text-black text-2xl pt-2 px-2 font-light">
         {vehicleName}

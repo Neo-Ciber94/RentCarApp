@@ -130,7 +130,7 @@ async function openDelete(entity: ModelDTO) {
     icon: "warning",
     title: "Delete Model",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     focusCancel: true,
     html: (
       <p>
@@ -153,7 +153,7 @@ async function openDetails(entity: ModelDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Model",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     cancelButtonText: "Ok",
     confirmButtonText: "Edit",
     focusCancel: true,

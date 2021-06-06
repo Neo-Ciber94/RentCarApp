@@ -100,7 +100,7 @@ async function openDelete(entity: FuelDTO) {
     icon: "warning",
     title: "Delete Fuel",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     focusCancel: true,
     html: (
       <p>
@@ -119,7 +119,7 @@ async function openDetails(entity: FuelDTO, rerender: () => void) {
   return ReactSwal.fire({
     title: "Fuel",
     showCancelButton: true,
-    confirmButtonColor: Colors.MainColor,
+    confirmButtonColor: Colors.Main,
     cancelButtonText: "Ok",
     confirmButtonText: "Edit",
     focusCancel: true,

@@ -40,6 +40,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     canView = true,
     canEdit = true,
     canDelete = true,
+    ...rest
   } = props;
 
   if (canAdd && onAdd == null && addPath == null) {
@@ -81,7 +82,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
   return (
     <>
       {canAdd && <AddButtom props={props} />}
-      <CustomDataTable columns={mergedColumns} data={data} />
+      <CustomDataTable {...rest} columns={mergedColumns} data={data} />
     </>
   );
 }

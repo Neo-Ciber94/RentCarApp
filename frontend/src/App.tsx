@@ -17,6 +17,7 @@ import {
   Brands,
   Models,
   Fuels,
+  ProfileRoutes,
 } from "./pages";
 import Home from "./pages/common/Home";
 import NotFound from "./pages/common/NotFound";
@@ -70,11 +71,11 @@ const App = observer(() => {
             />
 
             {/* Employees */}
-            {/* <ProtectedRoute
+            <ProtectedRoute
               roles={ROLES_ALL}
               path={Routes.profile.path}
               component={ProfileRoutes}
-            /> */}
+            />
 
             <ProtectedRoute
               roles={ROLES_ALL}

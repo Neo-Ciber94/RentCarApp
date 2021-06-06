@@ -265,7 +265,10 @@ async function openDetails(entity: InspectionDTO, rerender: () => void) {
           value={bool2YesNo(entity.haveScratches)}
         />
         <TextInfo label="Have Tires" value={bool2YesNo(entity.haveTires)} />
-        <TextInfo label="Tire Status" value={entity.frontLeftTire} />
+        <TextInfo label="Front left Status" value={entity.frontLeftTire} />
+        <TextInfo label="Front right Status" value={entity.frontRightTire} />
+        <TextInfo label="Back left Status" value={entity.backLeftTire} />
+        <TextInfo label="Back right Status" value={entity.backRightTire} />
       </div>
     ),
   }).then((result) => {

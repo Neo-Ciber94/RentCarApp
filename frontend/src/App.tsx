@@ -1,23 +1,27 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home from "./pages/common/Home";
-import { Login } from "./pages/common/Login";
-import NotFound from "./pages/common/NotFound";
-import Reservation from "./pages/reservations/Reservation";
-import { NavbarProvider } from "./context/NavbarContext";
-import { Routes, withHeaderAndFooter } from "./layout";
-import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { AuthContext } from "./context/AuthContext";
-import { Clients } from "./pages/clients/Clients";
-import { Fuels } from "./pages/fuels/Fuels";
-import { Models } from "./pages/models/Models";
-import { ProtectedRoute } from "./components";
-import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
+import { useState, useContext, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Brands, EmployeeRoutes, Inspections, RentRoutes } from "./pages";
-import { VehicleRoutes } from "./pages/vehicles/VehicleRoutes";
-import { ROLES_ALL, ROLES_ADMIN } from "./config/roles";
+import { ROLES_ALL, ROLES_ADMIN } from "./config";
+import { AuthContext } from "./context/AuthContext";
+import { withHeaderAndFooter, Routes } from "./layout";
+import {
+  Reservation,
+  VehicleRoutes,
+  Login,
+  Clients,
+  Inspections,
+  RentRoutes,
+  EmployeeRoutes,
+  Brands,
+  Models,
+  Fuels,
+} from "./pages";
+import Home from "./pages/common/Home";
+import NotFound from "./pages/common/NotFound";
+import { ProtectedRoute } from "./components";
+import { NavbarProvider } from "./context/NavbarContext";
 
 const queryClient = new QueryClient();
 
@@ -66,11 +70,11 @@ const App = observer(() => {
             />
 
             {/* Employees */}
-            <ProtectedRoute
+            {/* <ProtectedRoute
               roles={ROLES_ALL}
               path={Routes.profile.path}
               component={ProfileRoutes}
-            />
+            /> */}
 
             <ProtectedRoute
               roles={ROLES_ALL}

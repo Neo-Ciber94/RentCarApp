@@ -12,7 +12,7 @@ import { RentVehicleSelection } from "./RentVehicleSelection";
 import {
   inspectionValidationSchema,
   rentValidationSchema,
-} from "./rentValidationSchemas";
+} from "./validationSchema";
 
 interface RentFormProps {
   initialValues: RentFormValues;

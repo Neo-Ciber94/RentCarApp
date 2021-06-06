@@ -17,7 +17,7 @@ export function RentRoutes() {
     <>
       <Header title="Rents" />
       <Switch>
-        <Route exact path={`${match.url}`} component={Rents} />
+        <Route exact path={match.url} component={Rents} />
         <Route exact path={`${match.url}/new`} component={RentCreate} />
         <Route exact path={`${match.url}/:id`} component={RentDetails} />
         <Route exact path={`${match.url}/:id/edit`} component={RentEdit} />

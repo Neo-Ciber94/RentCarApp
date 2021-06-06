@@ -1,3 +1,4 @@
 [] Change display dates to 'toLocaleString'
 [] Add export to csv in datatables
 [] Add export to pdf in datatables
+[] Redirect to /404 in not found resources: vehicle/:id

@@ -17,7 +17,7 @@ import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Brands, EmployeeRoutes, Inspections, RentRoutes } from "./pages";
 import { VehicleRoutes } from "./pages/vehicles/VehicleRoutes";
-import { ROLES_ALL, ROLES_ADMIN } from "./roles";
+import { ROLES_ALL, ROLES_ADMIN } from "./config/roles";
 
 const queryClient = new QueryClient();
 

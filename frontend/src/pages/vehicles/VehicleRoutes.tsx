@@ -1,7 +1,7 @@
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { ProtectedRoute } from "src/components";
 import { Footer, Header } from "src/layout";
-import { ROLES_ALL } from "src/roles";
+import { ROLES_ALL } from "src/config/roles";
 import NotFound from "../common/NotFound";
 import { VehicleCreate } from "./VehicleCreate";
 import { VehicleDelete } from "./VehicleDelete";

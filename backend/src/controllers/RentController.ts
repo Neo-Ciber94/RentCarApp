@@ -1,5 +1,5 @@
 import { calculateDaysPassed, calculateRentPrice } from "@shared/utils";
-import { RentReturn } from "@shared/types";
+import { NewRent, RentReturn } from "@shared/types";
 import { Response } from "express";
 import {
   Body,
@@ -30,7 +30,7 @@ export class RentController {
   }
 
   @Post()
-  async post(@Body() rent: DeepPartial<Rent>) {
+  async post(@Body() rent: NewRent) {
     return this.repository.create(rent);
   }
 

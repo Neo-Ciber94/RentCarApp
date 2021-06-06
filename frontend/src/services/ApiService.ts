@@ -5,7 +5,7 @@ type Create<T> = Partial<Omit<T, "id">>;
 /**
  * A RestAPI client.
  */
-export class ApiService<T> {
+export class ApiService<T, C = Create<T>> {
   constructor(protected readonly baseUrl: string) {}
 
   async getAll(): Promise<T[]> {
@@ -16,8 +16,8 @@ export class ApiService<T> {
     return webClient.get<T>(`${this.baseUrl}/${id}`);
   }
 
-  async create(entity: Create<T>): Promise<T> {
-    return webClient.post<T, Create<T>>(this.baseUrl, entity);
+  async create(entity: C): Promise<T> {
+    return webClient.post<T, C>(this.baseUrl, entity);
   }
 
   async update(entity: T): Promise<T> {

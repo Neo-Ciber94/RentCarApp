@@ -1,6 +1,7 @@
 export * from './dto';
 export * from './GearBox';
 export * from './LegalPerson';
+export * from './NewRent';
 export * from './RentReturn';
 export * from './ReservationStatus';
 export * from './TireStatus';

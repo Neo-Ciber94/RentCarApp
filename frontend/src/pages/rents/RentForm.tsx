@@ -91,18 +91,13 @@ async function submitRent(
   values: RentFormValues,
   actions: FormikHelpers<RentFormValues>
 ) {
-  // FIXME: This should happen in a DB transation
-  const client = await Services.clients.create({
+  const rent = await Services.rents.create({
     name: values.name,
     email: values.email,
     creditCard: values.creditCard,
     creditLimit: values.creditLimit!,
     documentId: values.documentId,
     legalPerson: values.legalPerson,
-  });
-
-  const rent = await Services.rents.create({
-    clientId: client.id,
     employeeId: values.employeeId,
     vehicleId: values.vehicleId,
     comments: values.comments!,
@@ -121,7 +116,7 @@ async function submitRent(
     status: values.status!,
   });
 
-  console.log(client, rent, inspection);
+  console.log(rent, inspection);
 
   actions.setSubmitting(false);
 }

@@ -1,7 +1,7 @@
 import { calculateDaysPassed, calculateRentPrice } from "@shared/utils";
-import { RentDTO, RentReturn } from "@shared/types";
-import { Rent, Vehicle } from "src/entities";
-import { DeepPartial } from "typeorm";
+import { NewRent, RentDTO, RentReturn } from "@shared/types";
+import { Client, Rent, Vehicle } from "src/entities";
+import { DeepPartial, EntityManager, getManager } from "typeorm";
 import { err, ok, Result } from "@shared/result";
 import { Mapper } from "src/utils";
 
@@ -29,23 +29,33 @@ export class RentRespository {
     }
   }
 
-  async create(rent: DeepPartial<Rent>) {
-    const newRent = Rent.create({
-      clientId: rent.clientId,
-      comments: rent.comments,
-      employeeId: rent.employeeId,
-      vehicleId: rent.vehicleId,
+  async create(rent: NewRent): Promise<Rent> {
+    return getManager().transaction(async (manager) => {
+      const newClient = manager.create(Client, {
+        name: rent.name,
+        email: rent.email,
+        documentId: rent.documentId,
+        creditCard: rent.creditCard,
+        creditLimit: rent.creditLimit,
+      });
+
+      await manager.save(newClient);
+
+      const newRent = manager.create(Rent, {
+        clientId: newClient.id,
+        comments: rent.comments,
+        employeeId: rent.employeeId,
+        vehicleId: rent.vehicleId,
+      });
+
+      const resultRent = await manager.save(newRent);
+
+      // Mark the vehicle as not available
+      await this.markVehicleAvailable(rent.vehicleId, false, manager);
+
+      // Return the rent
+      return resultRent;
     });
-
-    const resultRent = await Rent.save(newRent);
-
-    // Mark the vehicle as not available
-    const rentedVehicle = await Vehicle.findOne(rent.vehicleId);
-    rentedVehicle!.isAvailable = false;
-    await Vehicle.save(rentedVehicle!);
-
-    // Return the rent
-    return resultRent;
   }
 
   async update(
@@ -74,6 +84,10 @@ export class RentRespository {
       }
 
       const result = await Rent.save(newRent);
+
+      // Mark vehicle as not available
+      await this.markVehicleAvailable(rent.vehicleId!, false);
+
       return ok(this.withDaysAndPrice(result));
     } else {
       return ok(undefined);
@@ -86,6 +100,17 @@ export class RentRespository {
       const vehicle = await Vehicle.findOne(rentToReturn.vehicleId);
       const totalDays = calculateDaysPassed(rentToReturn.rentDate);
       const totalPrice = calculateRentPrice(vehicle!.rentPrice, totalDays);
+
+      if (vehicle == null) {
+        throw new Error("No vehicle to return");
+      }
+
+      if (vehicle.isAvailable === true) {
+        throw Error(`Vehicle is id ${vehicle.id} is not rented`);
+      }
+
+      // Mark the vehicle as available
+      await this.markVehicleAvailable(vehicle.id, true);
 
       // Sets the total price and days
       rentToReturn.returnDate = new Date();
@@ -103,6 +128,9 @@ export class RentRespository {
     if (entityToDelete) {
       // Removes the rent
       const result = await Rent.remove(entityToDelete);
+
+      // Mark vehicle as available
+      this.markVehicleAvailable(result.vehicleId, true);
       return result;
     } else {
       return undefined;
@@ -117,5 +145,21 @@ export class RentRespository {
       totalDays,
       totalPrice,
     };
+  }
+
+  async markVehicleAvailable(
+    vehicleId: number,
+    isAvailable: boolean,
+    manager?: EntityManager
+  ) {
+    if (manager) {
+      const vehicle = await manager.findOne(Vehicle, vehicleId);
+      vehicle!.isAvailable = isAvailable;
+      await manager.save(vehicle);
+    } else {
+      const vehicle = await Vehicle.findOne(vehicleId);
+      vehicle!.isAvailable = isAvailable;
+      await Vehicle.save(vehicle!);
+    }
   }
 }

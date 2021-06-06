@@ -2,6 +2,7 @@ import { useHistory, useParams } from "react-router-dom";
 import {
   BottomButtonGroup,
   Container,
+  LinkButton,
   Loading,
   MainButton,
 } from "src/components";
@@ -11,15 +12,15 @@ import { RentView } from ".";
 export function RentDetails() {
   const params = useParams<{ id: string }>();
   const history = useHistory();
-  const { isLoading, data } = useRent(Number(params.id));
+  const { isLoading, data: rent } = useRent(Number(params.id));
 
-  if (isLoading || data == null) {
+  if (isLoading || rent == null) {
     return <Loading />;
   }
 
   return (
     <Container className="lg:w-4/6 md:w-5/6">
-      <RentView rent={data} />
+      <RentView rent={rent} />
 
       <div className="mt-4 flex flex-row w-full gap-4">
         <MainButton
@@ -29,10 +30,14 @@ export function RentDetails() {
         >
           Back
         </MainButton>
-        {data.returnDate == null && (
-          <MainButton className="w-full" color="primary" onClick={() => {}}>
+        {rent.returnDate == null && (
+          <LinkButton
+            className="w-full text-center"
+            color="primary"
+            to={`/rents/${rent.id}/return`}
+          >
             Return
-          </MainButton>
+          </LinkButton>
         )}
       </div>
     </Container>

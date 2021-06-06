@@ -54,7 +54,7 @@ export function Brands() {
   );
 }
 
-async function openEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
+async function openEditor(initialValues: Partial<BrandDTO>) {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Brand name is required")
@@ -84,13 +84,16 @@ async function openEditor(initialValues: BrandDTO | Omit<BrandDTO, "id">) {
       }
     },
     render: ({ errors, touched }) => (
-      <FormInput
-        label="Name"
-        name="name"
-        autoFocus
-        error={errors.name}
-        touched={touched.name}
-      />
+      <>
+        {initialValues.id && <FormInput label="ID" name="id" readOnly />}
+        <FormInput
+          label="Name"
+          name="name"
+          autoFocus
+          error={errors.name}
+          touched={touched.name}
+        />
+      </>
     ),
   });
 }

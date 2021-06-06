@@ -41,7 +41,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
       <div
         style={{ backgroundColor: Colors.MainColor, height: 15, width: "100%" }}
       />
-      <div className="text-black text-3xl pt-2 px-2 font-light">
+      <div className="text-black text-2xl pt-2 px-2 font-light">
         {vehicleName}
       </div>
 
@@ -68,9 +68,9 @@ const VehicleInfo: React.FC<{ icon: string; value: string | number }> = ({
   return (
     <div className="flex flex-row mb-1">
       <div>
-        <i className={`text-xl w-16 px-2 text-red-600  ${icon}`}></i>
+        <i className={`text-lg w-12 px-2 text-red-600  ${icon}`}></i>
       </div>
-      <div className="text-xl font-light text-gray-500">{value}</div>
+      <div className="text-lg font-light text-gray-500">{value}</div>
     </div>
   );
 };

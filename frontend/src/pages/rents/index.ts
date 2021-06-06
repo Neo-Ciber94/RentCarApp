@@ -7,6 +7,7 @@ export * from './RentEdit';
 export * from './RentForm';
 export * from './RentFormValues';
 export * from './RentInspectionForm';
+export * from './RentReturn';
 export * from './RentRoutes';
 export * from './Rents';
 export * from './RentVehicleSelection';

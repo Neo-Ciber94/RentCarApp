@@ -144,9 +144,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           console.log(values);
 
           if (initialValues.type === "update") {
-            updateEmployee(values as UpdateEmployee, authService, setError);
+            await updateEmployee(
+              values as UpdateEmployee,
+              authService,
+              setError
+            );
           } else {
-            addEmployee(values as NewEmployee, authService, setError);
+            await addEmployee(values as NewEmployee, authService, setError);
           }
 
           history.push(Routes.employees.path);

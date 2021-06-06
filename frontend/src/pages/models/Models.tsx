@@ -20,6 +20,26 @@ import { FormSelect } from "src/components/FormSelect";
 const queryClient = new QueryClient();
 const modelService = Services.models;
 
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .required("Model name is required")
+    .test(
+      "empty",
+      "Model name cannot be blank",
+      (name) => name?.trim().length !== 0
+    ),
+
+  brandId: Yup.number()
+    .min(1, "Brand is required")
+    .required("Brand is required"),
+
+  vehicleType: Yup.string().required("Vehicle type is required"),
+
+  capacity: Yup.number()
+    .min(1, "Vehicle capacity must be 1 or more")
+    .required("Vehicle capacity is required"),
+});
+
 const columns: IDataTableColumn<ModelDTO>[] = [
   {
     name: "ID",
@@ -81,22 +101,6 @@ export function Models() {
 }
 
 async function openEditor(initialValues: Partial<ModelDTO>) {
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required("Model name is required")
-      .test(
-        "empty",
-        "Model name cannot be blank",
-        (name) => name?.trim().length !== 0
-      ),
-
-    brandId: Yup.number().required("Brand is required"),
-    vehicleType: Yup.string().required("Vehicle type is required"),
-    capacity: Yup.number()
-      .required("Vehicle capacity is required")
-      .min(1, "Vehicle capacity must be 1 or more"),
-  });
-
   return openSwalForm({
     title: "Add Model",
     initialValues: initialValues,
@@ -180,7 +184,7 @@ function ModelEditorForm(props: {
   formikProps: FormikProps<Partial<ModelDTO>>;
 }) {
   const { isLoading, data } = useBrands();
-  const { errors, touched } = props.formikProps;
+  const { errors, touched, initialValues } = props.formikProps;
 
   if (isLoading) {
     return <Loading />;
@@ -190,13 +194,15 @@ function ModelEditorForm(props: {
 
   return (
     <>
+      {initialValues.id && <FormInput label="ID" name="id" readOnly />}
+
       <FormSelect
         name="brandId"
         label="Brand"
         options={options}
         error={errors.brandId}
         touched={touched.brandId}
-        // defaultLabel="Select a brand..."
+        defaultOption="Select a brand..."
       />
 
       <FormInput

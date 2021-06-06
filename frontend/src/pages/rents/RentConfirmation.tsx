@@ -1,4 +1,6 @@
-import { TextInfo, Title } from "src/components";
+import { Loading, TextInfo, Title } from "src/components";
+import { useVehicle } from "src/hooks";
+import { useEmployee } from "src/hooks/employeeHooks";
 import { bool2YesNo } from "src/utils/bool2YesNo";
 import { RentFormValues } from "./RentFormValues";
 
@@ -7,13 +9,31 @@ interface RentConfirmationProps {
 }
 
 export function RentConfirmation({ values }: RentConfirmationProps) {
+  const vehicleQuery = useVehicle(values.vehicleId);
+  const employeeQuery = useEmployee(values.employeeId);
+
+  if (vehicleQuery.isLoading || employeeQuery.isLoading) {
+    return <Loading />;
+  }
+
+  const vehicle = vehicleQuery.data!;
+  const employee = employeeQuery.data!;
+
   return (
     <>
       {/* Rent */}
       <Title title="Vehicle" />
       {values.rentId && <TextInfo label="Rent ID" value={values.rentId} />}
       <TextInfo label="Vehicle ID" value={values.vehicleId} />
+      <TextInfo
+        label="Vehicle"
+        value={`${vehicle.model.brand.name} ${vehicle.model.name}`}
+      />
       <TextInfo label="Employee ID" value={values.employeeId} />
+      <TextInfo
+        label="Employee"
+        value={`${employee.user.firstName} ${employee.user.lastName}`}
+      />
       {values.rentDate && (
         <TextInfo label="Rent Date" value={values.rentDate} />
       )}
@@ -47,16 +67,30 @@ export function RentConfirmation({ values }: RentConfirmationProps) {
         <TextInfo label="Inspection Date" value={values.inspectionDate} />
       )}
 
-      <TextInfo
-        label="Have Scratches"
-        value={bool2YesNo(values.haveScratches)}
-      />
-      <TextInfo
-        label="Have Broken Class"
-        value={bool2YesNo(values.haveBrokenGlass)}
-      />
-      <TextInfo label="Have CarJack" value={bool2YesNo(values.haveCarJack)} />
-      <TextInfo label="Have Tires" value={bool2YesNo(values.haveTires)} />
+      <div className="flex flex-col sm:flex-row gap-4 w-full justify-between">
+        <TextInfo
+          label="Have Scratches"
+          value={bool2YesNo(values.haveScratches)}
+          className="flex-1"
+        />
+        <TextInfo
+          label="Have Broken Class"
+          value={bool2YesNo(values.haveBrokenGlass)}
+          className="flex-1"
+        />
+
+        <TextInfo
+          label="Have CarJack"
+          value={bool2YesNo(values.haveCarJack)}
+          className="flex-1"
+        />
+        <TextInfo
+          label="Have Tires"
+          value={bool2YesNo(values.haveTires)}
+          className="flex-1"
+        />
+      </div>
+
       <TextInfo label="Tire Status" value={values.tireStatus} />
       <TextInfo label="Status" value={values.status || ""} />
     </>

@@ -5,6 +5,10 @@ import DataTable, {
 } from "react-data-table-component";
 import { InputWithReset } from ".";
 
+interface DataBaseProps<T> extends IDataTableProps<T> {
+  sortable?: boolean;
+}
+
 // Redefinition due they don't work as expected
 const customStyles: IDataTableStyles = {
   headRow: {
@@ -48,8 +52,17 @@ const customStyles: IDataTableStyles = {
   },
 };
 
-export function CustomDataTable<T = any>(props: IDataTableProps<T>) {
-  const { data, columns, ...rest } = props;
+export function CustomDataTable<T = any>(props: DataBaseProps<T>) {
+  const { data, columns, sortable, ...rest } = props;
+
+  // Mark the columns as sortable
+  if (sortable != null) {
+    for (const column of columns) {
+      if (column.sortable !== false) {
+        column.sortable = sortable;
+      }
+    }
+  }
 
   const [filterText, setFilterText] = useState("");
   const subHeaderMemo = useMemo(() => {

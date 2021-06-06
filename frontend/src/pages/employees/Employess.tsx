@@ -12,26 +12,31 @@ import { Routes } from "src/layout";
 const columns: IDataTableColumn<UserEmployee>[] = [
   {
     name: "ID",
+    sortable: true,
     selector: (e) => e.id,
   },
 
   {
     name: "First Name",
+    sortable: true,
     selector: (e) => e.firstName,
   },
 
   {
     name: "Last Name",
+    sortable: true,
     selector: (e) => e.lastName,
   },
 
   {
     name: "Email",
+    sortable: true,
     selector: (e) => e.email,
   },
 
   {
     name: "Role",
+    sortable: true,
     selector: (e) => e.role,
   },
 ];

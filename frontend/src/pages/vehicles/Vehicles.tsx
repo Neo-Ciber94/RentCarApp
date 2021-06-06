@@ -21,16 +21,19 @@ interface ButtonShowKindProps {
 const columns: IDataTableColumn<VehicleDTO>[] = [
   {
     name: "ID",
+    sortable: true,
     selector: (e) => e.id,
   },
 
   {
     name: "Model",
+    sortable: true,
     selector: (e) => `${e.model.brand.name} ${e.model.name}`,
   },
 
   {
     name: "Available",
+    sortable: true,
     cell: (row) => (
       <p className={row.isAvailable ? "text-green-600" : "text-red-600"}>
         {row.isAvailable ? "Available" : "Rented"}
@@ -40,11 +43,13 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
 
   {
     name: "Fuel",
+    sortable: true,
     selector: (e) => e.fuel.name,
   },
 
   {
     name: "GearBox",
+    sortable: true,
     selector: (e) => e.gearBox,
   },
 ];

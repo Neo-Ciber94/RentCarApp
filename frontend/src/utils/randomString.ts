@@ -8,6 +8,17 @@ export class RandomString {
   }
 
   static number(length: number) {
-    return crypto.randomBytes(length).toString();
+    let result = "";
+
+    while (length > 0) {
+      result += Math.floor(randomRange(0, 10));
+      length -= 1;
+    }
+
+    return result;
   }
+}
+
+function randomRange(min: number, max: number) {
+  return Math.random() * (max - min) + min;
 }

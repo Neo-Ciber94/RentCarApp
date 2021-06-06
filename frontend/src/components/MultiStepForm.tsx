@@ -57,7 +57,6 @@ export function MultiStepForm<T>({
   const nextStep = (formikProps: FormikProps<T>) => {
     onMove(onNext, currentStep, formikProps, () => {
       formikProps.validateForm().then((errors) => {
-        console.log(errors);
         if (Object.keys(errors).length === 0) {
           setStep(currentStep + 1);
           setValidationSchema(props.steps[currentStep + 1]?.validationSchema);
@@ -149,7 +148,6 @@ function onMove<T>(
   if (isPromise(result)) {
     result.then((v) => {
       if (v) {
-        console.log(v);
         success();
       }
     });

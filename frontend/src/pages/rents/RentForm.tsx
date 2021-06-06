@@ -12,6 +12,7 @@ import { RentVehicleSelection } from "./RentVehicleSelection";
 import {
   inspectionValidationSchema,
   rentValidationSchema,
+  vehicleValidationSchema,
 } from "./validationSchema";
 
 interface RentFormProps {
@@ -25,7 +26,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
   const steps: FormStep<RentFormValues>[] = [
     {
       label: "Vehicle",
-      validationSchema: rentValidationSchema,
+      validationSchema: vehicleValidationSchema,
       render: ({ errors, ...formik }) => (
         <RentVehicleSelection
           onSelect={(v) => {

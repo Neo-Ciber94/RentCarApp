@@ -7,7 +7,17 @@ import {
   RentValues,
 } from "./RentFormValues";
 
-export const rentValidationSchema: yup.SchemaOf<RentValues & RentClientValues> =
+type RentValidationType = Omit<RentValues & RentClientValues, "vehicleId">;
+
+export const vehicleValidationSchema: yup.SchemaOf<{ vehicleId: number }> =
+  yup.object({
+    vehicleId: yup
+      .number()
+      .min(1, "Select a vehicle")
+      .required("Select a vehicle"),
+  });
+
+export const rentValidationSchema: yup.SchemaOf<RentValidationType> =
   yup.object({
     rentId: yup.number().optional(),
 
@@ -28,8 +38,8 @@ export const rentValidationSchema: yup.SchemaOf<RentValues & RentClientValues> =
 
     creditLimit: yup
       .number()
-      .optional()
-      .min(1000, "Min credit limit is 1000 RD$"),
+      .min(0, "Credit limit must be positive")
+      .optional(),
 
     documentId: yup
       .string()
@@ -43,11 +53,6 @@ export const rentValidationSchema: yup.SchemaOf<RentValues & RentClientValues> =
       .mixed<LegalPerson>()
       .oneOf(Object.values(LegalPerson))
       .required("Legal Person type is required"),
-
-    vehicleId: yup
-      .number()
-      .min(1, "Select a vehicle")
-      .required("Vehicle is required"),
 
     comments: yup.string().optional(),
 

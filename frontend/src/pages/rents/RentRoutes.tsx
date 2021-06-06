@@ -11,8 +11,6 @@ import { Rents } from "./Rents";
 export function RentRoutes() {
   const match = useRouteMatch();
 
-  console.log("Empea");
-
   return (
     <>
       <Header title="Rents" />

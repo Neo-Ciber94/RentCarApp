@@ -40,7 +40,7 @@ export function Brands() {
   }
 
   return (
-    <Container className="h-full lg:max-w-5xl">
+    <Container className="h-full lg:max-w-6xl">
       {withCrudDataTable({
         columns,
         data,

@@ -20,7 +20,10 @@ export function RentView(props: RentViewProps) {
 
       <TextInfo label="Rent ID" value={rent.id} />
 
-      <TextInfo label="Rent Date" value={rent.rentDate} />
+      <TextInfo
+        label="Rent Date"
+        value={new Date(rent.rentDate).toLocaleString()}
+      />
 
       <Row>
         <TextInfo label="Vehicle ID" value={vehicle.id} />

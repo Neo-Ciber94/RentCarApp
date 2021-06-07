@@ -19,7 +19,7 @@ export function RentRoutes() {
         <Route exact path={`${match.url}/new`} component={RentCreate} />
         <Route exact path={`${match.url}/:id`} component={RentDetails} />
         <Route exact path={`${match.url}/:id/edit`} component={RentEdit} />
-        <Route exact path={`${match.url}/:id/delete`} component={RentDelete} />
+        {/* <Route exact path={`${match.url}/:id/delete`} component={RentDelete} /> */}
         <Route exact path={`${match.url}/:id/return`} component={RentReturn} />
         <Route path="*" component={NotFound} />
       </Switch>

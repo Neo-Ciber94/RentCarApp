@@ -16,9 +16,9 @@ interface Props<T> {
   editPath?: (item: T) => string;
   deletePath?: (item: T) => string;
   canAdd?: boolean;
-  canEdit?: boolean;
-  canView?: boolean;
-  canDelete?: boolean;
+  canEdit?: boolean | ((row: T) => boolean);
+  canView?: boolean | ((row: T) => boolean);
+  canDelete?: boolean | ((row: T) => boolean);
 }
 
 type CrudDataTableProps<T = AnyARecord> = Props<T> & CustomDataTableProps<T>;
@@ -63,16 +63,21 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     );
   }
 
+  // prettier-ignore
   const mergedColumns: IDataTableColumn<T>[] = [
     ...columns,
     {
       name: actionsText || "Actions",
       cell: (row) => {
+        const viewBtn = typeof canView === "boolean" ? canView : canView(row);
+        const editBtn = typeof canEdit === "boolean" ? canEdit : canEdit(row);
+        const deleteBtn = typeof canDelete === "boolean" ? canDelete : canDelete(row);
+
         return (
           <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
-            {canView && <DetailsButton props={props} row={row} />}
-            {canEdit && <EditButton props={props} row={row} />}
-            {canDelete && <DeleteButton props={props} row={row} />}
+            {viewBtn && <DetailsButton props={props} row={row} />}
+            {editBtn && <EditButton props={props} row={row} />}
+            {deleteBtn && <DeleteButton props={props} row={row} />}
           </div>
         );
       },

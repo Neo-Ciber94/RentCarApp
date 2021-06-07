@@ -5,14 +5,14 @@ import { VehicleCard } from "..";
 
 export interface VehicleSelectionProps {
   onSelect: (vehicle: VehicleDTO) => void;
-  selected?: VehicleDTO;
+  selectedId?: number;
   error?: string;
 }
 
 export function RentVehicleSelection({
   error,
   onSelect,
-  selected,
+  selectedId,
 }: VehicleSelectionProps) {
   const { isLoading, data = [] } = useAllVehicles();
 
@@ -21,7 +21,7 @@ export function RentVehicleSelection({
   }
 
   const vehicles = data.map((e, index) => {
-    const isSelected = selected?.id === e.id;
+    const isSelected = selectedId === e.id;
     return (
       <VehicleCard
         key={index}
@@ -41,7 +41,7 @@ export function RentVehicleSelection({
         label="Vehicle"
         name="vehicleId"
         type="hidden"
-        value={selected?.id || 0}
+        value={selectedId || 0}
       />
 
       <div className="flex flex-row flex-wrap gap-4">{vehicles}</div>

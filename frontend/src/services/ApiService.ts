@@ -20,8 +20,8 @@ export class ApiService<T, C = Create<T>> {
     return webClient.post<T, C>(this.baseUrl, entity);
   }
 
-  async update(entity: T): Promise<T> {
-    return webClient.put<T>(this.baseUrl, entity);
+  async update(entity: Partial<T>): Promise<T> {
+    return webClient.put<T, Partial<T>>(this.baseUrl, entity);
   }
 
   async delete(id: number): Promise<T> {

@@ -58,6 +58,8 @@ export const rentValidationSchema: yup.SchemaOf<RentValidationType> =
 
     employeeId: yup.number().required("Employee is required"),
 
+    employee: yup.mixed().optional(),
+
     rentDate: yup.date().optional() as any,
 
     returnDate: yup.date().optional() as any,

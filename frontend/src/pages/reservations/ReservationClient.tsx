@@ -36,7 +36,7 @@ export function ReservationClient() {
       validationSchema: reservationValidationSchemas.vehicle,
       render: ({ errors, setFieldValue }) => (
         <RentVehicleSelection
-          selected={vehicle}
+          selectedId={vehicle?.id}
           onSelect={(v) => {
             setVehicle(v);
             setFieldValue("vehicleId", v.id);

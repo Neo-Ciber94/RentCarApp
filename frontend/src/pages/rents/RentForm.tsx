@@ -21,7 +21,7 @@ interface RentFormProps {
 
 export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
   const history = useHistory();
-  const [selectedVehicle, setVehicle] = useState<VehicleDTO>();
+  const [vehicle, setVehicle] = useState<VehicleDTO>();
 
   const steps: FormStep<RentFormValues>[] = [
     {
@@ -33,7 +33,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
             setVehicle(v);
             formik.setFieldValue("vehicleId", v.id);
           }}
-          selected={selectedVehicle!}
+          selectedId={vehicle?.id}
           error={errors.vehicleId}
         />
       ),
@@ -42,9 +42,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
     {
       label: "Client",
       validationSchema: rentValidationSchema,
-      render: ({ errors, touched, values }) => (
-        <RentClientForm errors={errors} touched={touched} values={values} />
-      ),
+      render: (formik) => <RentClientForm props={formik} />,
     },
 
     {
@@ -69,7 +67,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         onNext={async (step, formik) => {
           if (step === 0) {
             formik.validateField("vehicleId");
-            return !!selectedVehicle?.id;
+            return !!vehicle?.id;
           }
 
           if (step >= 1) {

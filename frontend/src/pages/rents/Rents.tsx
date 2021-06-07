@@ -51,6 +51,7 @@ export function Rents() {
         addPath: "/rents/new",
         editPath: (row) => `/rents/${row.id}/edit`,
         detailsPath: (row) => `/rents/${row.id}`,
+        canEdit: (row) => row.returnDate == null,
         canDelete: false,
       })}
     </Container>

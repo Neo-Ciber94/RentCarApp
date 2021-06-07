@@ -1,10 +1,11 @@
-import { LegalPerson, TireStatus } from "@shared/types";
+import { ClientDTO, EmployeeDTO, LegalPerson, TireStatus } from "@shared/types";
 
 // Rent
 export type RentValues = {
   rentId?: number;
   vehicleId: number;
   employeeId: number;
+  employee?: EmployeeDTO;
   rentDate?: Date;
   returnDate?: Date;
   totalDays?: number;

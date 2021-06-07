@@ -60,8 +60,10 @@ export class RentRespository {
 
   async update(
     rent: DeepPartial<Rent>
-  ): Promise<Result<RentDTO | undefined, string>> {
-    const rentToUpdate = await Rent.findOne(rent.id);
+  ): Promise<Result<Rent | undefined, string>> {
+    const rentToUpdate = await Rent.findOne(rent.id, {
+      relations: ["vehicle"],
+    });
 
     if (rent.returnDate) {
       return err("Rent was already returned");
@@ -88,7 +90,7 @@ export class RentRespository {
       // Mark vehicle as not available
       await this.markVehicleAvailable(rent.vehicleId!, false);
 
-      return ok(this.withDaysAndPrice(result));
+      return ok(result);
     } else {
       return ok(undefined);
     }

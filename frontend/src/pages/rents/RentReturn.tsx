@@ -6,6 +6,7 @@ import { Routes } from "src/layout";
 import { Services } from "src/services";
 import { RentView } from "./RentView";
 import { InspectionForm } from "src/pages/inspections";
+import NotFound from "../common/NotFound";
 
 type InspectionEntity = Partial<InspectionDTO>;
 
@@ -16,6 +17,11 @@ export function RentReturn() {
 
   if (isLoading || data == null) {
     return <Loading />;
+  }
+
+  // Its already returned
+  if (data.returnDate) {
+    return <NotFound />;
   }
 
   const initialValues: InspectionEntity = {

@@ -1,3 +1,6 @@
 export * from './Reservation';
-export * from './ReservationClient';
+export * from './ReservationCreate';
+export * from './ReservationEdit';
+export * from './ReservationForm';
+export * from './ReservationRoutes';
 export * from './reservationValidationSchemas';

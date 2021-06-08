@@ -7,6 +7,7 @@ export class ReservationController extends AbstractController<Reservation> {
   constructor() {
     super({
       repository: Reservation.getRepository(),
+      relations: ["client", "vehicle"],
     });
   }
 }

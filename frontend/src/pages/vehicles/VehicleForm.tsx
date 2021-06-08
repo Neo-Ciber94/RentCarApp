@@ -1,7 +1,16 @@
-import { GearBox, VehicleDTO } from "@shared/types";
+import { GearBox, UserRole, VehicleDTO } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
-import { FormInput, FormSelect, Loading, withCustomForm } from "src/components";
+import {
+  FormCheckbox,
+  FormInput,
+  FormSelect,
+  Loading,
+  withCustomForm,
+} from "src/components";
+import { AuthContext } from "src/context/AuthContext";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
 import * as yup from "yup";
@@ -42,10 +51,13 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
   status: yup.string().optional(),
 });
 
-export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
+export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
+  const authService = useContext(AuthContext);
   const history = useHistory();
   const modelsResult = useModels();
   const fuelsResult = useFuels();
+
+  const isAdmin = authService.currentUser?.role === UserRole.Admin;
 
   if (modelsResult.isLoading || fuelsResult.isLoading) {
     return <Loading />;
@@ -105,6 +117,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
             error={errors.rentPrice}
             touched={touched.rentPrice}
           />
+          {isAdmin && <FormCheckbox label="Is Available" name="isAvailable" />}
           <FormInput
             label="Engine Number"
             name="engineNumber"
@@ -142,7 +155,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ initialValues }) => {
       );
     },
   });
-};
+});
 
 function useModels() {
   return useQuery("models", () => {

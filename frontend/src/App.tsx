@@ -18,6 +18,7 @@ import {
   Models,
   Fuels,
   ProfileRoutes,
+  ReservationRoutes,
 } from "./pages";
 import Home from "./pages/common/Home";
 import NotFound from "./pages/common/NotFound";
@@ -59,10 +60,7 @@ const App = observer(() => {
             <Route path="/" exact component={withHeaderAndFooter(Home)} />
             <Route
               path={Routes.reservations.path}
-              component={withHeaderAndFooter(
-                Reservation,
-                Routes.reservations.name
-              )}
+              component={ReservationRoutes}
             />
             <Route path={Routes.vehicles.path} component={VehicleRoutes} />
             <Route

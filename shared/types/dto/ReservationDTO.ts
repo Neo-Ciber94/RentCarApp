@@ -1,6 +1,7 @@
 import { ReservationStatus } from "../ReservationStatus";
 import { ClientDTO } from "./ClientDTO";
 import { RentDTO } from "./RentDTO";
+import { VehicleDTO } from "./VehicleDTO";
 
 export interface ReservationDTO {
   id: number;
@@ -8,6 +9,8 @@ export interface ReservationDTO {
   client: ClientDTO;
   rentId: number;
   rent?: RentDTO;
+  vehicleId: number;
+  vehicle: VehicleDTO;
   reservationDate: Date;
   status: ReservationStatus;
 }

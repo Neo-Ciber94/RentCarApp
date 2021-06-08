@@ -1,5 +1,5 @@
 import { LegalPerson } from "@shared/types";
-import { FormikErrors, FormikProps, FormikTouched } from "formik";
+import { FormikProps } from "formik";
 import { FormInput, FormSelect, Row } from "src/components";
 import { RentFormValues } from ".";
 

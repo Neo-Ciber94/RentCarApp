@@ -1,9 +1,12 @@
-import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { Form, Formik, FormikErrors, FormikHelpers, FormikProps } from "formik";
 import isPromise from "is-promise";
 import { useState } from "react";
 import { ButtonProps, FormStepper, MainButton } from ".";
 
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
+
+type ValidateFn<T> = (values: T) => void | object | Promise<FormikErrors<T>>;
+
 interface FormButtomProps extends ButtonProps {
   onClick?: () => void;
   text: string;
@@ -22,6 +25,7 @@ type AsyncOnMove<T> = (
 export interface FormStep<T> {
   label: string;
   validationSchema?: any;
+  validate?: ValidateFn<T>;
   render: (props: FormikProps<T>) => ReactNode;
 }
 
@@ -52,14 +56,21 @@ export function MultiStepForm<T>({
   const [validationSchema, setValidationSchema] = useState(
     props.steps[0]?.validationSchema
   );
+  const [validation, setValidation] = useState(() => props.steps[0]?.validate);
   const stepLabels = props.steps.map((e) => e.label);
 
-  const nextStep = (formikProps: FormikProps<T>) => {
-    onMove(onNext, currentStep, formikProps, () => {
-      formikProps.validateForm().then((errors) => {
+  const nextStep = (formik: FormikProps<T>) => {
+    onMove(onNext, currentStep, formik, () => {
+      console.log(formik.values);
+      formik.validateForm().then((errors) => {
         if (Object.keys(errors).length === 0) {
-          setStep(currentStep + 1);
-          setValidationSchema(props.steps[currentStep + 1]?.validationSchema);
+          const nextStep = currentStep + 1;
+          const step = props.steps[nextStep];
+          setStep(nextStep);
+
+          // Set validation
+          setValidationSchema(step?.validationSchema);
+          setValidation(step?.validate);
         }
       });
     });
@@ -67,8 +78,13 @@ export function MultiStepForm<T>({
 
   const prevStep = (formikProps: FormikProps<T>) => {
     onMove(onPrev, currentStep, formikProps, async () => {
-      setStep(currentStep - 1);
-      setValidationSchema(props.steps[currentStep - 1]?.validationSchema);
+      const prevStep = currentStep - 1;
+      const step = props.steps[prevStep];
+      setStep(prevStep);
+
+      // Set validation
+      setValidationSchema(step?.validationSchema);
+      setValidation(step?.validate);
     });
   };
 
@@ -83,6 +99,7 @@ export function MultiStepForm<T>({
       <Formik
         initialValues={props.initialValues}
         validationSchema={validationSchema}
+        validate={validation}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={(values, actions) => props.onSubmit(values, actions)}

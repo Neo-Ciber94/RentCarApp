@@ -5,8 +5,15 @@ import { RentVehicleSelection } from "../rents";
 import { reservationValidationSchemas } from "./reservationValidationSchemas";
 import { FormInput, FormSelect } from "src/components";
 import { FormikProps } from "formik";
+import { RandomString } from "src/utils/RandomString";
+import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
+import { Services } from "src/services";
+import { useHistory } from "react-router";
+import { Routes } from "src/layout";
 
 export interface ReservationValues extends Omit<ClientDTO, "id"> {
+  reservationId?: number;
+
   // Vehicle
   vehicleId: number;
 
@@ -17,18 +24,13 @@ export interface ReservationValues extends Omit<ClientDTO, "id"> {
   reservationDate: Date;
 }
 
-export function ReservationClient() {
+export interface ReservationFormProps {
+  initialValues: ReservationValues;
+}
+
+export function ReservationForm({ initialValues }: ReservationFormProps) {
+  const history = useHistory();
   const [vehicle, setVehicle] = useState<VehicleDTO>();
-  const initialValues: ReservationValues = {
-    vehicleId: 0,
-    creditCard: "",
-    creditLimit: 0,
-    documentId: "",
-    email: "",
-    legalPerson: LegalPerson.Physical,
-    name: "",
-    reservationDate: new Date(),
-  };
 
   const steps: FormStep<ReservationValues>[] = [
     {
@@ -55,7 +57,7 @@ export function ReservationClient() {
     {
       label: "Reservation Date",
       validationSchema: reservationValidationSchemas.reservation,
-      render: (formik) => <ReservationForm formik={formik} />,
+      render: (formik) => <ReservationDateForm formik={formik} />,
     },
   ];
 
@@ -64,11 +66,22 @@ export function ReservationClient() {
       <MultiStepForm
         initialValues={initialValues}
         steps={steps}
-        onNext={(step, values) => {
-          console.log(values);
-        }}
-        onSubmit={(values, actions) => {
-          console.log(values);
+        onSubmit={async (values, actions) => {
+          const client = await Services.clients.create({
+            name: values.name,
+            creditCard: values.creditCard,
+            creditLimit: values.creditLimit,
+            documentId: values.documentId,
+            email: values.email,
+            legalPerson: values.legalPerson,
+          });
+
+          await Services.reservations.create({
+            clientId: client.id,
+          });
+
+          actions.setSubmitting(false);
+          history.push(Routes.reservations.path);
         }}
       />
     </Container>
@@ -126,7 +139,9 @@ function ClientForm(props: { formik: FormikProps<ReservationValues> }) {
   );
 }
 
-function ReservationForm(props: { formik: FormikProps<ReservationValues> }) {
+function ReservationDateForm(props: {
+  formik: FormikProps<ReservationValues>;
+}) {
   const { errors, touched } = props.formik;
 
   return (
@@ -134,9 +149,9 @@ function ReservationForm(props: { formik: FormikProps<ReservationValues> }) {
       <FormInput
         label="Reservation Date"
         name="reservationDate"
-        type="datetime"
-        error={errors.reservationDate + ""}
-        touched={touched.reservationDate ? true : false}
+        type="date"
+        error={errors.reservationDate as any}
+        touched={touched.reservationDate as any}
       />
     </>
   );

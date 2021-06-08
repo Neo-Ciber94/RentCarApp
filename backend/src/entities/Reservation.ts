@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Client } from "./Client";
 import { Rent } from "./Rent";
+import { Vehicle } from "./Vehicle";
 
 @Entity()
 export class Reservation extends BaseEntity {
@@ -35,6 +36,13 @@ export class Reservation extends BaseEntity {
 
   @CreateDateColumn()
   reservationDate!: Date;
+
+  @Column()
+  vehicleId!: number;
+
+  @OneToOne(() => Vehicle)
+  @JoinColumn()
+  vehicle!: Vehicle;
 
   @Column({
     type: "enum",

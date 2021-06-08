@@ -1,7 +1,7 @@
 import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
 import { ClientDTO, LegalPerson } from "@shared/types";
 import * as yup from "yup";
-import { ReservationValues } from "./ReservationClient";
+import { ReservationValues } from "./ReservationForm";
 
 export const reservationValidationSchemas = {
   // Vehicle
@@ -48,7 +48,7 @@ export const reservationValidationSchemas = {
   reservation: yup.object({
     reservationDate: yup
       .date()
-      .min(new Date(), "Date after this day")
+      .min(new Date(), `The date must be after ${new Date()}`)
       .required("Date is required") as any,
   }) as yup.SchemaOf<{ reservationDate: Date }>,
 };

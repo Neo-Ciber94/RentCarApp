@@ -1,10 +1,13 @@
 import { ReservationStatus } from "@shared/types";
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -40,7 +43,7 @@ export class Reservation extends BaseEntity {
   @Column()
   vehicleId!: number;
 
-  @OneToOne(() => Vehicle)
+  @ManyToOne(() => Vehicle)
   @JoinColumn()
   vehicle!: Vehicle;
 
@@ -50,4 +53,18 @@ export class Reservation extends BaseEntity {
     default: ReservationStatus.Active,
   })
   status!: ReservationStatus;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async checkVehicleIsAvailable() {
+    const vehicle = await Vehicle.findOne(this.vehicleId);
+
+    if (vehicle == null) {
+      throw new Error("Vehicle to reserve is null");
+    }
+
+    if (vehicle.isAvailable === false) {
+      throw new Error(`Vehicle with id ${vehicle.id} is not available`);
+    }
+  }
 }

@@ -6,20 +6,29 @@ interface BottomButtonGroupProps {
   confirmPath?: string;
   cancelText?: string;
   confirmText?: string;
+  noCancelButton?: boolean;
+  noConfirmButton?: boolean;
   onCancel?: () => void;
   onConfirm?: () => void;
 }
 
 export const BottomButtonGroup: React.FC<BottomButtonGroupProps> = (props) => {
-  const { cancelPath, confirmPath, onCancel, onConfirm } = props;
+  const {
+    cancelPath,
+    confirmPath,
+    onCancel,
+    onConfirm,
+    noCancelButton,
+    noConfirmButton,
+  } = props;
 
-  if (cancelPath == null && onCancel == null) {
+  if (!noCancelButton && cancelPath == null && onCancel == null) {
     throw new Error(
       "'BottomButtonGroup' required 1: 'cancelPath' or 'onCancel'"
     );
   }
 
-  if (confirmPath == null && onConfirm == null) {
+  if (!noConfirmButton && confirmPath == null && onConfirm == null) {
     throw new Error(
       "'BottomButtonGroup' required 1: 'confirmPath' or 'onConfirm'"
     );
@@ -27,8 +36,8 @@ export const BottomButtonGroup: React.FC<BottomButtonGroupProps> = (props) => {
 
   return (
     <div className="flex flex-row gap-4 mt-4 w-full">
-      <CancelButton {...props} />
-      <ConfirmButton {...props} />
+      {!noCancelButton && <CancelButton {...props} />}
+      {!noConfirmButton && <ConfirmButton {...props} />}
     </div>
   );
 };

@@ -73,8 +73,11 @@ export const Vehicles = observer(() => {
     return <Loading />;
   }
 
+  // Get all the available vehicles
+  const availableVehicles = data.filter((v) => v.isAvailable);
+
   if (authService.currentUser == null || showKind === ShowKind.Grid) {
-    const vehicles = data.map((e, index) => (
+    const vehicles = availableVehicles.map((e, index) => (
       <VehicleCard key={index} vehicle={e} />
     ));
 

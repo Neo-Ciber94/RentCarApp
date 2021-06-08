@@ -5,8 +5,6 @@ import { RentVehicleSelection } from "../rents";
 import { reservationValidationSchemas } from "./reservationValidationSchemas";
 import { FormInput, FormSelect } from "src/components";
 import { FormikProps } from "formik";
-import { RandomString } from "src/utils/RandomString";
-import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
 import { Services } from "src/services";
 import { useHistory } from "react-router";
 import { Routes } from "src/layout";
@@ -38,7 +36,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
       validationSchema: reservationValidationSchemas.vehicle,
       render: ({ errors, setFieldValue }) => (
         <RentVehicleSelection
-          selectedId={vehicle?.id}
+          selectedId={initialValues.vehicleId}
           onSelect={(v) => {
             setVehicle(v);
             setFieldValue("vehicleId", v.id);
@@ -67,18 +65,39 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
         initialValues={initialValues}
         steps={steps}
         onSubmit={async (values, actions) => {
-          const client = await Services.clients.create({
-            name: values.name,
-            creditCard: values.creditCard,
-            creditLimit: values.creditLimit,
-            documentId: values.documentId,
-            email: values.email,
-            legalPerson: values.legalPerson,
-          });
+          // Updates
+          if (values.reservationId) {
+            await Services.clients.update({
+              id: values.clientId,
+              name: values.name,
+              creditCard: values.creditCard,
+              creditLimit: values.creditLimit,
+              documentId: values.documentId,
+              email: values.email,
+              legalPerson: values.legalPerson,
+            });
 
-          await Services.reservations.create({
-            clientId: client.id,
-          });
+            await Services.reservations.update({
+              id: values.reservationId,
+              vehicleId: values.vehicleId,
+            });
+          }
+          // Creates
+          else {
+            const client = await Services.clients.create({
+              name: values.name,
+              creditCard: values.creditCard,
+              creditLimit: values.creditLimit,
+              documentId: values.documentId,
+              email: values.email,
+              legalPerson: values.legalPerson,
+            });
+
+            await Services.reservations.create({
+              clientId: client.id,
+              vehicleId: values.vehicleId,
+            });
+          }
 
           actions.setSubmitting(false);
           history.push(Routes.reservations.path);

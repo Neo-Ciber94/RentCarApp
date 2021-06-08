@@ -4,6 +4,8 @@ import { ROLES_ALL } from "src/config";
 import { Footer, Header } from "src/layout";
 import { Reservation } from "./Reservation";
 import { ReservationCreate } from "./ReservationCreate";
+import { ReservationEdit } from "./ReservationEdit";
+import { ReservationRent } from "./ReservationRent";
 
 export function ReservationRoutes() {
   const match = useRouteMatch();
@@ -29,13 +31,19 @@ export function ReservationRoutes() {
           exact
           path={`${match.url}/:id/edit`}
           roles={ROLES_ALL}
-          component={ReservationCreate}
+          component={ReservationEdit}
+        />
+        <ProtectedRoute
+          exact
+          path={`${match.url}/:id/rent`}
+          roles={ROLES_ALL}
+          component={ReservationRent}
         />
         <ProtectedRoute
           exact
           path={`${match.url}/:id/delete`}
           roles={ROLES_ALL}
-          component={ReservationCreate}
+          component={ReservationRoutes}
         />
       </Switch>
       <Footer />

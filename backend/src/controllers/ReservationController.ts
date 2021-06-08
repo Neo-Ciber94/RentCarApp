@@ -1,13 +1,11 @@
 import { JsonController } from "routing-controllers";
 import { Reservation } from "src/entities";
-import { AbstractController } from "./AbstractController";
+import { ReservationRespository } from "src/repositories";
+import { ForwardController } from "./ForwardController";
 
 @JsonController("/reservations")
-export class ReservationController extends AbstractController<Reservation> {
+export class ReservationController extends ForwardController<Reservation> {
   constructor() {
-    super({
-      repository: Reservation.getRepository(),
-      relations: ["client", "vehicle"],
-    });
+    super(new ReservationRespository());
   }
 }

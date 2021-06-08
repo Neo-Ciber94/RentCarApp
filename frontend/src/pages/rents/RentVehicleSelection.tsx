@@ -20,7 +20,10 @@ export function RentVehicleSelection({
     return <Loading />;
   }
 
-  const vehicles = data.map((e, index) => {
+  // Get all the available vehicles
+  const availableVehicles = data.filter((v) => v.isAvailable);
+
+  const vehicles = availableVehicles.map((e, index) => {
     const isSelected = selectedId === e.id;
     return (
       <VehicleCard

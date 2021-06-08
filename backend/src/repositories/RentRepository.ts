@@ -1,9 +1,17 @@
 import { calculateDaysPassed, calculateRentPrice } from "@shared/utils";
-import { NewRent, RentDTO, RentReturn } from "@shared/types";
-import { Client, Rent, Vehicle } from "src/entities";
+import {
+  NewRent,
+  RentDTO,
+  RentFromReservation,
+  RentReturn,
+  ReservationStatus,
+} from "@shared/types";
+import { Client, Rent, Reservation, Vehicle } from "src/entities";
 import { DeepPartial, EntityManager, getManager } from "typeorm";
 import { err, ok, Result } from "@shared/result";
-import { Mapper } from "src/utils";
+import { markVehicleAvailable } from "src/utils";
+import { Body, BodyParam, Post } from "routing-controllers";
+import { throwIfCompletedOrCancelled } from "src/utils/throwIfCompletedOrCancelled";
 
 const INCLUDES = [
   "vehicle",
@@ -51,7 +59,7 @@ export class RentRespository {
       const resultRent = await manager.save(newRent);
 
       // Mark the vehicle as not available
-      await this.markVehicleAvailable(rent.vehicleId, false, manager);
+      await markVehicleAvailable(rent.vehicleId, false, manager);
 
       // Return the rent
       return resultRent;
@@ -80,15 +88,13 @@ export class RentRespository {
 
       // If is changing vehicle, mark the old as available
       if (rentToUpdate.vehicleId !== rent.vehicleId) {
-        const oldVehicle = await Vehicle.findOne(rentToUpdate.vehicleId);
-        oldVehicle!.isAvailable = true;
-        await Vehicle.save(oldVehicle!);
+        await markVehicleAvailable(rentToUpdate.vehicleId, true);
       }
 
       const result = await Rent.save(newRent);
 
       // Mark vehicle as not available
-      await this.markVehicleAvailable(rent.vehicleId!, false);
+      await markVehicleAvailable(rent.vehicleId!, false);
 
       return ok(result);
     } else {
@@ -112,7 +118,7 @@ export class RentRespository {
       }
 
       // Mark the vehicle as available
-      await this.markVehicleAvailable(vehicle.id, true);
+      await markVehicleAvailable(vehicle.id, true);
 
       // Sets the total price and days
       rentToReturn.returnDate = new Date();
@@ -125,6 +131,34 @@ export class RentRespository {
     }
   }
 
+  @Post("/reserved")
+  async fromReservation(@Body() rentFromReservation: RentFromReservation) {
+    const reservation = await Reservation.findOne(
+      rentFromReservation.reservationId
+    );
+    if (reservation) {
+      throwIfCompletedOrCancelled(reservation);
+
+      const newRent = Rent.create({
+        clientId: reservation.clientId,
+        vehicleId: reservation.vehicleId,
+        employeeId: rentFromReservation.employeeId,
+        comments: rentFromReservation.comments,
+      });
+
+      const result = await Rent.save(newRent);
+
+      // Complete the reservation
+      reservation.rent = result;
+      reservation.status = ReservationStatus.Completed;
+      await Reservation.save(reservation);
+
+      return result;
+    } else {
+      return undefined;
+    }
+  }
+
   async delete(id: number) {
     const entityToDelete = await Rent.findOne(id);
     if (entityToDelete) {
@@ -132,7 +166,7 @@ export class RentRespository {
       const result = await Rent.remove(entityToDelete);
 
       // Mark vehicle as available
-      this.markVehicleAvailable(result.vehicleId, true);
+      markVehicleAvailable(result.vehicleId, true);
       return result;
     } else {
       return undefined;
@@ -147,21 +181,5 @@ export class RentRespository {
       totalDays,
       totalPrice,
     };
-  }
-
-  async markVehicleAvailable(
-    vehicleId: number,
-    isAvailable: boolean,
-    manager?: EntityManager
-  ) {
-    if (manager) {
-      const vehicle = await manager.findOne(Vehicle, vehicleId);
-      vehicle!.isAvailable = isAvailable;
-      await manager.save(vehicle);
-    } else {
-      const vehicle = await Vehicle.findOne(vehicleId);
-      vehicle!.isAvailable = isAvailable;
-      await Vehicle.save(vehicle!);
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { ReservationDTO } from "@shared/types";
+import { ReservationDTO, ReservationStatus } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
@@ -22,7 +22,17 @@ const columns: IDataTableColumn<ReservationDTO>[] = [
 
   {
     name: "Status",
-    selector: (e) => e.status,
+    cell: (row) => (
+      <p
+        className={`${
+          row.status === ReservationStatus.Cancelled
+            ? "text-red-600"
+            : "text-green-500"
+        }`}
+      >
+        {row.status}
+      </p>
+    ),
   },
 ];
 
@@ -41,9 +51,9 @@ export function Reservation() {
         sortable: true,
         addButtonText: "New Reservation",
         addPath: "/reservations/new",
-        onDelete: (row) => console.log("DELETE", row),
-        onDetails: (row) => console.log("DETAILS", row),
-        onEdit: (row) => console.log("EDIT", row),
+        onDetails: (row) => `/reservations/${row.id}`,
+        onDelete: (row) => `/reservations/${row.id}/delete`,
+        editPath: (row) => `/reservations/${row.id}/edit`,
       })}
     </Container>
   );

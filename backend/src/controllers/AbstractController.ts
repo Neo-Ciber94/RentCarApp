@@ -4,7 +4,7 @@ import { Mapper, MapperFn } from "src/utils";
 import { DeepPartial, Repository } from "typeorm";
 
 export interface ControllerOptions<T, R = T> {
-  repository: Repository<T>;
+  repository: Repository<T> | GenericRepository<T, R>;
   mapper?: Mapper<T, R> | MapperFn<T, R>;
   relations?: string[];
 }
@@ -14,10 +14,15 @@ export class AbstractController<T, R = T> {
   protected readonly relations: string[];
 
   constructor(options: ControllerOptions<T, R>) {
-    this.repository = new GenericRepository({
-      repository: options.repository,
-      mapper: options.mapper,
-    });
+    if (options.repository instanceof GenericRepository) {
+      this.repository = options.repository;
+    } else {
+      this.repository = new GenericRepository({
+        repository: options.repository,
+        mapper: options.mapper,
+      });
+    }
+
     this.relations = options.relations || [];
   }
 

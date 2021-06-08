@@ -1,4 +1,9 @@
-import { NewRent, RentDTO, RentReturn } from "@shared/types";
+import {
+  NewRent,
+  RentDTO,
+  RentFromReservation,
+  RentReturn,
+} from "@shared/types";
 import { ApiService } from "./ApiService";
 import { webClient } from "./http";
 
@@ -13,5 +18,9 @@ export class RentService extends ApiService<RentDTO, NewRent> {
 
   rentReturn(rent: RentReturn) {
     return webClient.post(`${this.baseUrl}/return`, rent);
+  }
+
+  fromReservation(reservation: RentFromReservation) {
+    return webClient.post(`${this.baseUrl}/reserved`, reservation);
   }
 }

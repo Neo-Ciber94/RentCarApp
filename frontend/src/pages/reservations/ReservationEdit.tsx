@@ -1,10 +1,6 @@
-import { CREDIT_CARD_LENGTH, DOCUMENT_ID_LENGTH } from "@shared/config";
-import { LegalPerson } from "@shared/types";
 import { useParams } from "react-router";
 import { Loading } from "src/components";
 import { useReservation } from "src/hooks/reservationHooks";
-import { Services } from "src/services";
-import { RandomString } from "src/utils/RandomString";
 import { ReservationForm, ReservationValues } from "./ReservationForm";
 
 export function ReservationEdit() {
@@ -17,12 +13,12 @@ export function ReservationEdit() {
   const initialValues: ReservationValues = {
     name: reservation.client.name,
     email: reservation.client.email,
+    creditLimit: reservation.client.creditLimit,
+    creditCard: reservation.client.creditCard,
     vehicleId: reservation.vehicleId,
-    creditLimit: 0,
-    creditCard: RandomString.number(CREDIT_CARD_LENGTH),
-    documentId: RandomString.number(DOCUMENT_ID_LENGTH),
-    legalPerson: LegalPerson.Physical,
-    reservationDate: new Date(new Date().toDateString()),
+    documentId: reservation.client.documentId,
+    legalPerson: reservation.client.legalPerson,
+    reservationDate: reservation.reservationDate,
   };
 
   return <ReservationForm initialValues={initialValues} />;

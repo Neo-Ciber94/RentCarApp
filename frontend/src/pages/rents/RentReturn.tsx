@@ -62,10 +62,16 @@ export function RentReturn() {
         buttonsClassName="text-sm"
         steps={steps}
         submitButtonText="Return Vehicle"
-        onSubmit={async (_, actions) => {
+        onSubmit={async (values, actions) => {
           await Services.rents.rentReturn({
             rentId: data.id,
           });
+
+          await Services.inspections.create({
+            ...values,
+            rentId: data.id,
+          });
+
           actions.setSubmitting(false);
           history.push(Routes.rent.path);
         }}

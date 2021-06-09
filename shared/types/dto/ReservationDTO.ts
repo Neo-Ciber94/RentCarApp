@@ -11,6 +11,7 @@ export interface ReservationDTO {
   rent?: RentDTO;
   vehicleId: number;
   vehicle: VehicleDTO;
+  createdAt?: Date;
   reservationDate: Date;
   status: ReservationStatus;
 }

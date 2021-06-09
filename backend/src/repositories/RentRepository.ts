@@ -133,30 +133,33 @@ export class RentRespository {
 
   @Post("/reserved")
   async fromReservation(@Body() rentFromReservation: RentFromReservation) {
-    const reservation = await Reservation.findOne(
-      rentFromReservation.reservationId
-    );
-    if (reservation) {
-      throwIfCompletedOrCancelled(reservation);
+    return getManager().transaction(async (manager) => {
+      const reservation = await manager.findOne(
+        Reservation,
+        rentFromReservation.reservationId
+      );
+      if (reservation) {
+        throwIfCompletedOrCancelled(reservation);
 
-      const newRent = Rent.create({
-        clientId: reservation.clientId,
-        vehicleId: reservation.vehicleId,
-        employeeId: rentFromReservation.employeeId,
-        comments: rentFromReservation.comments,
-      });
+        const newRent = manager.create(Rent, {
+          clientId: reservation.clientId,
+          vehicleId: reservation.vehicleId,
+          employeeId: rentFromReservation.employeeId,
+          comments: rentFromReservation.comments,
+        });
 
-      const result = await Rent.save(newRent);
+        const result: Rent = await manager.save(newRent);
 
-      // Complete the reservation
-      reservation.rent = result;
-      reservation.status = ReservationStatus.Completed;
-      await Reservation.save(reservation);
+        // Complete the reservation
+        reservation.rent = result;
+        reservation.status = ReservationStatus.Completed;
+        await manager.save(reservation);
 
-      return result;
-    } else {
-      return undefined;
-    }
+        return result;
+      } else {
+        return undefined;
+      }
+    });
   }
 
   async delete(id: number) {

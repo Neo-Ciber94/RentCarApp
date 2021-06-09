@@ -21,6 +21,9 @@ export class RentService extends ApiService<RentDTO, NewRent> {
   }
 
   fromReservation(reservation: RentFromReservation) {
-    return webClient.post(`${this.baseUrl}/reserved`, reservation);
+    return webClient.post<RentDTO, RentFromReservation>(
+      `${this.baseUrl}/reserved`,
+      reservation
+    );
   }
 }

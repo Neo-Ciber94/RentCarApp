@@ -66,10 +66,13 @@ export const ReservationRent = observer(() => {
         steps={steps}
         onSubmit={async (values, actions) => {
           // Creates the reservation
-          await Services.rents.fromReservation(values);
+          const newRent = await Services.rents.fromReservation(values);
 
           // Creates an inspection for the reservation
-          await Services.inspections.create(values);
+          await Services.inspections.create({
+            ...values,
+            rentId: newRent.id,
+          });
 
           actions.setSubmitting(false);
           history.push(Routes.reservations.path);

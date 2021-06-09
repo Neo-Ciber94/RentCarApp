@@ -20,6 +20,7 @@ export class ReservationRespository implements RepositoryLike<Reservation> {
     const newReservation = Reservation.create({
       clientId: reservation.clientId,
       vehicleId: reservation.vehicleId,
+      reservationDate: reservation.reservationDate,
     });
 
     const result = await Reservation.save(newReservation);
@@ -53,6 +54,9 @@ export class ReservationRespository implements RepositoryLike<Reservation> {
     const reservation = await Reservation.findOne(id);
     if (reservation) {
       throwIfCompletedOrCancelled(reservation);
+
+      // Mark the reserved vehicle as available
+      markVehicleAvailable(reservation.vehicleId, true);
 
       reservation.status = ReservationStatus.Cancelled;
       return Reservation.save(reservation);

@@ -12,6 +12,7 @@ export const VehicleInfo = ({ vehicle }: VehicleInfoProps) => {
       <TextInfo label="ID" value={vehicle.id} />
       <TextInfo label="Model" value={vehicle.model.name} />
       <TextInfo label="Is Available" value={bool2YesNo(vehicle.isAvailable)} />
+      <TextInfo label="Price Per Day" value={`${vehicle.rentPrice} RD$`} />
       <TextInfo label="Fuel" value={vehicle.fuel.name} />
       <TextInfo label="Engine Number" value={vehicle.engineNumber} />
       <TextInfo label="Chassis Number" value={vehicle.chassisNumber} />

@@ -38,6 +38,9 @@ export class Reservation extends BaseEntity {
   rent!: Rent | null;
 
   @CreateDateColumn()
+  createdAt!: Date;
+
+  @Column("date")
   reservationDate!: Date;
 
   @Column()
@@ -57,14 +60,16 @@ export class Reservation extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   async checkVehicleIsAvailable() {
-    const vehicle = await Vehicle.findOne(this.vehicleId);
+    if (this.status === ReservationStatus.Active) {
+      const vehicle = await Vehicle.findOne(this.vehicleId);
 
-    if (vehicle == null) {
-      throw new Error("Vehicle to reserve is null");
-    }
+      if (vehicle == null) {
+        throw new Error("Vehicle to reserve is null");
+      }
 
-    if (vehicle.isAvailable === false) {
-      throw new Error(`Vehicle with id ${vehicle.id} is not available`);
+      if (vehicle.isAvailable === false) {
+        throw new Error(`Vehicle with id ${vehicle.id} is not available`);
+      }
     }
   }
 }

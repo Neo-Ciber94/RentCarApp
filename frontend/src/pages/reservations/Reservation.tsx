@@ -2,6 +2,7 @@ import { ReservationDTO, ReservationStatus } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
+import dayjs from "dayjs";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
   {
@@ -11,7 +12,7 @@ const columns: IDataTableColumn<ReservationDTO>[] = [
 
   {
     name: "Reservation Date",
-    selector: (e) => new Date(e.reservationDate).toLocaleDateString(),
+    selector: (e) => dayjs(e.reservationDate).format("DD-MM-YYYY"),
   },
 
   {
@@ -38,7 +39,7 @@ export function Reservation() {
   }
 
   return (
-    <Container>
+    <Container className="lg:max-w-6xl">
       {withCrudDataTable({
         data,
         columns,

@@ -65,6 +65,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
         initialValues={initialValues}
         steps={steps}
         onSubmit={async (values, actions) => {
+          console.log(values);
           // Updates
           if (values.reservationId) {
             await Services.clients.update({
@@ -80,6 +81,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
             await Services.reservations.update({
               id: values.reservationId,
               vehicleId: values.vehicleId,
+              reservationDate: values.reservationDate,
             });
           }
           // Creates
@@ -96,6 +98,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
             await Services.reservations.create({
               clientId: client.id,
               vehicleId: values.vehicleId,
+              reservationDate: values.reservationDate,
             });
           }
 

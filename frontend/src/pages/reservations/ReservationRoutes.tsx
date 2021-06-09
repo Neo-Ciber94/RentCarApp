@@ -4,6 +4,8 @@ import { ROLES_ALL } from "src/config";
 import { Footer, Header } from "src/layout";
 import { Reservation } from "./Reservation";
 import { ReservationCreate } from "./ReservationCreate";
+import { ReservationDelete } from "./ReservationDelete";
+import { ReservationDetails } from "./ReservationDetails";
 import { ReservationEdit } from "./ReservationEdit";
 import { ReservationRent } from "./ReservationRent";
 
@@ -25,7 +27,7 @@ export function ReservationRoutes() {
           exact
           path={`${match.url}/:id`}
           roles={ROLES_ALL}
-          component={ReservationCreate}
+          component={ReservationDetails}
         />
         <ProtectedRoute
           exact
@@ -43,7 +45,7 @@ export function ReservationRoutes() {
           exact
           path={`${match.url}/:id/delete`}
           roles={ROLES_ALL}
-          component={ReservationRoutes}
+          component={ReservationDelete}
         />
       </Switch>
       <Footer />

@@ -36,7 +36,7 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
     sortable: true,
     cell: (row) => (
       <p className={row.isAvailable ? "text-green-600" : "text-red-600"}>
-        {row.isAvailable ? "Available" : "Rented"}
+        {row.isAvailable ? "Yes" : "No"}
       </p>
     ),
   },

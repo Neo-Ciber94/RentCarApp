@@ -10,7 +10,10 @@ export function ReservationInfo({ reservation }: ReservationInfoProps) {
     <>
       <Title title="Reservation" />
       <TextInfo label="ID" value={reservation.id} />
-      <TextInfo label="Date" value={reservation.reservationDate} />
+      <TextInfo
+        label="Reservation Date"
+        value={new Date(reservation.reservationDate).toLocaleDateString()}
+      />
       <TextInfo label="Status" value={reservation.status} />
       <TextInfo
         label="Vehicle"

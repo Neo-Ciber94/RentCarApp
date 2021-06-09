@@ -7,7 +7,6 @@ import { ROLES_ALL, ROLES_ADMIN } from "./config";
 import { AuthContext } from "./context/AuthContext";
 import { withHeaderAndFooter, Routes } from "./layout";
 import {
-  Reservation,
   VehicleRoutes,
   Login,
   Clients,

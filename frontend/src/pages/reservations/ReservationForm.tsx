@@ -36,7 +36,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
       validationSchema: reservationValidationSchemas.vehicle,
       render: ({ errors, setFieldValue }) => (
         <RentVehicleSelection
-          selectedId={initialValues.vehicleId}
+          selectedId={vehicle?.id || initialValues.vehicleId}
           onSelect={(v) => {
             setVehicle(v);
             setFieldValue("vehicleId", v.id);
@@ -60,7 +60,7 @@ export function ReservationForm({ initialValues }: ReservationFormProps) {
   ];
 
   return (
-    <Container>
+    <Container className="lg:w-4/6 md:w-5/6">
       <MultiStepForm
         initialValues={initialValues}
         steps={steps}

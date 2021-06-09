@@ -1,5 +1,5 @@
 import { calculateDaysPassed, calculateRentPrice } from "@shared/utils";
-import { NewRent, RentReturn } from "@shared/types";
+import { NewRent, RentFromReservation, RentReturn } from "@shared/types";
 import { Response } from "express";
 import {
   Body,
@@ -48,6 +48,11 @@ export class RentController {
   @Post("/return")
   async rentReturn(@Body() rent: RentReturn) {
     return this.repository.rentReturn(rent);
+  }
+
+  @Post("/reserved")
+  async fromReservation(@Body() reservation: RentFromReservation) {
+    return this.repository.fromReservation(reservation);
   }
 
   @Delete("/:id")

@@ -74,7 +74,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
         const deleteBtn = typeof canDelete === "boolean" ? canDelete : canDelete(row);
 
         return (
-          <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
+          <div className="flex flex-row w-full justify-center items-center gap-4 lg:gap-10">
             {viewBtn && <DetailsButton props={props} row={row} />}
             {editBtn && <EditButton props={props} row={row} />}
             {deleteBtn && <DeleteButton props={props} row={row} />}

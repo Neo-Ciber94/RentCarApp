@@ -1,4 +1,4 @@
-import { ClientDTO, EmployeeDTO, LegalPerson, TireStatus } from "@shared/types";
+import { EmployeeDTO, LegalPerson, TireStatus } from "@shared/types";
 
 // Rent
 export type RentValues = {

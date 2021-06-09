@@ -1,12 +1,6 @@
 import { ReservationDTO, ReservationStatus } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
-import {
-  Container,
-  CustomDataTable,
-  Loading,
-  withCrudDataTable,
-} from "src/components";
-import { useAllVehicles } from "src/hooks";
+import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
@@ -16,8 +10,8 @@ const columns: IDataTableColumn<ReservationDTO>[] = [
   },
 
   {
-    name: "Date",
-    selector: (e) => e.reservationDate,
+    name: "Reservation Date",
+    selector: (e) => new Date(e.reservationDate).toLocaleDateString(),
   },
 
   {
@@ -30,7 +24,7 @@ const columns: IDataTableColumn<ReservationDTO>[] = [
             : "text-green-500"
         }`}
       >
-        {row.status}
+        {capitalize(row.status)}
       </p>
     ),
   },
@@ -51,10 +45,16 @@ export function Reservation() {
         sortable: true,
         addButtonText: "New Reservation",
         addPath: "/reservations/new",
-        onDetails: (row) => `/reservations/${row.id}`,
-        onDelete: (row) => `/reservations/${row.id}/delete`,
+        detailsPath: (row) => `/reservations/${row.id}`,
+        deletePath: (row) => `/reservations/${row.id}/delete`,
         editPath: (row) => `/reservations/${row.id}/edit`,
+        canEdit: (row) => row.status === ReservationStatus.Active,
+        canDelete: (row) => row.status === ReservationStatus.Active,
       })}
     </Container>
   );
+}
+
+function capitalize(s: string) {
+  return s.charAt(0).toLocaleUpperCase() + s.slice(1).toLowerCase();
 }

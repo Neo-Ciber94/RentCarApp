@@ -3,27 +3,29 @@ import { useHistory, useParams } from "react-router";
 import { BottomButtonGroup, Container, Loading } from "src/components";
 import { useReservation } from "src/hooks/reservationHooks";
 import { Routes } from "src/layout";
+import { Services } from "src/services";
 import { ReservationInfo } from "./ReservationInfo";
 
 export function ReservationDetails() {
-  const params = useParams<{ id: string }>();
   const history = useHistory();
+  const params = useParams<{ id: string }>();
   const { isLoading, data } = useReservation(Number(params.id));
 
   if (isLoading || data == null) {
     return <Loading />;
   }
 
+  console.log(params, data);
   const isCompleted =
     data.status === ReservationStatus.Cancelled ||
     data.status === ReservationStatus.Completed;
 
   return (
-    <Container>
+    <Container className="lg:w-4/6 md:w-5/6">
       <ReservationInfo reservation={data} />
       <BottomButtonGroup
-        confirmText="Edit"
-        confirmPath={`/reservations/${data.id}`}
+        confirmText="Rent"
+        confirmPath={`/reservations/${data.id}/rent`}
         onCancel={() => history.push(Routes.reservations.path)}
         noConfirmButton={isCompleted}
       />

@@ -20,7 +20,7 @@ export function ReservationDelete() {
     data.status === ReservationStatus.Completed;
 
   return (
-    <Container>
+    <Container className="lg:w-4/6 md:w-5/6">
       <ReservationInfo reservation={data} />
       <BottomButtonGroup
         confirmText="Delete"

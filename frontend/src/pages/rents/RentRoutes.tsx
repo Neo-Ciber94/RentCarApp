@@ -2,7 +2,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { Footer, Header } from "src/layout";
 import NotFound from "../common/NotFound";
 import { RentCreate } from "./RentCreate";
-import { RentDelete } from "./RentDelete";
+// import { RentDelete } from "./RentDelete";
 import { RentDetails } from "./RentDetails";
 import { RentEdit } from "./RentEdit";
 import { RentReturn } from "./RentReturn";

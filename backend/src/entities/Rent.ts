@@ -1,3 +1,4 @@
+import { ReservationStatus } from "@shared/types";
 import {
   AfterInsert,
   AfterRemove,
@@ -18,6 +19,7 @@ import {
 import { Client } from "./Client";
 import { Employee } from "./Employee";
 import { Inspection } from "./Inspection";
+import { Reservation } from "./Reservation";
 import { Vehicle } from "./Vehicle";
 
 @Entity()
@@ -79,6 +81,18 @@ export class Rent extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   async checkVehicleIsAvailable() {
+    const reservation = await Reservation.findOne({
+      where: {
+        status: ReservationStatus.Active,
+        vehicleId: this.vehicleId,
+      },
+    });
+
+    // If the vehicle is reserved we don't need more checks
+    if (reservation) {
+      return;
+    }
+
     const vehicle = await Vehicle.findOne(this.vehicleId);
 
     if (vehicle!.isAvailable === false) {

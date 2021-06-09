@@ -9,9 +9,11 @@ interface DataTableActionButton<T> {
   classNames?: string;
   action: (data: T[]) => void;
 }
+
 interface Props<T> {
   addButtonText?: string;
   actionsText?: string;
+  actionButtons?: DataTableActionButton<T>[];
   onAdd?: () => void;
   onDetails?: (item: T) => void;
   onEdit?: (item: T) => void;

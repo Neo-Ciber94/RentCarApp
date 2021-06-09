@@ -1,5 +1,5 @@
 import { ClientDTO, LegalPerson, VehicleDTO } from "@shared/types";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Container, FormStep, MultiStepForm } from "src/components";
 import { RentVehicleSelection } from "../rents";
 import { reservationValidationSchemas } from "./reservationValidationSchemas";
@@ -8,6 +8,8 @@ import { FormikProps } from "formik";
 import { Services } from "src/services";
 import { useHistory } from "react-router";
 import { Routes } from "src/layout";
+import { AuthContext } from "src/context/AuthContext";
+import { observer } from "mobx-react-lite";
 
 export interface ReservationValues extends Omit<ClientDTO, "id"> {
   reservationId?: number;
@@ -26,89 +28,96 @@ export interface ReservationFormProps {
   initialValues: ReservationValues;
 }
 
-export function ReservationForm({ initialValues }: ReservationFormProps) {
-  const history = useHistory();
-  const [vehicle, setVehicle] = useState<VehicleDTO>();
+export const ReservationForm = observer<ReservationFormProps>(
+  ({ initialValues }) => {
+    const history = useHistory();
+    const [vehicle, setVehicle] = useState<VehicleDTO>();
+    const authService = useContext(AuthContext);
 
-  const steps: FormStep<ReservationValues>[] = [
-    {
-      label: "Vehicle",
-      validationSchema: reservationValidationSchemas.vehicle,
-      render: ({ errors, setFieldValue }) => (
-        <RentVehicleSelection
-          selectedId={vehicle?.id || initialValues.vehicleId}
-          onSelect={(v) => {
-            setVehicle(v);
-            setFieldValue("vehicleId", v.id);
+    const steps: FormStep<ReservationValues>[] = [
+      {
+        label: "Vehicle",
+        validationSchema: reservationValidationSchemas.vehicle,
+        render: ({ errors, setFieldValue }) => (
+          <RentVehicleSelection
+            selectedId={vehicle?.id || initialValues.vehicleId}
+            onSelect={(v) => {
+              setVehicle(v);
+              setFieldValue("vehicleId", v.id);
+            }}
+            error={errors.vehicleId}
+          />
+        ),
+      },
+
+      {
+        label: "Client",
+        validationSchema: reservationValidationSchemas.client,
+        render: (formik) => <ClientForm formik={formik} />,
+      },
+
+      {
+        label: "Reservation Date",
+        validationSchema: reservationValidationSchemas.reservation,
+        render: (formik) => <ReservationDateForm formik={formik} />,
+      },
+    ];
+
+    return (
+      <Container className="lg:w-4/6 md:w-5/6">
+        <MultiStepForm
+          initialValues={initialValues}
+          steps={steps}
+          onSubmit={async (values, actions) => {
+            console.log(values);
+            // Updates
+            if (values.reservationId) {
+              await Services.clients.update({
+                id: values.clientId,
+                name: values.name,
+                creditCard: values.creditCard,
+                creditLimit: values.creditLimit,
+                documentId: values.documentId,
+                email: values.email,
+                legalPerson: values.legalPerson,
+              });
+
+              await Services.reservations.update({
+                id: values.reservationId,
+                vehicleId: values.vehicleId,
+                reservationDate: values.reservationDate,
+              });
+            }
+            // Creates
+            else {
+              const client = await Services.clients.create({
+                name: values.name,
+                creditCard: values.creditCard,
+                creditLimit: values.creditLimit,
+                documentId: values.documentId,
+                email: values.email,
+                legalPerson: values.legalPerson,
+              });
+
+              await Services.reservations.create({
+                clientId: client.id,
+                vehicleId: values.vehicleId,
+                reservationDate: values.reservationDate,
+              });
+            }
+
+            actions.setSubmitting(false);
+            if (authService.isAuthenticated) {
+              history.push(Routes.reservations.path);
+            } else {
+              history.push("/");
+            }
           }}
-          error={errors.vehicleId}
         />
-      ),
-    },
-
-    {
-      label: "Client",
-      validationSchema: reservationValidationSchemas.client,
-      render: (formik) => <ClientForm formik={formik} />,
-    },
-
-    {
-      label: "Reservation Date",
-      validationSchema: reservationValidationSchemas.reservation,
-      render: (formik) => <ReservationDateForm formik={formik} />,
-    },
-  ];
-
-  return (
-    <Container className="lg:w-4/6 md:w-5/6">
-      <MultiStepForm
-        initialValues={initialValues}
-        steps={steps}
-        onSubmit={async (values, actions) => {
-          console.log(values);
-          // Updates
-          if (values.reservationId) {
-            await Services.clients.update({
-              id: values.clientId,
-              name: values.name,
-              creditCard: values.creditCard,
-              creditLimit: values.creditLimit,
-              documentId: values.documentId,
-              email: values.email,
-              legalPerson: values.legalPerson,
-            });
-
-            await Services.reservations.update({
-              id: values.reservationId,
-              vehicleId: values.vehicleId,
-              reservationDate: values.reservationDate,
-            });
-          }
-          // Creates
-          else {
-            const client = await Services.clients.create({
-              name: values.name,
-              creditCard: values.creditCard,
-              creditLimit: values.creditLimit,
-              documentId: values.documentId,
-              email: values.email,
-              legalPerson: values.legalPerson,
-            });
-
-            await Services.reservations.create({
-              clientId: client.id,
-              vehicleId: values.vehicleId,
-              reservationDate: values.reservationDate,
-            });
-          }
-
-          actions.setSubmitting(false);
-          history.push(Routes.reservations.path);
-        }}
-      />
-    </Container>
-  );
-}
+      </Container>
+    );
+  }
+);
 
 function ClientForm(props: { formik: FormikProps<ReservationValues> }) {
   const { errors, values, touched } = props.formik;

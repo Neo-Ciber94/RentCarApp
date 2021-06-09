@@ -3,7 +3,6 @@ import { useHistory, useParams } from "react-router";
 import { BottomButtonGroup, Container, Loading } from "src/components";
 import { useReservation } from "src/hooks/reservationHooks";
 import { Routes } from "src/layout";
-import { Services } from "src/services";
 import { ReservationInfo } from "./ReservationInfo";
 
 export function ReservationDetails() {

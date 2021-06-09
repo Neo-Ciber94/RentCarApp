@@ -126,14 +126,18 @@ function HeaderTitle(props: { title: string }) {
 }
 
 // reservation, vehicles, login
-const HomeNav: React.FC = () => {
+const HomeNav = observer(() => {
   const { setOpen } = useNavbar();
+  const authService = useContext(AuthContext);
+
+  const toPath = authService.isAuthenticated ? undefined : "/reservations/new";
 
   return (
     <>
       <NavItem
         key={Routes.reservations.name}
         route={Routes.reservations}
+        to={toPath}
         onClick={() => setOpen(false)}
       />
       <NavItem
@@ -145,7 +149,7 @@ const HomeNav: React.FC = () => {
       <NavLoginAndLogout />
     </>
   );
-};
+});
 
 // clients, inspection, rent, reservation, vehicles, login
 const EmployeeNav: React.FC = () => {

@@ -4,6 +4,11 @@ import { NavLink } from "react-router-dom";
 import { LinkButton, MainButton } from ".";
 import { CustomDataTable, CustomDataTableProps } from "./CustomDataTable";
 
+interface DataTableActionButton<T> {
+  text: string;
+  classNames?: string;
+  action: (data: T[]) => void;
+}
 interface Props<T> {
   addButtonText?: string;
   actionsText?: string;

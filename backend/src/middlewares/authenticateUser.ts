@@ -46,6 +46,14 @@ function needsAuthentication(request: Request, url: string) {
     return false;
   }
 
+  // FIXME: Only for create reservations
+  if (
+    url === `${BASE_API}/clients` ||
+    (url === `${BASE_API}/reservations` && request.method === "POST")
+  ) {
+    return false;
+  }
+
   if (url.startsWith(authUrl)) {
     // Split the string removing any query params
     const urlRest = url.slice(authUrl.length).split("?")[0];

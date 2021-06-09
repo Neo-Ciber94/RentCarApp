@@ -1,5 +1,5 @@
 import { FormikHelpers, FormikErrors, FormikProps, Form, Formik } from "formik";
-import Swal from "sweetalert2";
+import Swal, { SweetAlertGrow } from "sweetalert2";
 
 import { MainButton, ReactSwal } from ".";
 
@@ -18,6 +18,7 @@ interface FormConfig<T> {
   validationSchema?: any | (() => any);
   autoFocusCancel?: boolean;
   autoFocusSubmit?: boolean;
+  grow?: SweetAlertGrow;
   onSubmit: (values: T, helpers: FormikHelpers<T> & CloseCallback) => void;
   onCancel?: (close: CloseCallback) => void;
   validate?: (values: T) => void | object | Promise<FormikErrors<T>>;
@@ -39,6 +40,7 @@ export function openSwalForm<T>(config: FormConfig<T>) {
       htmlContainer: "text-left",
       container: "text-left",
     },
+    grow: config.grow || false,
     html: (
       <Formik
         initialValues={config.initialValues}

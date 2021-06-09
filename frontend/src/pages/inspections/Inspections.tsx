@@ -128,6 +128,7 @@ async function openEditor(initialValues: Partial<InspectionDTO>) {
     title: "Add Inspection",
     initialValues: initialValues,
     validationSchema,
+    grow: "row",
     onSubmit: async (values, actions) => {
       try {
         let result: InspectionDTO;
@@ -250,25 +251,36 @@ async function openDetails(entity: InspectionDTO, rerender: () => void) {
     cancelButtonText: "Ok",
     confirmButtonText: "Edit",
     focusCancel: true,
+    grow: "row",
     html: (
       <div className="text-left">
         <TextInfo label="Inspection ID" value={entity.id} />
         <TextInfo label="Rent ID" value={entity.rentId} />
         <TextInfo label="Inspection Date" value={entity.inspectionDate} />
-        <TextInfo
-          label="Have Broken Glass"
-          value={bool2YesNo(entity.haveBrokenGlass)}
-        />
-        <TextInfo label="Have CarJack" value={bool2YesNo(entity.haveCarJack)} />
-        <TextInfo
-          label="Have Scratches"
-          value={bool2YesNo(entity.haveScratches)}
-        />
-        <TextInfo label="Have Tires" value={bool2YesNo(entity.haveTires)} />
-        <TextInfo label="Front left Status" value={entity.frontLeftTire} />
-        <TextInfo label="Front right Status" value={entity.frontRightTire} />
-        <TextInfo label="Back left Status" value={entity.backLeftTire} />
-        <TextInfo label="Back right Status" value={entity.backRightTire} />
+
+        <Row>
+          <TextInfo
+            label="Have Broken Glass"
+            value={bool2YesNo(entity.haveBrokenGlass)}
+          />
+          <TextInfo
+            label="Have CarJack"
+            value={bool2YesNo(entity.haveCarJack)}
+          />
+          <TextInfo
+            label="Have Scratches"
+            value={bool2YesNo(entity.haveScratches)}
+          />
+
+          <TextInfo label="Have Tires" value={bool2YesNo(entity.haveTires)} />
+        </Row>
+
+        <Row>
+          <TextInfo label="Front left Status" value={entity.frontLeftTire} />
+          <TextInfo label="Front right Status" value={entity.frontRightTire} />
+          <TextInfo label="Back left Status" value={entity.backLeftTire} />
+          <TextInfo label="Back right Status" value={entity.backRightTire} />
+        </Row>
       </div>
     ),
   }).then((result) => {

@@ -60,7 +60,7 @@ export const ReservationRent = observer(() => {
   ];
 
   return (
-    <Container>
+    <Container className="lg:max-w-5xl">
       <MultiStepForm
         initialValues={initialValues}
         steps={steps}

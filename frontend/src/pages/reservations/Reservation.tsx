@@ -3,6 +3,7 @@ import { IDataTableColumn } from "react-data-table-component";
 import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
 import dayjs from "dayjs";
+import { capitalize } from "src/utils/capitalize";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
   {
@@ -54,8 +55,4 @@ export function Reservation() {
       })}
     </Container>
   );
-}
-
-function capitalize(s: string) {
-  return s.charAt(0).toLocaleUpperCase() + s.slice(1).toLowerCase();
 }

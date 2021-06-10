@@ -94,7 +94,12 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
   return (
     <>
       {canAdd && <AddButtom props={props} />}
-      <CustomDataTable {...rest} columns={mergedColumns} data={data} />
+      <CustomDataTable
+        {...rest}
+        pagination={true}
+        columns={mergedColumns}
+        data={data}
+      />
     </>
   );
 }

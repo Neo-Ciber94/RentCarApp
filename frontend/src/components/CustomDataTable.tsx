@@ -78,12 +78,11 @@ export function CustomDataTable<T = any>(props: CustomDataTableProps<T>) {
       data={filteredItems!}
       customStyles={customStyles}
       paginationComponentOptions={{ noRowsPerPage: true }}
-      paginationTotalRows={10}
       subHeaderComponent={subHeaderMemo}
       subHeader={data.length > 0}
       noHeader
       highlightOnHover
-      pagination
+      pagination={true}
       dense
       striped
     />

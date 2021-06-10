@@ -4,11 +4,17 @@ import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
 import dayjs from "dayjs";
 import { capitalize } from "src/utils/capitalize";
+import { string } from "yup/lib/locale";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
   {
     name: "ID",
     selector: (e) => e.id,
+  },
+
+  {
+    name: "Client",
+    selector: (e) => e.client.name,
   },
 
   {
@@ -18,17 +24,23 @@ const columns: IDataTableColumn<ReservationDTO>[] = [
 
   {
     name: "Status",
-    cell: (row) => (
-      <p
-        className={`${
-          row.status === ReservationStatus.Cancelled
-            ? "text-red-600"
-            : "text-green-500"
-        }`}
-      >
-        {capitalize(row.status)}
-      </p>
-    ),
+    selector: (e) => e.status,
+    cell: (row) => {
+      let className: string;
+      switch (row.status) {
+        case ReservationStatus.Active:
+          className = "text-green-500";
+          break;
+        case ReservationStatus.Cancelled:
+          className = "text-red-600";
+          break;
+        case ReservationStatus.Completed:
+          className = "text-blue-600";
+          break;
+      }
+
+      return <p className={className}>{capitalize(row.status)}</p>;
+    },
   },
 ];
 

@@ -90,6 +90,8 @@ async function submitRent(
   values: RentFormValues,
   actions: FormikHelpers<RentFormValues>
 ) {
+  await Services.clients.create(values);
+
   const rent = await Services.rents.create({
     name: values.name,
     email: values.email,

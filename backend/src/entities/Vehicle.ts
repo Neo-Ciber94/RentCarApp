@@ -34,6 +34,9 @@ export class Vehicle extends BaseEntity {
   @JoinColumn()
   fuel!: Fuel;
 
+  @Column({ type: "tinytext" })
+  image!: string | null;
+
   @Column({ unique: true })
   engineNumber!: string;
 

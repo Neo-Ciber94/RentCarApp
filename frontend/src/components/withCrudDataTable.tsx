@@ -7,7 +7,7 @@ import { CustomDataTable, CustomDataTableProps } from "./CustomDataTable";
 interface DataTableActionButton<T> {
   text: string;
   classNames?: string;
-  action: (data: T[]) => void;
+  onClick: (data: T[]) => void;
 }
 
 interface Props<T> {
@@ -35,6 +35,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     columns,
     data,
     actionsText,
+    actionButtons = [],
     onAdd,
     addPath,
     onDetails,
@@ -91,9 +92,22 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     },
   ];
 
+  const actions = actionButtons.map((btn, index) => (
+    <MainButton
+      key={`${btn.text}-${index}`}
+      onClick={() => btn.onClick(data)}
+      className={`text-lg m-1 ${btn.classNames || ""}`}
+    >
+      {btn.text}
+    </MainButton>
+  ));
+
   return (
     <>
-      {canAdd && <AddButtom props={props} />}
+      <div className="flex flex-row gap-2">
+        {canAdd && <AddButtom props={props} />} {actions}
+      </div>
+
       <CustomDataTable
         {...rest}
         pagination={true}

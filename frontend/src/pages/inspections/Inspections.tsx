@@ -114,6 +114,12 @@ export function Inspections() {
         columns,
         data,
         addButtonText: "Add Inspection",
+        actionButtons: [
+          {
+            text: "Test",
+            onClick: () => console.log("Hello"),
+          },
+        ],
         onAdd: () => openEditor(initialValues).then(() => refetch()),
         onDelete: (row) => openDelete(row).then(() => refetch),
         onDetails: (row) => openDetails(row, refetch),

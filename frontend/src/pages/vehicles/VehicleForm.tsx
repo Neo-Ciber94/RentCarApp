@@ -31,6 +31,8 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
     .required("Rent price is required")
     .min(1, "Rent price must be greater than 0"),
 
+  image: yup.string().optional(),
+
   gearBox: yup.mixed<GearBox>().required().oneOf(Object.values(GearBox)),
 
   chassisNumber: yup.string().required("Chassis number is required"),

@@ -46,6 +46,7 @@ export function Rents() {
       {withCrudDataTable({
         columns,
         data,
+        actionButtons: [],
         sortable: true,
         addButtonText: "Rent Vehicle",
         addPath: "/rents/new",

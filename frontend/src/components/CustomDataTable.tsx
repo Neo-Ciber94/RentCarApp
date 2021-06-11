@@ -6,6 +6,7 @@ import DataTable, {
 import { InputWithReset } from ".";
 
 export interface CustomDataTableProps<T> extends IDataTableProps<T> {
+  ref?: this;
   sortable?: boolean;
 }
 
@@ -73,7 +74,6 @@ export function CustomDataTable<T = any>(props: CustomDataTableProps<T>) {
 
   return (
     <DataTable
-      {...rest}
       columns={columns}
       data={filteredItems!}
       customStyles={customStyles}
@@ -85,6 +85,7 @@ export function CustomDataTable<T = any>(props: CustomDataTableProps<T>) {
       pagination={true}
       dense
       striped
+      {...rest}
     />
   );
 }

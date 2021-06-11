@@ -1,5 +1,4 @@
 import { InspectionDTO, TireStatus } from "@shared/types";
-import React from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
@@ -114,12 +113,6 @@ export function Inspections() {
         columns,
         data,
         addButtonText: "Add Inspection",
-        actionButtons: [
-          {
-            text: "Test",
-            onClick: () => console.log("Hello"),
-          },
-        ],
         onAdd: () => openEditor(initialValues).then(() => refetch()),
         onDelete: (row) => openDelete(row).then(() => refetch),
         onDetails: (row) => openDetails(row, refetch),

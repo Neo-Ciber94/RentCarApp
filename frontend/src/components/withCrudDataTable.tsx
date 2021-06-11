@@ -1,4 +1,5 @@
 import { AnyARecord } from "dns";
+import { useRef } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { NavLink } from "react-router-dom";
 import { LinkButton, MainButton } from ".";
@@ -109,10 +110,10 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
       </div>
 
       <CustomDataTable
-        {...rest}
         pagination={true}
         columns={mergedColumns}
         data={data}
+        {...rest}
       />
     </>
   );

@@ -23,7 +23,7 @@ import Home from "./pages/common/Home";
 import NotFound from "./pages/common/NotFound";
 import { ProtectedRoute } from "./components";
 import { NavbarProvider } from "./context/NavbarContext";
-import { PrintableTableProvider } from "./context/PrintableTableContext";
+import { PrintDataTableProvider } from "./context/PrintDataTableContext";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +53,7 @@ const App = observer(() => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PrintableTableProvider>
+      <PrintDataTableProvider>
         <Router>
           <NavbarProvider>
             <Switch>
@@ -122,7 +122,7 @@ const App = observer(() => {
             </Switch>
           </NavbarProvider>
         </Router>
-      </PrintableTableProvider>
+      </PrintDataTableProvider>
     </QueryClientProvider>
   );
 });

@@ -29,7 +29,7 @@ const customStyles: CSSDataTableStyles = {
   },
 };
 
-export const PrintableTable = React.forwardRef<
+export const PrintDataTable = React.forwardRef<
   HTMLDivElement,
   PrintableTableProps
 >(({ display = false, columns, data }, ref) => {

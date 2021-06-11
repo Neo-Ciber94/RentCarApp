@@ -1,7 +1,7 @@
 import { RentDTO } from "@shared/types";
 import React from "react";
 import { IDataTableColumn } from "react-data-table-component";
-import { PrintableTable } from "src/components";
+import { PrintDataTable } from "src/components";
 
 interface RentPrintProps<T> {
   ref: any;
@@ -51,5 +51,5 @@ const printColumns: IDataTableColumn<RentDTO>[] = [
 ];
 
 export function RentPrint<T>({ data, ref }: RentPrintProps<T>) {
-  return <PrintableTable ref={ref} data={data} columns={printColumns} />;
+  return <PrintDataTable ref={ref} data={data} columns={printColumns} />;
 }

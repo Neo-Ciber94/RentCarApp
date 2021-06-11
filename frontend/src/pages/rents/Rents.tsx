@@ -1,7 +1,7 @@
 import { RentDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import { Container, Loading, withCrudDataTable } from "src/components";
-import { usePrintableTable } from "src/context/PrintableTableContext";
+import { usePrintableTable } from "src/context/PrintDataTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
 import { timeStamp } from "src/utils/timeStamp";
 

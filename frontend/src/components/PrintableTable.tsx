@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
-import { useReactToPrint } from "react-to-print";
 import { CSSDataTableStyles } from "./CSSDataTableStyles";
 
 interface PrintableTableProps<T = any> {
@@ -66,29 +65,3 @@ export const PrintableTable = React.forwardRef<
     </div>
   );
 });
-
-interface PrintTableOptions<T> {
-  display?: boolean;
-  documentTitle?: string;
-  data: T[];
-  columns: IDataTableColumn<T>[];
-}
-
-export function usePrintTable<T = any>(options: PrintTableOptions<T>) {
-  const componentRef: any = useRef(null);
-
-  const print = useReactToPrint({
-    documentTitle: options.documentTitle,
-    content: () => componentRef.current,
-  })!;
-
-  const content = (
-    <PrintableTable
-      ref={componentRef}
-      data={options.data}
-      columns={options.columns}
-    />
-  );
-
-  return { print, content };
-}

@@ -1,11 +1,7 @@
 import { RentDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
-import {
-  Container,
-  Loading,
-  usePrintTable,
-  withCrudDataTable,
-} from "src/components";
+import { Container, Loading, withCrudDataTable } from "src/components";
+import { usePrintableTable } from "src/context/PrintableTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
 import { timeStamp } from "src/utils/timeStamp";
 
@@ -83,13 +79,8 @@ const printColumns: IDataTableColumn<RentDTO>[] = [
 ];
 
 export function Rents() {
+  const printable = usePrintableTable();
   const { isLoading, data = [] } = useAllRents();
-
-  const printable = usePrintTable({
-    documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
-    columns: printColumns,
-    data,
-  });
 
   if (isLoading) {
     return <Loading />;
@@ -97,14 +88,18 @@ export function Rents() {
 
   return (
     <Container className="lg:max-w-6xl">
-      {printable.content}
       {withCrudDataTable({
         columns,
         data,
         actionButtons: [
           {
             text: "Export PDF",
-            onClick: () => printable.print(),
+            onClick: () =>
+              printable.print({
+                documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
+                columns: printColumns,
+                data,
+              }),
           },
         ],
         sortable: true,

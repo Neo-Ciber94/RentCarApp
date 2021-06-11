@@ -1,14 +1,13 @@
 import { RentDTO } from "@shared/types";
-import { useRef } from "react";
 import { IDataTableColumn } from "react-data-table-component";
-import { useReactToPrint } from "react-to-print";
 import {
   Container,
   Loading,
-  PrintableTable,
+  usePrintTable,
   withCrudDataTable,
 } from "src/components";
 import { useAllRents } from "src/hooks/rentHooks";
+import { timeStamp } from "src/utils/timeStamp";
 
 const columns: IDataTableColumn<RentDTO>[] = [
   {
@@ -85,13 +84,11 @@ const printColumns: IDataTableColumn<RentDTO>[] = [
 
 export function Rents() {
   const { isLoading, data = [] } = useAllRents();
-  const componentRef: any = useRef(null);
 
-  const print = useReactToPrint({
-    documentTitle: `rents-${new Date().toLocaleDateString()}-${Math.floor(
-      Date.now() / 1000
-    )}`,
-    content: () => componentRef.current,
+  const printable = usePrintTable({
+    documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
+    columns: printColumns,
+    data,
   });
 
   if (isLoading) {
@@ -100,16 +97,14 @@ export function Rents() {
 
   return (
     <Container className="lg:max-w-6xl">
-      <div className="hidden">
-        <PrintableTable ref={componentRef} data={data} columns={printColumns} />
-      </div>
+      {printable.content}
       {withCrudDataTable({
         columns,
         data,
         actionButtons: [
           {
             text: "Export PDF",
-            onClick: () => print!(),
+            onClick: () => printable.print(),
           },
         ],
         sortable: true,

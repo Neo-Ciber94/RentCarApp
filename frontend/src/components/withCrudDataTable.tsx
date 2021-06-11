@@ -1,5 +1,3 @@
-import { AnyARecord } from "dns";
-import { useRef } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { NavLink } from "react-router-dom";
 import { LinkButton, MainButton } from ".";
@@ -29,7 +27,7 @@ interface Props<T> {
   canDelete?: boolean | ((row: T) => boolean);
 }
 
-type CrudDataTableProps<T = AnyARecord> = Props<T> & CustomDataTableProps<T>;
+type CrudDataTableProps<T = any> = Props<T> & CustomDataTableProps<T>;
 
 export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
   const {
@@ -97,7 +95,7 @@ export function withCrudDataTable<T>(props: CrudDataTableProps<T>) {
     <MainButton
       key={`${btn.text}-${index}`}
       onClick={() => btn.onClick(data)}
-      className={`text-lg m-1 ${btn.classNames || ""}`}
+      className={`text-lg m-1 overflow-visible ${btn.classNames || ""}`}
     >
       {btn.text}
     </MainButton>
@@ -123,11 +121,9 @@ const AddButtom = (props: { props: CrudDataTableProps<any> }) => {
   const { addPath, onAdd, addButtonText } = props.props;
 
   return addPath ? (
-    <div className="py-2 overflow-visible">
-      <LinkButton to={addPath} className="text-lg inline-block">
-        {addButtonText || "Add"}
-      </LinkButton>
-    </div>
+    <LinkButton to={addPath} className="text-lg m-1 overflow-visible">
+      {addButtonText || "Add"}
+    </LinkButton>
   ) : (
     <MainButton className="text-lg m-1 overflow-visible" onClick={onAdd}>
       {addButtonText || "Add"}

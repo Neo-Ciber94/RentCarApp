@@ -4,7 +4,6 @@ import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
 import dayjs from "dayjs";
 import { capitalize } from "src/utils/capitalize";
-import { string } from "yup/lib/locale";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
   {

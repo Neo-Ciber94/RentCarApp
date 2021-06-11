@@ -1,6 +1,7 @@
 export * from './BottomButtonGroup';
 export * from './Buttons';
 export * from './Container';
+export * from './CSSDataTableStyles';
 export * from './CustomDataTable';
 export * from './FormCheckbox';
 export * from './FormInput';
@@ -12,6 +13,7 @@ export * from './MultiStepForm';
 export * from './NavDropdown';
 export * from './NavItem';
 export * from './openSwalForm';
+export * from './PrintableTable';
 export * from './ProtectedRoute';
 export * from './ReactSwal';
 export * from './Row';

@@ -1,11 +1,16 @@
 import { RentDTO } from "@shared/types";
+import React from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
+  FormInput,
+  FormSelect,
   Loading,
   LoadingScreen,
+  openSwalForm,
   withCrudDataTable,
 } from "src/components";
+import { ExportType } from "src/components/ExportForm";
 import { usePrintableTable } from "src/context/PrintDataTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
 import { timeStamp } from "src/utils/timeStamp";
@@ -99,13 +104,14 @@ export function Rents() {
         data,
         actionButtons: [
           {
-            text: "Export PDF",
-            onClick: () =>
+            text: "Export",
+            onClick: () => {
               printable.print({
                 documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
                 columns: printColumns,
                 data,
-              }),
+              });
+            },
           },
         ],
         sortable: true,

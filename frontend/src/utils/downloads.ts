@@ -1,14 +1,16 @@
-export function downloadFile(fileName: string, data: string) {
-  const link = document.createElement("a");
-  link.setAttribute("href", encodeURI(data));
-  link.setAttribute("download", fileName);
-  link.click();
-}
-
-export function downloadCSV(fileName: string, data: string) {
-  if (!data.match(/^data:text\/csv/i)) {
-    data = `data:text/csv;charset=utf-8,${data}`;
+export module Download {
+  export function file(fileName: string, data: string) {
+    const link = document.createElement("a");
+    link.href = encodeURI(data);
+    link.download = fileName;
+    link.click();
   }
 
-  downloadFile(fileName, data);
+  export function csv(fileName: string, data: string) {
+    if (!data.match(/^data:text\/csv/i)) {
+      data = `data:text/csv;charset=utf-8,${data}`;
+    }
+
+    Download.file(fileName, data);
+  }
 }

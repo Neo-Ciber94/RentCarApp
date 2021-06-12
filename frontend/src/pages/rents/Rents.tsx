@@ -7,13 +7,15 @@ import {
   FormSelect,
   Loading,
   LoadingScreen,
+  openExportForm,
   openSwalForm,
   withCrudDataTable,
 } from "src/components";
-import { ExportType } from "src/components/ExportForm";
 import { usePrintableTable } from "src/context/PrintDataTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
-import { timeStamp } from "src/utils/timeStamp";
+import { convertToCSV } from "src/utils/convertToCSV";
+import { Download } from "src/utils/downloads";
+import { dateTimeStamp, timeStamp } from "src/utils/timeStamp";
 
 const columns: IDataTableColumn<RentDTO>[] = [
   {
@@ -106,10 +108,46 @@ export function Rents() {
           {
             text: "Export",
             onClick: () => {
-              printable.print({
-                documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
-                columns: printColumns,
-                data,
+              openExportForm({
+                formats: ["csv", "pdf"],
+                dateRange: true,
+                onExport: (format, options) => {
+                  // Report on the completed rents
+                  const reportRents = data.filter((e) => e.returnDate != null);
+
+                  switch (format) {
+                    case "csv":
+                      {
+                        const csv = convertToCSV<RentDTO>({
+                          data: reportRents,
+                          columns: printColumns.map((c) => ({
+                            name: c.name!.toString() as keyof RentDTO,
+                            selector: (value, index) => {
+                              if (typeof c.selector === "string") {
+                                return c.selector;
+                              } else {
+                                return c.selector!(value, index)!.toString();
+                              }
+                            },
+                          })),
+                        });
+
+                        Download.csv(`rents-${dateTimeStamp()}.csv`, csv);
+                      }
+                      break;
+                    case "pdf":
+                      {
+                        printable.print({
+                          documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
+                          columns: printColumns,
+                          data,
+                        });
+                      }
+                      break;
+                  }
+
+                  console.log(format, options);
+                },
               });
             },
           },

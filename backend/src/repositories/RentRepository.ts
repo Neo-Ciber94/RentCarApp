@@ -12,6 +12,7 @@ import { err, ok, Result } from "@shared/result";
 import { markVehicleAvailable } from "src/utils";
 import { Body, BodyParam, Post } from "routing-controllers";
 import { throwIfCompletedOrCancelled } from "src/utils/throwIfCompletedOrCancelled";
+import { RentMapper } from "src/mapper/RentMapper";
 
 const INCLUDES = [
   "vehicle",
@@ -23,21 +24,26 @@ const INCLUDES = [
 ];
 
 export class RentRespository {
+  readonly mapper = new RentMapper();
+
   async find() {
-    const result = await Rent.find({ relations: INCLUDES });
+    const result = await Rent.find({ relations: INCLUDES }).then((e) =>
+      this.mapper.mapMany(e)
+    );
     return result.map(this.withDaysAndPrice);
   }
 
   async findById(id: number) {
     const result = await Rent.findOne(id, { relations: INCLUDES });
     if (result) {
-      return this.withDaysAndPrice(result);
+      const mappedResult = this.mapper.map(result);
+      return this.withDaysAndPrice(mappedResult);
     } else {
       return undefined;
     }
   }
 
-  async create(rent: NewRent): Promise<Rent> {
+  async create(rent: NewRent): Promise<RentDTO> {
     return getManager().transaction(async (manager) => {
       const newClient = manager.create(Client, {
         name: rent.name,
@@ -62,13 +68,13 @@ export class RentRespository {
       await markVehicleAvailable(rent.vehicleId, false, manager);
 
       // Return the rent
-      return resultRent;
+      return this.mapper.map(resultRent);
     });
   }
 
   async update(
     rent: DeepPartial<Rent>
-  ): Promise<Result<Rent | undefined, string>> {
+  ): Promise<Result<RentDTO | undefined, string>> {
     const rentToUpdate = await Rent.findOne(rent.id, {
       relations: ["vehicle"],
     });
@@ -96,7 +102,7 @@ export class RentRespository {
       // Mark vehicle as not available
       await markVehicleAvailable(rent.vehicleId!, false);
 
-      return ok(result);
+      return ok(this.mapper.map(result));
     } else {
       return ok(undefined);
     }
@@ -125,7 +131,8 @@ export class RentRespository {
       rentToReturn.totalDays = totalDays;
       rentToReturn.totalPrice = totalPrice;
 
-      return Rent.save(rentToReturn);
+      const result = await Rent.save(rentToReturn);
+      return this.mapper.map(result);
     } else {
       return undefined;
     }
@@ -155,7 +162,7 @@ export class RentRespository {
         reservation.status = ReservationStatus.Completed;
         await manager.save(reservation);
 
-        return result;
+        return this.mapper.map(result);
       } else {
         return undefined;
       }
@@ -170,15 +177,18 @@ export class RentRespository {
 
       // Mark vehicle as available
       markVehicleAvailable(result.vehicleId, true);
-      return result;
+
+      const mappedResult = this.mapper.map(result);
+      return this.withDaysAndPrice(mappedResult);
     } else {
       return undefined;
     }
   }
 
-  withDaysAndPrice(rent: Rent): RentDTO {
+  withDaysAndPrice(rent: Rent | RentDTO): RentDTO {
     const totalDays = calculateDaysPassed(rent.rentDate);
     const totalPrice = calculateRentPrice(rent.vehicle.rentPrice, totalDays);
+
     return {
       ...(rent as RentDTO),
       totalDays,

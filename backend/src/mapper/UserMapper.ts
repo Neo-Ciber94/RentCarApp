@@ -3,6 +3,10 @@ import { User } from "src/entities";
 import { Mapper } from "src/utils";
 
 export class UserMapper extends Mapper<User, UserDTO> {
+  constructor() {
+    super();
+  }
+
   map(entity: User): UserDTO {
     return {
       id: entity.id,

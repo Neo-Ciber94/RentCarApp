@@ -14,6 +14,7 @@ const customStyles: CSSDataTableStyles = {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      fontSize: 10,
       borderLeft: "0.5px solid rgba(0, 0, 0, 0.1)",
       borderRight: "0.5px solid rgba(0, 0, 0, 0.1)",
       borderCollapse: "collapse",

@@ -77,14 +77,14 @@ const printColumns: IDataTableColumn<RentDTO>[] = [
 
   {
     name: "Total Days",
-    selector: (e) => e.totalDays,
+    selector: (e) => e.totalDays?.toFixed(2),
     compact: true,
     grow: 0,
   },
 
   {
     name: "Total Price",
-    selector: (e) => `${e.totalPrice} RD$`,
+    selector: (e) => `${e.totalPrice?.toLocaleString()} RD$`,
     compact: true,
     grow: 0,
   },

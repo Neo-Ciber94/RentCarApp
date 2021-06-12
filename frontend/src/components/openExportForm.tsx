@@ -50,7 +50,7 @@ export function openExportForm<K extends string>(config: ExportConfig<K>) {
       if (config.dateRange) {
         return (
           <>
-            <FormSelect label="Export Type" options={formats} />
+            <FormSelect label="Export Type" options={formats} name="format" />
             <FormInput label="From Date" name="fromDate" type="date" />
             <FormInput label="To Date" name="toDate" type="date" />
           </>

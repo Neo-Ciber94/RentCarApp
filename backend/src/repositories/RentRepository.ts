@@ -186,7 +186,7 @@ export class RentRespository {
   }
 
   withDaysAndPrice(rent: Rent | RentDTO): RentDTO {
-    const totalDays = calculateDaysPassed(rent.rentDate);
+    const totalDays = calculateDaysPassed(rent.rentDate, rent.returnDate);
     const totalPrice = calculateRentPrice(rent.vehicle.rentPrice, totalDays);
 
     return {

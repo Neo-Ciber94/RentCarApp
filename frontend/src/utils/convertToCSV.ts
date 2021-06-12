@@ -91,22 +91,14 @@ function getRow<T>(obj: T, index: number, config: CSVConfig<T>): string[] {
 
     for (const column of config.columns) {
       const columnName = column.name;
-      if (columnName in obj) {
-        let value: string;
+      let value: string;
 
-        if (column.selector) {
-          value = column.selector(obj, index);
-        } else {
-          value = (obj as any)[columnName];
-        }
-        rows.push(value);
+      if (column.selector) {
+        value = column.selector(obj, index);
       } else {
-        throw new TypeError(
-          `'${JSON.stringify(
-            obj
-          )}' does not contain a property named ${columnName}`
-        );
+        value = (obj as any)[columnName];
       }
+      rows.push(value);
     }
 
     return rows;

@@ -1,6 +1,11 @@
 import { RentDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
-import { Container, Loading, withCrudDataTable } from "src/components";
+import {
+  Container,
+  Loading,
+  LoadingScreen,
+  withCrudDataTable,
+} from "src/components";
 import { usePrintableTable } from "src/context/PrintDataTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
 import { timeStamp } from "src/utils/timeStamp";
@@ -88,6 +93,7 @@ export function Rents() {
 
   return (
     <Container className="lg:max-w-6xl">
+      {printable.isPrinting && <LoadingScreen />}
       {withCrudDataTable({
         columns,
         data,

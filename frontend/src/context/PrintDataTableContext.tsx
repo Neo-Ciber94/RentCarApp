@@ -10,6 +10,7 @@ interface PrintableOptions<T = any> {
 }
 
 interface PrintDataTableContextProps<T = any> {
+  isPrinting: boolean;
   print: (content: PrintableOptions<T>) => void;
 }
 
@@ -34,7 +35,9 @@ export const PrintDataTableProvider: React.FC = ({ children }) => {
 
   // prettier-ignore
   return (
-    <PrintDataTableContext.Provider value={{print: (data) => {
+    <PrintDataTableContext.Provider value={{
+      isPrinting,
+      print: (data) => {
         setPrintable(data);
         setIsPrinting(true);
     }}}>

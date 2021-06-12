@@ -3,7 +3,7 @@ import { Loading, Container, MainButton } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
-import { RentView } from ".";
+import { RentInfo } from ".";
 
 export function RentDelete() {
   const params = useParams<{ id: string }>();
@@ -16,7 +16,7 @@ export function RentDelete() {
 
   return (
     <Container className="lg:w-4/6 md:w-5/6">
-      <RentView rent={rent} />
+      <RentInfo rent={rent} />
 
       <div className="flex flex-row w-full mt-4 gap-4">
         <MainButton

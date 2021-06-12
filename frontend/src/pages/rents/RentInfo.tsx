@@ -6,7 +6,7 @@ interface RentViewProps {
   rent: RentDTO;
 }
 
-export function RentView(props: RentViewProps) {
+export function RentInfo(props: RentViewProps) {
   const { rent } = props;
   const client = rent.client;
 
@@ -44,10 +44,13 @@ export function RentView(props: RentViewProps) {
 
       <Row>
         {rent.totalDays != null && (
-          <TextInfo label="Totals Days" value={rent.totalDays} />
+          <TextInfo label="Totals Days" value={daysToString(rent.totalDays)} />
         )}
         {rent.totalPrice != null && (
-          <TextInfo label="Totals Price" value={`${rent.totalPrice} RD$`} />
+          <TextInfo
+            label="Totals Price"
+            value={`${rent.totalPrice.toLocaleString()} RD$`}
+          />
         )}
       </Row>
       <TextInfo label="Comments" value={rent.comments || ""} />
@@ -72,4 +75,12 @@ export function RentView(props: RentViewProps) {
       </Row>
     </>
   );
+}
+
+function daysToString(days: number): string {
+  if (days === 1) {
+    return `${days.toFixed(3)} day`;
+  }
+
+  return `${days.toFixed(3)} days`;
 }

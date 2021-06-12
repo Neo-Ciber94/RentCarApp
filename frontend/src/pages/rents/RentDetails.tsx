@@ -1,7 +1,7 @@
 import { useHistory, useParams } from "react-router-dom";
 import { Container, LinkButton, Loading, MainButton } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
-import { RentView } from ".";
+import { RentInfo } from ".";
 
 export function RentDetails() {
   const params = useParams<{ id: string }>();
@@ -14,7 +14,7 @@ export function RentDetails() {
 
   return (
     <Container className="lg:w-4/6 md:w-5/6">
-      <RentView rent={rent} />
+      <RentInfo rent={rent} />
 
       <div className="mt-4 flex flex-row w-full gap-4">
         <MainButton

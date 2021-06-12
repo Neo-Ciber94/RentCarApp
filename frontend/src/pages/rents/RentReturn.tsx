@@ -4,7 +4,7 @@ import { Container, FormStep, Loading, MultiStepForm } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
-import { RentView } from "./RentView";
+import { RentInfo } from "./RentInfo";
 import { InspectionForm } from "src/pages/inspections";
 import NotFound from "../common/NotFound";
 
@@ -40,7 +40,7 @@ export function RentReturn() {
   const steps: FormStep<InspectionEntity>[] = [
     {
       label: "Review Rent",
-      render: () => <RentView rent={data} />,
+      render: () => <RentInfo rent={data} />,
     },
 
     {

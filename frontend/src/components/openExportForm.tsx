@@ -1,9 +1,10 @@
+import { FormikErrors } from "formik";
 import { openSwalForm } from ".";
 import { FormInput } from "./FormInput";
 import { FormSelect } from "./FormSelect";
 
 export interface OnExportOptions {
-  formDate?: Date;
+  fromDate?: Date;
   toDate?: Date;
 }
 
@@ -32,16 +33,30 @@ export function openExportForm<K extends string>(config: ExportConfig<K>) {
       fromDate: "" as any,
       toDate: "" as any,
     },
+    validate: (values) => {
+      const errors: FormikErrors<ExportFormValues> = {};
+
+      if (values.fromDate && values.toDate) {
+        const from = new Date(values.fromDate);
+        const to = new Date(values.toDate);
+
+        if (to < from) {
+          errors.toDate = `"To Date" cannot be lower than "From Date"`;
+        }
+      }
+
+      return errors;
+    },
     onSubmit: (values, actions) => {
       console.log("Exporting: ", values);
       config.onExport(values.format as K, {
-        formDate: values.fromDate,
+        fromDate: values.fromDate,
         toDate: values.toDate,
       });
 
       actions.close();
     },
-    render: () => {
+    render: ({ errors, touched }) => {
       const formats = config.formats.map((f) => ({
         label: f,
         value: f,
@@ -50,9 +65,27 @@ export function openExportForm<K extends string>(config: ExportConfig<K>) {
       if (config.dateRange) {
         return (
           <>
-            <FormSelect label="Export Type" options={formats} name="format" />
-            <FormInput label="From Date" name="fromDate" type="date" />
-            <FormInput label="To Date" name="toDate" type="date" />
+            <FormSelect
+              label="Export Type"
+              options={formats}
+              name="format"
+              error={errors.format}
+              touched={touched.format}
+            />
+            <FormInput
+              label="From Date"
+              name="fromDate"
+              type="date"
+              error={errors.fromDate}
+              touched={touched.fromDate}
+            />
+            <FormInput
+              label="To Date"
+              name="toDate"
+              type="date"
+              error={errors.toDate}
+              touched={touched.toDate}
+            />
           </>
         );
       } else {

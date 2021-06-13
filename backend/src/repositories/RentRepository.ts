@@ -68,7 +68,7 @@ export class RentRespository {
       await markVehicleAvailable(rent.vehicleId, false, manager);
 
       // Return the rent
-      return this.mapper.map(resultRent);
+      return resultRent as RentDTO;
     });
   }
 
@@ -102,7 +102,7 @@ export class RentRespository {
       // Mark vehicle as not available
       await markVehicleAvailable(rent.vehicleId!, false);
 
-      return ok(this.mapper.map(result));
+      return ok(result as RentDTO);
     } else {
       return ok(undefined);
     }
@@ -131,8 +131,7 @@ export class RentRespository {
       rentToReturn.totalDays = totalDays;
       rentToReturn.totalPrice = totalPrice;
 
-      const result = await Rent.save(rentToReturn);
-      return this.mapper.map(result);
+      return Rent.save(rentToReturn);
     } else {
       return undefined;
     }
@@ -162,7 +161,7 @@ export class RentRespository {
         reservation.status = ReservationStatus.Completed;
         await manager.save(reservation);
 
-        return this.mapper.map(result);
+        return result;
       } else {
         return undefined;
       }

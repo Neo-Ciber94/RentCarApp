@@ -34,6 +34,11 @@ const columns: IDataTableColumn<RentDTO>[] = [
   },
 
   {
+    name: "Client",
+    selector: (e) => `${e.client.name}`,
+  },
+
+  {
     name: "Rent Date",
     selector: (e) => new Date(e.rentDate).toLocaleString(),
   },
@@ -66,15 +71,16 @@ const printColumns: IDataTableColumn<RentDTO>[] = [
 
   {
     name: "Rent Date",
-    selector: (e) => (
-      <p className="whitespace-nowrap">
-        {new Date(e.rentDate).toLocaleDateString()}
-      </p>
-    ),
+    selector: (e) => new Date(e.rentDate).toLocaleDateString(),
     compact: true,
     grow: 0,
   },
-
+  {
+    name: "Return Date",
+    selector: (e) => new Date(e.returnDate!).toLocaleDateString(),
+    compact: true,
+    grow: 0,
+  },
   {
     name: "Total Days",
     selector: (e) => e.totalDays?.toFixed(2),
@@ -113,7 +119,11 @@ export function Rents() {
                 dateRange: true,
                 onExport: (format, options) => {
                   // Report on the completed rents
-                  const reportRents = data.filter((e) => e.returnDate != null);
+                  const reportRents = getExportRents(
+                    data,
+                    options?.fromDate,
+                    options?.toDate
+                  );
 
                   switch (format) {
                     case "csv":
@@ -140,7 +150,7 @@ export function Rents() {
                         printable.print({
                           documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
                           columns: printColumns,
-                          data,
+                          data: reportRents,
                         });
                       }
                       break;
@@ -162,4 +172,23 @@ export function Rents() {
       })}
     </Container>
   );
+}
+
+function getExportRents(rents: RentDTO[], from?: Date, to?: Date) {
+  // Only include returned rents
+  let result = rents.filter((e) => e.returnDate != null);
+
+  if (from) {
+    result = result.filter((e) => {
+      console.log(`(${e.id}) ${e.rentDate} >= ${from} = ${e.rentDate >= from}`);
+      return e.rentDate >= from;
+    });
+  }
+
+  if (to) {
+    result = result.filter((e) => new Date(e.rentDate!) <= new Date(to));
+  }
+
+  console.log(result, new Date(from!), new Date(to!));
+  return result;
 }

@@ -110,7 +110,7 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
             options={fuels || []}
             error={errors.fuelId}
             touched={touched.fuelId}
-            defaultOption={"Select an model..."}
+            defaultOption={"Select a fuel..."}
           />
           <FormInput
             label="Rent Price"

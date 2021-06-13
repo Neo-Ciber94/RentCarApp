@@ -5,7 +5,7 @@ export interface CsvColumn<T> {
   /**
    * Name of the obj key.
    */
-  name: keyof T;
+  name: string;
 
   /**
    * Select the data to include in the cell.

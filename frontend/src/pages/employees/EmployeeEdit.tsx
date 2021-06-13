@@ -3,10 +3,6 @@ import { Container, Loading } from "src/components";
 import { useEmployee } from "src/hooks/employeeHooks";
 import { EmployeeForm, UpdateEmployee } from "./EmployeeForm";
 
-interface Params {
-  id: string;
-}
-
 export function EmployeeEdit() {
   const params = useParams<{ id: string }>();
   const { isLoading, data } = useEmployee(Number(params.id));

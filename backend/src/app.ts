@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from "express";
+import path from "path";
 import { CorsOptions } from "cors";
 import { useExpressServer } from "routing-controllers";
 import { createConnection } from "typeorm";
@@ -21,6 +22,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 // Set express middlewares
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(

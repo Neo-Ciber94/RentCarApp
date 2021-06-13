@@ -16,7 +16,15 @@ interface Props {
 type FormInputProps = Props & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 export const FormInput: React.FC<FormInputProps> = (props) => {
-  const { error, label, name, touched, readOnly = false, ...rest } = props;
+  const {
+    error,
+    label,
+    name,
+    touched,
+    readOnly = false,
+    children,
+    ...rest
+  } = props;
 
   const errorClass = error && props.touched ? "border-red-600" : "";
 
@@ -24,6 +32,7 @@ export const FormInput: React.FC<FormInputProps> = (props) => {
     return (
       <div className="mb-4">
         {!props.hidden && <Label name={name} label={label} />}
+        {children}
         <Field
           {...rest}
           name={name}
@@ -38,6 +47,7 @@ export const FormInput: React.FC<FormInputProps> = (props) => {
   return (
     <div className="mb-4">
       {!props.hidden && <Label name={name} label={label} />}
+      {children}
       <Field
         {...rest}
         name={name}

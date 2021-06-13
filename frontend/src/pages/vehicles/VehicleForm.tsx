@@ -1,16 +1,15 @@
-import { GearBox, UserRole, VehicleDTO } from "@shared/types";
+import { GearBox, VehicleDTO } from "@shared/types";
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import {
-  FormCheckbox,
   FormInput,
+  FormFile,
   FormSelect,
   Loading,
   withCustomForm,
 } from "src/components";
-import { AuthContext } from "src/context/AuthContext";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
 import * as yup from "yup";
@@ -31,7 +30,7 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
     .required("Rent price is required")
     .min(1, "Rent price must be greater than 0"),
 
-  image: yup.string().optional(),
+  image: yup.mixed().optional(),
 
   gearBox: yup.mixed<GearBox>().required().oneOf(Object.values(GearBox)),
 
@@ -54,12 +53,9 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
 });
 
 export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
-  const authService = useContext(AuthContext);
   const history = useHistory();
   const modelsResult = useModels();
   const fuelsResult = useFuels();
-
-  const isAdmin = authService.currentUser?.role === UserRole.Admin;
 
   if (modelsResult.isLoading || fuelsResult.isLoading) {
     return <Loading />;
@@ -71,18 +67,19 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
     onCancel: () => history.push(Routes.vehicles.path),
     onSubmit: async (values, actions) => {
       console.log(values);
-      if ("id" in values) {
-        const result = await Services.vehicles.update(values as VehicleDTO);
-        console.log(result);
-      } else {
-        const result = await Services.vehicles.create(values as VehicleDTO);
-        console.log(result);
-      }
+      // if ("id" in values) {
+      //   const result = await Services.vehicles.update(values as VehicleDTO);
+      //   console.log(result);
+      // } else {
+      //   const result = await Services.vehicles.create(values as VehicleDTO);
+      //   console.log(result);
+      // }
 
-      history.push(Routes.vehicles.path);
+      // history.push(Routes.vehicles.path);
+
       actions.setSubmitting(false);
     },
-    render: ({ errors, touched }) => {
+    render: ({ errors, touched, setFieldValue }) => {
       const models = modelsResult.data?.map((e) => ({
         label: `${e.brand.name} ${e.name}`,
         value: e.id,
@@ -96,6 +93,7 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
       return (
         <>
           {initialValues.id && <FormInput label="ID" name="id" readOnly />}
+          <FormFile label="Image" name="image" onFile={setFieldValue} />
           <FormSelect
             label="Model"
             name="modelId"
@@ -119,7 +117,6 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
             error={errors.rentPrice}
             touched={touched.rentPrice}
           />
-          {isAdmin && <FormCheckbox label="Is Available" name="isAvailable" />}
           <FormInput
             label="Engine Number"
             name="engineNumber"

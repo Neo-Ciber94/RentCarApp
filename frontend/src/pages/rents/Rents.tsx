@@ -1,14 +1,10 @@
 import { RentDTO } from "@shared/types";
-import React from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import {
   Container,
-  FormInput,
-  FormSelect,
   Loading,
   LoadingScreen,
   openExportForm,
-  openSwalForm,
   withCrudDataTable,
 } from "src/components";
 import { usePrintableTable } from "src/context/PrintDataTableContext";
@@ -146,13 +142,11 @@ export function Rents() {
                       }
                       break;
                     case "pdf":
-                      {
-                        printable.print({
-                          documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
-                          columns: printColumns,
-                          data: reportRents,
-                        });
-                      }
+                      printable.print({
+                        documentTitle: `rents-${new Date().toLocaleDateString()}-${timeStamp()}`,
+                        columns: printColumns,
+                        data: reportRents,
+                      });
                       break;
                   }
 

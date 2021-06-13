@@ -4,6 +4,7 @@ export * from "./Container";
 export * from "./CSSDataTableStyles";
 export * from "./CustomDataTable";
 export * from "./FormCheckbox";
+export * from "./FormFile";
 export * from "./FormInput";
 export * from "./FormSelect";
 export * from "./FormStepper";

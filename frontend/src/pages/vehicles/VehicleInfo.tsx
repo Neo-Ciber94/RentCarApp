@@ -1,6 +1,8 @@
 import { VehicleDTO } from "@shared/types";
+import { ImageContainer } from "src/components/ImageContainer";
 import { TextInfo } from "src/components/TextInfo";
 import { bool2YesNo } from "src/utils/bool2YesNo";
+import { getImage } from "src/utils/getImage";
 
 interface VehicleInfoProps {
   vehicle: VehicleDTO;
@@ -9,6 +11,12 @@ interface VehicleInfoProps {
 export const VehicleInfo = ({ vehicle }: VehicleInfoProps) => {
   return (
     <>
+      {vehicle.image != null && (
+        <ImageContainer
+          src={getImage(vehicle.image)}
+          alt={vehicle.model.name}
+        />
+      )}
       <TextInfo label="ID" value={vehicle.id} />
       <TextInfo label="Model" value={vehicle.model.name} />
       <TextInfo label="Is Available" value={bool2YesNo(vehicle.isAvailable)} />

@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import express from "express";
-import path from "path";
 import { CorsOptions } from "cors";
 import { useExpressServer } from "routing-controllers";
 import { createConnection } from "typeorm";
@@ -10,7 +9,12 @@ import rateLimit from "express-rate-limit";
 import session from "express-session";
 import { TypeormStore } from "typeorm-store";
 import { UserSession } from "./entities";
-import { BASE_API, SESSION_EXPIRATION, SESSION_SECRET } from "./config";
+import {
+  BASE_API,
+  PUBLIC_PATH,
+  SESSION_EXPIRATION,
+  SESSION_SECRET,
+} from "./config";
 import { authenticateUser } from "./middlewares/authenticateUser";
 import { startDeleteExpiredSessionsRoutine } from "./scripts/deleteExpiredSessionsRoutine";
 import { Logger } from "./loggers/logger";
@@ -22,7 +26,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 // Set express middlewares
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(
@@ -31,6 +35,9 @@ app.use(
     max: 100, // 100 request max
   })
 );
+
+// Set static files
+app.use("/public", express.static(PUBLIC_PATH));
 
 // Main async function
 async function main() {

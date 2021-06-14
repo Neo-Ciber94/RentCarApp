@@ -5,13 +5,14 @@ import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import {
   FormInput,
-  FormFile,
+  FormImageFile,
   FormSelect,
   Loading,
   withCustomForm,
 } from "src/components";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
+import { getImage } from "src/utils/getImage";
 import * as yup from "yup";
 
 interface VehicleFormProps {
@@ -64,18 +65,30 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
   return withCustomForm({
     initialValues: initialValues,
     validationSchema,
+    formProps: {
+      encType: "multipart/form-data",
+    },
     onCancel: () => history.push(Routes.vehicles.path),
     onSubmit: async (values, actions) => {
-      console.log(values);
-      // if ("id" in values) {
-      //   const result = await Services.vehicles.update(values as VehicleDTO);
-      //   console.log(result);
-      // } else {
-      //   const result = await Services.vehicles.create(values as VehicleDTO);
-      //   console.log(result);
-      // }
+      const formData = new FormData();
+      for (const key in values) {
+        const value = (values as any)[key];
+        formData.append(key, value);
+      }
 
-      // history.push(Routes.vehicles.path);
+      if ("id" in values) {
+        const result = await Services.vehicles.update(
+          formData as unknown as VehicleDTO
+        );
+        console.log(result);
+      } else {
+        const result = await Services.vehicles.create(
+          formData as unknown as VehicleDTO
+        );
+        console.log(result);
+      }
+
+      history.push(Routes.vehicles.path);
 
       actions.setSubmitting(false);
     },
@@ -90,10 +103,19 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
         value: e.id,
       }));
 
+      const previewImage = initialValues.image
+        ? getImage(initialValues.image)
+        : undefined;
+
       return (
         <>
           {initialValues.id && <FormInput label="ID" name="id" readOnly />}
-          <FormFile label="Image" name="image" onFile={setFieldValue} />
+          <FormImageFile
+            label="Image"
+            name="image"
+            onFile={setFieldValue}
+            defaultSrc={previewImage}
+          />
           <FormSelect
             label="Model"
             name="modelId"
@@ -114,6 +136,7 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
             label="Rent Price"
             name="rentPrice"
             type="number"
+            min={1}
             error={errors.rentPrice}
             touched={touched.rentPrice}
           />

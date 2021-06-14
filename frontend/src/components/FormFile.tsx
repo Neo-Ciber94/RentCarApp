@@ -1,23 +1,20 @@
 import { Field } from "formik";
-import React, {
-  ChangeEvent,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
-import { FormInput } from ".";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./FormFile.css";
+import { ImageContainer } from "./ImageContainer";
 
-interface FormFileProps {
+interface FormImageFileProps {
   label: string;
   name: string;
   className?: string;
+  defaultSrc?: string;
   onFile: (name: string, file: File) => void;
 }
 
-export const FormFile: React.FC<FormFileProps> = ({
+export const FormImageFile: React.FC<FormImageFileProps> = ({
   label,
   name,
+  defaultSrc,
   className,
   onFile,
 }) => {
@@ -32,19 +29,22 @@ export const FormFile: React.FC<FormFileProps> = ({
     };
   });
 
+  let imagePreview;
+
+  if (defaultSrc && imagePreviewUrl == null) {
+    imagePreview = <ImageContainer src={defaultSrc} alt="image" />;
+  }
+
+  if (imagePreviewUrl) {
+    imagePreview = <ImageContainer src={imagePreviewUrl} alt="image" />;
+  }
+
   return (
     <div className={`my-1 ${className || ""}`}>
       <Label text={label} />
-      {imagePreviewUrl != null && (
-        <div className="mb-2 rounded-lg overflow-hidden shadow-md border border-gray-500 border-opacity-25">
-          <img
-            className="w-full object-cover"
-            alt={file?.name ?? "vehicle"}
-            style={{ maxHeight: 300 }}
-            src={imagePreviewUrl}
-          />
-        </div>
-      )}
+
+      {/** Image preview */}
+      {imagePreview != null && imagePreview}
 
       <div className="flex flex-row h-9 justify-items-center items-center">
         <div

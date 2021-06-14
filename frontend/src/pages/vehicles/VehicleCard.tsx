@@ -1,20 +1,25 @@
+import { PUBLIC_IMAGES_URL } from "@shared/config";
 import { VehicleDTO } from "@shared/types";
 import { Colors } from "src/layout";
 
 interface VehicleCardProps {
-  photo?: string;
   vehicle: VehicleDTO;
   className?: string;
   onClick?: () => void;
 }
 
+const PLACEHOLDER_IMAGE =
+  process.env.PUBLIC_URL + "/images/placeholder-vehicle.png";
+
 export const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
-  photo,
   className,
   onClick,
 }) => {
   const vehicleName = `${vehicle.model.brand.name} ${vehicle.model.name}`;
+  const imagePath = vehicle.image
+    ? `${PUBLIC_IMAGES_URL}/${vehicle.image}`
+    : undefined;
 
   return (
     <div
@@ -25,11 +30,9 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     >
       <div>
         <img
-          src={
-            photo ||
-            "https://www.autodetective.com/image/medium/ford/explorer/2016/804077.jpg"
-          }
+          src={imagePath || PLACEHOLDER_IMAGE}
           alt={vehicleName}
+          crossOrigin="anonymous"
           style={{
             height: 150,
             width: "100%",

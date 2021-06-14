@@ -2,10 +2,12 @@ import { Form, Formik, FormikErrors, FormikHelpers, FormikProps } from "formik";
 import { Container, MainButton } from ".";
 
 type ReactNode = React.ReactChild | React.ReactFragment | React.ReactPortal;
+type HTMLFormProps = React.FormHTMLAttributes<HTMLFormElement>;
 
 interface FormConfig<T> {
   initialValues: T;
   validationSchema?: any | (() => any);
+  formProps?: HTMLFormProps;
   onSubmit: (values: T, helpers: FormikHelpers<T>) => void;
   onCancel: () => void;
   validate?: (values: T) => void | object | Promise<FormikErrors<T>>;
@@ -27,7 +29,7 @@ export function withCustomForm<T>(props: FormConfig<T>) {
           <Container className="flex flex-row justify-center">
             <div className="w-full md:w-5/6 lg:w-4/6 px-6 py-3">
               {/* Actual form  */}
-              <Form>
+              <Form {...props.formProps}>
                 {props.render(formikProps)}
                 <div className="flex flex-row w-100 gap-2 mt-10">
                   {/* Buttons  */}

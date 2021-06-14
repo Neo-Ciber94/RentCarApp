@@ -8,6 +8,7 @@ export * from "./FormFile";
 export * from "./FormInput";
 export * from "./FormSelect";
 export * from "./FormStepper";
+export * from "./ImageContainer";
 export * from "./InputWithReset";
 export * from "./Loading";
 export * from "./LoadingScreen";

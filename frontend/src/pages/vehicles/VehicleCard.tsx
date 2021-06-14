@@ -5,7 +5,7 @@ import { Colors } from "src/layout";
 interface VehicleCardProps {
   vehicle: VehicleDTO;
   className?: string;
-  onClick?: () => void;
+  onClick?: (vehicle: VehicleDTO) => void;
 }
 
 const PLACEHOLDER_IMAGE =
@@ -23,8 +23,8 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
   return (
     <div
-      onClick={onClick}
-      className={`flex flex-col shadow-md ring-1 ring-gray-300 rounded-lg overflow-hidden sm:w-64 w-full ${
+      onClick={() => onClick?.(vehicle)}
+      className={`flex flex-col shadow-md ring-1 ring-gray-300 rounded-lg  sm:w-64 w-full ${
         className || ""
       }`}
     >
@@ -32,7 +32,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         <img
           src={imagePath || PLACEHOLDER_IMAGE}
           alt={vehicleName}
-          crossOrigin="anonymous"
           style={{
             height: 150,
             width: "100%",

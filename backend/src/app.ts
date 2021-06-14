@@ -15,6 +15,7 @@ import {
   SESSION_EXPIRATION,
   SESSION_SECRET,
 } from "./config";
+import multer from "multer";
 import { authenticateUser } from "./middlewares/authenticateUser";
 import { startDeleteExpiredSessionsRoutine } from "./scripts/deleteExpiredSessionsRoutine";
 import { Logger } from "./loggers/logger";

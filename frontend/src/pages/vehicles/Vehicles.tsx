@@ -6,6 +6,7 @@ import { useContext, useMemo, useState } from "react";
 import { AuthContext } from "src/context/AuthContext";
 import { VehicleCard } from ".";
 import { useAllVehicles } from "src/hooks";
+import { useHistory } from "react-router";
 
 enum ShowKind {
   Grid,
@@ -56,6 +57,7 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
 
 export const Vehicles = observer(() => {
   const authService = useContext(AuthContext);
+  const history = useHistory();
   const [showKind, setShowKind] = useState(ShowKind.Table);
   const { isLoading, data = [] } = useAllVehicles();
   const buttonGroup = useMemo(
@@ -78,7 +80,14 @@ export const Vehicles = observer(() => {
 
   if (authService.currentUser == null || showKind === ShowKind.Grid) {
     const vehicles = availableVehicles.map((e, index) => (
-      <VehicleCard key={index} vehicle={e} />
+      <VehicleCard
+        key={index}
+        vehicle={e}
+        className="cursor-pointer"
+        onClick={(v) => {
+          history.push(`/vehicles/${v.id}`);
+        }}
+      />
     ));
 
     return (

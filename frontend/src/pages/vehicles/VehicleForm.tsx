@@ -1,6 +1,6 @@
-import { GearBox, VehicleDTO } from "@shared/types";
+import { GearBox, UserRole, VehicleDTO } from "@shared/types";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import {
@@ -9,7 +9,9 @@ import {
   FormSelect,
   Loading,
   withCustomForm,
+  FormCheckbox,
 } from "src/components";
+import { AuthContext } from "src/context/AuthContext";
 import { Routes } from "src/layout";
 import { Services } from "src/services";
 import { getImage } from "src/utils/getImage";
@@ -55,12 +57,15 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
 
 export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
   const history = useHistory();
+  const authService = useContext(AuthContext);
   const modelsResult = useModels();
   const fuelsResult = useFuels();
 
   if (modelsResult.isLoading || fuelsResult.isLoading) {
     return <Loading />;
   }
+
+  const isAdmin = authService.currentUser?.role === UserRole.Admin;
 
   return withCustomForm({
     initialValues: initialValues,
@@ -73,7 +78,9 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
       const formData = new FormData();
       for (const key in values) {
         const value = (values as any)[key];
-        formData.append(key, value);
+        if (value) {
+          formData.append(key, value);
+        }
       }
 
       if ("id" in values) {
@@ -132,6 +139,7 @@ export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
             touched={touched.fuelId}
             defaultOption={"Select a fuel..."}
           />
+          {isAdmin && <FormCheckbox label="Is Available" name="isAvailable" />}
           <FormInput
             label="Rent Price"
             name="rentPrice"

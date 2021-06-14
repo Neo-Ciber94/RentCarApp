@@ -4,6 +4,7 @@ import {
   Post,
   Put,
   UploadedFile,
+  UseBefore,
 } from "routing-controllers";
 import { Vehicle } from "src/entities";
 import { AbstractController } from "./AbstractController";
@@ -16,6 +17,7 @@ import { IMAGES_PATH } from "src/config";
 import path from "path";
 import { VehicleDTO } from "@shared/types";
 import { getManager } from "typeorm";
+import multer from "multer";
 type MulterFile = Express.Multer.File;
 
 const VEHICLES_PATH = "vehicles";
@@ -35,7 +37,7 @@ export class VehicleController extends AbstractController<Vehicle, VehicleDTO> {
     @Body() entity: Vehicle,
     @UploadedFile("image") image?: MulterFile
   ) {
-    return (await this.createVehicle(entity, image))!;
+    return (await this.createVehicle(parseObj(entity), image))!;
   }
 
   @Put()
@@ -43,7 +45,7 @@ export class VehicleController extends AbstractController<Vehicle, VehicleDTO> {
     @Body() entity: Vehicle,
     @UploadedFile("image") image?: MulterFile
   ) {
-    return this.createVehicle(entity, image);
+    return this.createVehicle(parseObj(entity), image);
   }
 
   async createVehicle(
@@ -51,28 +53,45 @@ export class VehicleController extends AbstractController<Vehicle, VehicleDTO> {
     image?: MulterFile
   ): Promise<VehicleDTO | undefined> {
     return getManager().transaction(async (manager) => {
-      const vehicle = manager.create(Vehicle, entity);
+      const vehicle = manager.create(Vehicle, {
+        id: entity.id,
+        description: entity.description,
+        isAvailable: entity.isAvailable,
+        fuelId: entity.fuelId,
+        modelId: entity.modelId,
+        gearBox: entity.gearBox,
+        rentPrice: entity.rentPrice,
+        status: entity.status,
+        chassisNumber: entity.chassisNumber,
+        engineNumber: entity.engineNumber,
+        licensePlate: entity.licensePlate,
+      });
 
+      /* prettier-ignore */
       // If is updating, check if the vehicle exist
-      if (
-        entity.id != null &&
-        (await manager.findOne(Vehicle, entity.id)) == null
-      ) {
+      if (vehicle.id != null &&(await manager.findOne(Vehicle, vehicle.id)) == null) {
         return undefined;
       }
 
       // Inserts/Updates the entity
-      let newVehicle = await manager.save(vehicle);
+      let newVehicle: Vehicle;
+
+      if (vehicle.id) {
+        await manager.update(Vehicle, vehicle.id, vehicle);
+        newVehicle = (await manager.findOne(Vehicle, vehicle.id))!;
+      } else {
+        newVehicle = await manager.save(Vehicle, vehicle);
+      }
 
       // If there is an image
       if (image) {
-        console.log(image);
         const fileExtension = path.extname(image.originalname);
         const fileName = `${newVehicle.id}${fileExtension}`;
         const filePath = path.join(VEHICLE_IMAGES_PATH, fileName);
 
         try {
           // Writes the file
+          // FIXME: We need to compress images
           await fs.outputFile(filePath, image.buffer);
         } catch (err) {
           console.error(err);
@@ -80,11 +99,27 @@ export class VehicleController extends AbstractController<Vehicle, VehicleDTO> {
 
         // Sets the file path and save
         newVehicle.image = path.join(VEHICLES_PATH, fileName);
-        await manager.save(newVehicle);
+        await manager.save(Vehicle, newVehicle);
       }
 
       // Overlapping types
       return newVehicle as VehicleDTO;
     });
   }
+}
+
+// multipart/form  is not being parsed corretly, so we do this,
+// FIXME: Implements without throw exceptions
+function parseObj(obj: any): any {
+  const result: any = {};
+
+  for (const key in obj) {
+    try {
+      result[key] = JSON.parse(obj[key]);
+    } catch {
+      result[key] = obj[key];
+    }
+  }
+
+  return result;
 }

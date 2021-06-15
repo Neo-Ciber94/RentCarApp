@@ -32,12 +32,15 @@ export interface FormStep<T> {
 interface MultiStepFormProps<T> {
   initialValues: T;
   submitButtonText?: string;
+  cancelButtonText?: string;
   buttonsClassName?: string;
   submitButtonClassName?: string;
+  cancelButtonClassName?: string;
   nextButtonClassName?: string;
   prevButtonClassName?: string;
   onNext?: OnMove<T> | AsyncOnMove<T>;
   onPrev?: OnMove<T> | AsyncOnMove<T>;
+  onCancel?: () => void;
   onSubmit: (values: T, actions: FormikHelpers<T>) => void;
   steps: FormStep<T>[];
 }
@@ -45,6 +48,9 @@ interface MultiStepFormProps<T> {
 export function MultiStepForm<T>({
   onNext,
   onPrev,
+  onCancel,
+  cancelButtonText,
+  cancelButtonClassName,
   submitButtonText,
   submitButtonClassName,
   buttonsClassName,
@@ -127,19 +133,37 @@ export function MultiStepForm<T>({
               />
             );
 
+          let prevOrCancelBtn;
+
+          if (showPrevBtn) {
+            prevOrCancelBtn = (
+              <FormButton
+                type="button"
+                color="secondary"
+                onClick={() => prevStep(formikProps)}
+                text="Previous"
+                className={buttonClassNames(prevButtonClassName)}
+              />
+            );
+          }
+
+          if (!showPrevBtn && onCancel) {
+            prevOrCancelBtn = (
+              <FormButton
+                type="button"
+                color="secondary"
+                onClick={onCancel}
+                text={cancelButtonText || "Cancel"}
+                className={buttonClassNames(cancelButtonClassName)}
+              />
+            );
+          }
+
           return (
             <Form>
               {currentContent}
               <div className="flex flex-row w-full gap-4 mt-4 justify-end">
-                {showPrevBtn && (
-                  <FormButton
-                    type="button"
-                    color="secondary"
-                    onClick={() => prevStep(formikProps)}
-                    text="Previous"
-                    className={buttonClassNames(prevButtonClassName)}
-                  />
-                )}
+                {prevOrCancelBtn}
                 {showNextBtn && nextOrSubmitBtn}
               </div>
             </Form>

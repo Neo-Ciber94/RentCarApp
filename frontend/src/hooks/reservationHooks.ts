@@ -9,7 +9,7 @@ export function useAllReservations() {
 }
 
 export function useReservation(id: number) {
-  return useQuery("reservation", {
+  return useQuery(["reservation", id], {
     queryFn: () => Services.reservations.get(id),
     refetchOnMount: true,
   });

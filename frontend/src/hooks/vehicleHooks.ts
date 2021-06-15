@@ -2,9 +2,15 @@ import { useQuery } from "react-query";
 import { Services } from "src/services";
 
 export function useVehicle(id: number) {
-  return useQuery("vehicle", () => Services.vehicles.get(id));
+  return useQuery(["vehicle", id], {
+    queryFn: () => Services.vehicles.get(id),
+    refetchOnMount: true,
+  });
 }
 
 export function useAllVehicles() {
-  return useQuery("vehicles", () => Services.vehicles.getAll());
+  return useQuery("vehicles", {
+    queryFn: () => Services.vehicles.getAll(),
+    refetchOnMount: true,
+  });
 }

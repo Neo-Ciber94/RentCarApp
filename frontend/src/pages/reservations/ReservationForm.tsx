@@ -68,6 +68,7 @@ export const ReservationForm = observer<ReservationFormProps>(
         <MultiStepForm
           initialValues={initialValues}
           steps={steps}
+          onCancel={() => history.push("/reservations")}
           onSubmit={async (values, actions) => {
             console.log(values);
             // Updates

@@ -11,6 +11,8 @@ export function ReservationEdit() {
     return <Loading />;
   }
   const initialValues: ReservationValues = {
+    reservationId: reservation.id,
+    clientId: reservation.clientId,
     name: reservation.client.name,
     email: reservation.client.email,
     creditLimit: reservation.client.creditLimit,

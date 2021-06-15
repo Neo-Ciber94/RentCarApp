@@ -1,7 +1,8 @@
 import { ReservationDTO } from "@shared/types";
-import { Row, TextInfo, Title } from "src/components";
+import { ImageContainer, Row, TextInfo, Title } from "src/components";
 import { capitalize } from "src/utils/capitalize";
 import dayjs from "dayjs";
+import { getImageOrDefault } from "src/utils/getImage";
 
 export interface ReservationInfoProps {
   reservation: ReservationDTO;
@@ -11,6 +12,13 @@ export function ReservationInfo({ reservation }: ReservationInfoProps) {
   return (
     <>
       <Title title="Reservation" />
+      <>
+        <ImageContainer
+          src={getImageOrDefault(reservation?.vehicle.image)}
+          alt={"vehicle"}
+        />
+        <div className="bg-red-600 h-2 w-full shadow mb-4"></div>
+      </>
       <Row>
         <TextInfo label="ID" value={reservation.id} />
         <TextInfo label="Created At" value={reservation.createdAt} />

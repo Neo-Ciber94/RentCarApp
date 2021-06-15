@@ -1,4 +1,5 @@
 import { VehicleDTO } from "@shared/types";
+import { useRef } from "react";
 import { Loading, Container, FormInput } from "src/components";
 import { useAllVehicles } from "src/hooks";
 import { VehicleCard } from "..";
@@ -14,6 +15,7 @@ export function RentVehicleSelection({
   onSelect,
   selectedId,
 }: VehicleSelectionProps) {
+  const defaultSelected = useRef(selectedId);
   const { isLoading, data = [] } = useAllVehicles();
 
   if (isLoading) {
@@ -21,7 +23,9 @@ export function RentVehicleSelection({
   }
 
   // Get all the available vehicles
-  const availableVehicles = data.filter((v) => v.isAvailable);
+  const availableVehicles = data.filter(
+    (v) => v.isAvailable || v.id === defaultSelected.current
+  );
 
   const vehicles = availableVehicles.map((e, index) => {
     const isSelected = selectedId === e.id;

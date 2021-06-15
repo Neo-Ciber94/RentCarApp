@@ -82,6 +82,7 @@ export function RentEdit() {
         initialValues={initialValues}
         steps={steps}
         submitButtonText="Update"
+        onCancel={() => history.push("/rents")}
         onSubmit={async (values, actions) => {
           await Services.rents.update({
             id: values.rentId,

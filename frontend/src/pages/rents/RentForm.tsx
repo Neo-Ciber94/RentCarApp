@@ -77,6 +77,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
 
           return false;
         }}
+        onCancel={() => history.push("/rents")}
         onSubmit={async (values, actions) => {
           await submitRent(values, actions);
           history.push(Routes.rent.path);

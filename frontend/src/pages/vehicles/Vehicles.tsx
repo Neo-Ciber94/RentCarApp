@@ -8,9 +8,11 @@ import { VehicleCard } from ".";
 import { useAllVehicles } from "src/hooks";
 import { useHistory } from "react-router";
 
+const SHOW_KIND_KEY = "vehicles-show-kind";
+
 enum ShowKind {
-  Grid,
-  Table,
+  Grid = "grid",
+  Table = "table",
 }
 
 interface ButtonShowKindProps {
@@ -55,17 +57,32 @@ const columns: IDataTableColumn<VehicleDTO>[] = [
   },
 ];
 
+function getInitialShowKind(): ShowKind {
+  const stored = sessionStorage.getItem(SHOW_KIND_KEY);
+  if (stored === ShowKind.Grid || stored === ShowKind.Table) {
+    return stored;
+  }
+
+  return ShowKind.Grid;
+}
+
 export const Vehicles = observer(() => {
   const authService = useContext(AuthContext);
   const history = useHistory();
-  const [showKind, setShowKind] = useState(ShowKind.Table);
+  const [showKind, setShowKind] = useState(getInitialShowKind);
   const { isLoading, data = [] } = useAllVehicles();
+
+  const setAndSaveShowKind = (value: ShowKind) => {
+    sessionStorage.setItem(SHOW_KIND_KEY, value);
+    setShowKind(value);
+  };
+
   const buttonGroup = useMemo(
     () => (
       <ButtonShowKind
         kind={showKind}
-        onGrid={() => setShowKind(ShowKind.Grid)}
-        onTable={() => setShowKind(ShowKind.Table)}
+        onGrid={() => setAndSaveShowKind(ShowKind.Grid)}
+        onTable={() => setAndSaveShowKind(ShowKind.Table)}
       />
     ),
     [showKind, setShowKind]

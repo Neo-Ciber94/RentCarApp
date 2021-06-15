@@ -8,7 +8,7 @@ export interface UserEmployee extends UserDTO {
 }
 
 export function useEmployee(id: number) {
-  return useQuery("employee", {
+  return useQuery(["employee", id], {
     refetchOnMount: true,
     queryFn: () => Services.employees.get(id),
   });

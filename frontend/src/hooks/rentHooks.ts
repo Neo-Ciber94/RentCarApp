@@ -8,7 +8,7 @@ export function useAllRents() {
 }
 
 export function useRent(id: number) {
-  return useQuery("rent", {
+  return useQuery(["rent", id], {
     queryFn: () => Services.rents.get(id),
   });
 }

@@ -9,7 +9,7 @@ export function useAllClients() {
 }
 
 export function useClient(id: number) {
-  return useQuery("client", {
+  return useQuery(["client", id], {
     queryFn: () => Services.clients.get(id),
     refetchOnMount: true,
   });

@@ -1,53 +1,83 @@
-import { Get, Post, Put, Delete, Param, Body } from "routing-controllers";
+import { Response } from "express";
+import { Get, Post, Put, Delete, Param, Body, Res } from "routing-controllers";
 import { GenericRepository } from "src/repositories";
 import { Mapper, MapperFn } from "src/utils";
 import { DeepPartial, Repository } from "typeorm";
+import { handleError } from "./handleError";
 
-export interface ControllerOptions<T, R = T> {
-  repository: Repository<T> | GenericRepository<T, R>;
+type ControllerOptions<
+  T,
+  R = T,
+  TRepository extends GenericRepository<T, R> = GenericRepository<T, R>
+> = {
+  repository: Repository<T> | TRepository;
   mapper?: Mapper<T, R> | MapperFn<T, R>;
   relations?: string[];
-}
+};
 
-export class AbstractController<T, R = T> {
-  protected readonly repository: GenericRepository<T, R>;
-  protected readonly relations: string[];
+export abstract class AbstractController<
+  T,
+  R = T,
+  TRepository extends GenericRepository<T, R> = GenericRepository<T, R>
+> {
+  protected readonly repository: TRepository;
 
   constructor(options: ControllerOptions<T, R>) {
     if (options.repository instanceof GenericRepository) {
-      this.repository = options.repository;
+      this.repository = options.repository as any;
     } else {
       this.repository = new GenericRepository({
         repository: options.repository,
         mapper: options.mapper,
-      });
+        relations: options.relations,
+      }) as any;
     }
-
-    this.relations = options.relations || [];
   }
 
   @Get()
-  find(): Promise<R[]> {
-    return this.repository.find({ relations: this.relations });
+  async find(@Res() response?: Response): Promise<R[] | Response> {
+    return this.repository
+      .find()
+      .catch((error) => handleError(error, response!));
   }
 
   @Get("/:id")
-  findById(@Param("id") id: number): Promise<R | undefined> {
-    return this.repository.findById(id, { relations: this.relations });
+  async findById(
+    @Param("id") id: number,
+    @Res() response?: Response
+  ): Promise<R | Response<R> | undefined> {
+    return this.repository
+      .findById(id)
+      .catch((error) => handleError(error, response!));
   }
 
   @Post()
-  post(@Body() entity: DeepPartial<T>): Promise<R> {
-    return this.repository.create(entity);
+  async post(
+    @Body() entity: DeepPartial<T>,
+    @Res() response?: Response
+  ): Promise<R | Response<R>> {
+    return this.repository
+      .create(entity)
+      .catch((error) => handleError(error, response!));
   }
 
   @Put()
-  put(@Body() entity: DeepPartial<T> & { id: number }): Promise<R | undefined> {
-    return this.repository.update(entity);
+  async put(
+    @Body() entity: DeepPartial<T> & { id: number },
+    @Res() response?: Response
+  ): Promise<R | Response<R> | undefined> {
+    return this.repository
+      .update(entity)
+      .catch((error) => handleError(error, response!));
   }
 
   @Delete("/:id")
-  delete(@Param("id") id: number): Promise<R | undefined> {
-    return this.repository.delete(id);
+  async delete(
+    @Param("id") id: number,
+    @Res() response?: Response
+  ): Promise<R | Response<R> | undefined> {
+    return this.repository
+      .delete(id)
+      .catch((error) => handleError(error, response!));
   }
 }

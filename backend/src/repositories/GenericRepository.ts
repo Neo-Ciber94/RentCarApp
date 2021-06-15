@@ -7,23 +7,29 @@ import {
   Repository,
 } from "typeorm";
 
-export interface RepositoryOptions<T, R = T> {
+type RepositoryOptions<T, R = T> = {
   repository: Repository<T>;
   mapper?: Mapper<T, R> | MapperFn<T, R>;
-}
+  relations?: string[];
+};
 
 export class GenericRepository<T, R = T> {
   protected readonly repository: Repository<T>;
   protected readonly mapper: Mapper<T, R>;
+  protected readonly relations: string[];
 
   // prettier-ignore
   constructor(options: RepositoryOptions<T, R>) {
     this.repository = options.repository;
+    this.relations = options.relations || [];
     this.mapper =  options.mapper ? Mapper.from(options.mapper) : Mapper.IDENTITY;
   }
 
   async find(options?: FindManyOptions<T>): Promise<R[]> {
-    const result = await this.repository.find(options);
+    const result = await this.repository.find({
+      relations: this.relations,
+      ...options,
+    });
     return this.mapper.mapMany(result);
   }
 
@@ -31,7 +37,10 @@ export class GenericRepository<T, R = T> {
     id?: string | number | Date | ObjectID,
     options?: FindOneOptions<T>
   ): Promise<R | undefined> {
-    const result = await this.repository.findOne(id, options);
+    const result = await this.repository.findOne(id, {
+      relations: this.relations,
+      ...options,
+    });
     if (result) {
       return this.mapper.map(result);
     } else {

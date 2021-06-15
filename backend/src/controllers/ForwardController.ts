@@ -1,4 +1,6 @@
-import { Body, Delete, Get, Param, Post, Put } from "routing-controllers";
+import { Response } from "express";
+import { Body, Delete, Get, Param, Post, Put, Res } from "routing-controllers";
+import { handleError } from "./handleError";
 
 export interface RepositoryLike<T, R = T> {
   find(): Promise<T[]>;
@@ -12,27 +14,49 @@ export abstract class ForwardController<T, R = T> {
   constructor(protected readonly repository: RepositoryLike<T, R>) {}
 
   @Get()
-  find(): Promise<T[]> {
-    return this.repository.find();
+  async find(@Res() response: Response): Promise<T[] | Response<T[]>> {
+    return this.repository
+      .find()
+      .catch((error) => handleError(error, response));
   }
 
   @Get("/:id")
-  findById(@Param("id") id: number): Promise<T | undefined> {
-    return this.repository.findById(id);
+  async findById(
+    @Param("id") id: number,
+    @Res() response: Response
+  ): Promise<T | Response<T> | undefined> {
+    return this.repository
+      .findById(id)
+      .catch((error) => handleError(error, response));
   }
 
   @Post()
-  post(@Body() entity: R): Promise<T> {
-    return this.repository.create(entity);
+  async post(
+    @Body() entity: R,
+    @Res() response: Response
+  ): Promise<T | Response<T>> {
+    return this.repository
+      .create(entity)
+      .catch((error) => handleError(error, response));
   }
 
   @Put()
-  put(@Body() entity: R & { id: number }): Promise<T | undefined> {
-    return this.repository.update(entity);
+  async put(
+    @Body() entity: R & { id: number },
+    @Res() response: Response
+  ): Promise<T | Response<T> | undefined> {
+    return this.repository
+      .update(entity)
+      .catch((error) => handleError(error, response));
   }
 
   @Delete("/:id")
-  delete(@Param("id") id: number): Promise<T | undefined> {
-    return this.repository.delete(id);
+  async delete(
+    @Param("id") id: number,
+    @Res() response: Response
+  ): Promise<T | Response<T> | undefined> {
+    return this.repository
+      .delete(id)
+      .catch((error) => handleError(error, response));
   }
 }

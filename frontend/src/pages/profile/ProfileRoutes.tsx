@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { Footer, Header } from "src/layout";
 import Routes from "src/routes/Routes";
 import NotFound from "../common/NotFound";

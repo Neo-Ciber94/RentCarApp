@@ -5,8 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Container, FormInput, MainButton } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
-import { goToProfile } from "src/utils/historyHelper";
 import { MIN_PASSWORD_LENGTH } from "@shared/config";
+import Routes from "src/routes/Routes";
 
 interface ChangePasswordValues {
   email: string;
@@ -56,7 +56,7 @@ function ChangePasswordForm(props: {
 
       <div className="flex flex-row w-100 gap-2">
         <MainButton
-          onClick={() => goToProfile(history)}
+          onClick={() => history.push(Routes.profile())}
           type="button"
           color="secondary"
           className="w-full"
@@ -118,7 +118,7 @@ export const ChangePassword = observer(() => {
       onSubmit={(values, actions) => {
         authService.changePassword(values).then((result) => {
           if (result.isOk) {
-            goToProfile(history);
+            history.push(Routes.profile());
             actions.setSubmitting(false);
           } else {
             actions.setErrors({

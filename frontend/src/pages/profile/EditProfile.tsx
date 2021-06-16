@@ -7,7 +7,7 @@ import { Container, FormInput, MainButton } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import * as Yup from "yup";
 import { DOCUMENT_ID_LENGTH } from "@shared/config";
-import { goToProfile } from "src/utils/historyHelper";
+import Routes from "src/routes/Routes";
 
 function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
   const { touched, errors } = props.props;
@@ -37,7 +37,7 @@ function EditProfileForm(props: { props: FormikProps<UserUpdate> }) {
 
       <div className="flex flex-row w-100 gap-2">
         <MainButton
-          onClick={() => goToProfile(history)}
+          onClick={() => history.push(Routes.profile())}
           type="button"
           color="secondary"
           className="w-full"
@@ -73,7 +73,7 @@ export const EditProfile = observer(() => {
       validationSchema={validationSchema}
       onSubmit={(values, actions) => {
         authService.update(values).then(() => {
-          goToProfile(history);
+          history.push(Routes.profile());
           actions.setSubmitting(false);
         });
       }}

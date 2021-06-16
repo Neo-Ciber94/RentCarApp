@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { AuthContext } from "src/context/AuthContext";
 import { useContext } from "react";
 import { LinkButton } from "src/components/Buttons";
+import Routes from "src/routes/Routes";
 
 export const Profile = observer(() => {
   const authService = useContext(AuthContext);
@@ -30,19 +31,10 @@ export const Profile = observer(() => {
         <ProfileField title={"Status"} info={capitalize(user.status)} />
 
         <div className="flex flex-row justify-center gap-3 mt-4 mb-2 w-full md:w-4/5 lg:w-3/5">
-          <LinkButton
-            to={{
-              pathname: "/profile/changepassword",
-              state: "Change Password",
-            }}
-            className="w-full"
-          >
+          <LinkButton to={Routes.profile("changepassword")} className="w-full">
             Change Password
           </LinkButton>
-          <LinkButton
-            to={{ pathname: "/profile/edit", state: "Edit Profile" }}
-            className="w-full"
-          >
+          <LinkButton to={Routes.profile("edit")} className="w-full">
             Edit
           </LinkButton>
         </div>

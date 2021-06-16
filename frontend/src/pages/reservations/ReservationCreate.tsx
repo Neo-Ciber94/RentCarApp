@@ -3,7 +3,6 @@ import { LegalPerson } from "@shared/types";
 import { RandomString } from "src/utils/RandomString";
 import { ReservationForm, ReservationValues } from "./ReservationForm";
 import dayjs from "dayjs";
-import { useHistory } from "react-router";
 
 export function ReservationCreate() {
   const initialValues: ReservationValues = {

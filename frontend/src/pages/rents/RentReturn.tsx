@@ -2,11 +2,11 @@ import { InspectionDTO, TireStatus } from "@shared/types";
 import { useHistory, useParams } from "react-router";
 import { Container, FormStep, Loading, MultiStepForm } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
-import { BaseRoutes } from "src/layout";
 import { Services } from "src/services";
 import { RentInfo } from "./RentInfo";
 import { InspectionForm } from "src/pages/inspections";
 import NotFound from "../common/NotFound";
+import Routes from "src/routes/Routes";
 
 type InspectionEntity = Partial<InspectionDTO>;
 
@@ -73,7 +73,7 @@ export function RentReturn() {
           });
 
           actions.setSubmitting(false);
-          history.push(BaseRoutes.rent.path);
+          history.push(Routes.rents());
         }}
       />
     </Container>

@@ -1,6 +1,7 @@
 import { useHistory, useParams } from "react-router-dom";
 import { Container, LinkButton, Loading, MainButton } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
+import Routes from "src/routes/Routes";
 import { RentInfo } from ".";
 
 export function RentDetails() {
@@ -28,7 +29,7 @@ export function RentDetails() {
           <LinkButton
             className="w-full text-center"
             color="primary"
-            to={`/rents/${rent.id}/return`}
+            to={Routes.rents(rent.id, "return")}
           >
             Return
           </LinkButton>

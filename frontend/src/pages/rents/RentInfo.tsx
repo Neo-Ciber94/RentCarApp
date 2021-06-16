@@ -1,6 +1,8 @@
 import { RentDTO } from "@shared/types";
-import { TextInfo, Title } from "src/components";
+import { ImageContainer, TextInfo, Title } from "src/components";
+import { Line } from "src/components/Line";
 import { Row } from "src/components/Row";
+import { getImageOrDefault } from "src/utils";
 
 interface RentViewProps {
   rent: RentDTO;
@@ -17,6 +19,10 @@ export function RentInfo(props: RentViewProps) {
     <>
       {/* Rent */}
       <Title title="Vehicle" />
+
+      <ImageContainer src={getImageOrDefault(vehicle.image)} alt="vehicle" />
+
+      <Line />
 
       <TextInfo label="Rent ID" value={rent.id} />
 

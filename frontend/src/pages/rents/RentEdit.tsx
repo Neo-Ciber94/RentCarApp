@@ -12,9 +12,8 @@ import {
   vehicleValidationSchema,
 } from "./validationSchema";
 import { Services } from "src/services";
-import { BaseRoutes } from "src/layout";
-import React from "react";
 import NotFound from "../common/NotFound";
+import Routes from "src/routes/Routes";
 
 type UpdateRent = RentValues & RentClientValues;
 
@@ -101,7 +100,7 @@ export function RentEdit() {
           });
 
           actions.setSubmitting(false);
-          history.push(BaseRoutes.rent.path);
+          history.push(Routes.rents());
         }}
       />
     </Container>

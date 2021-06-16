@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ROLES_ALL, ROLES_ADMIN } from "./config";
 import { AuthContext } from "./context/AuthContext";
-import { withHeaderAndFooter, BaseRoutes } from "./layout";
+import { withHeaderAndFooter } from "./layout";
 import {
   VehicleRoutes,
   Login,

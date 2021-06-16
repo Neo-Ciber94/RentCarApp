@@ -2,7 +2,6 @@ import { ReservationStatus } from "@shared/types";
 import { useHistory, useParams } from "react-router";
 import { BottomButtonGroup, Container, Loading } from "src/components";
 import { useReservation } from "src/hooks/reservationHooks";
-import { BaseRoutes } from "src/layout";
 import Routes from "src/routes/Routes";
 import { ReservationInfo } from "./ReservationInfo";
 

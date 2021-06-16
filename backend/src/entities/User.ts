@@ -8,12 +8,9 @@ import {
   DeepPartial,
   Entity,
   Index,
-  JoinColumn,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Employee } from "./Employee";
 import { UserSession } from "./UserSession";
 
 @Entity()
@@ -35,9 +32,11 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email!: string;
 
+  // TODO: use { select: false } to force user to select by value
   @Column()
   salt!: string;
 
+  // TODO: use { select: false } to force user to select by value
   @Column({ unique: true })
   hash!: string;
 

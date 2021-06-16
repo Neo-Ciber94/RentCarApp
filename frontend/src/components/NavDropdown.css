@@ -8,9 +8,12 @@
 
 .dropdown-content {
   position: absolute;
-  display: none;
   min-width: 150px;
   z-index: 1;
+}
+
+.hoverable.dropdown-content {
+  display: none;
 }
 
 .dropdown-btn {
@@ -21,7 +24,7 @@
   float: none;
 }
 
-.dropdown:hover .dropdown-content {
+.hoverable.dropdown:hover .dropdown-content {
   display: flex;
   flex-direction: column;
 }

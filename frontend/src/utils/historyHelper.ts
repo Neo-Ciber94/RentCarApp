@@ -1,10 +1,10 @@
 import { History } from "history";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 
 export function goToProfile(history: History) {
-  history.push(Routes.profile.path, Routes.profile.name);
+  history.push(BaseRoutes.profile.path, BaseRoutes.profile.name);
 }
 
 export function goToBrands(history: History) {
-  history.push(Routes.brands.path, Routes.brands.name);
+  history.push(BaseRoutes.brands.path, BaseRoutes.brands.name);
 }

@@ -9,6 +9,7 @@ import {
 } from "src/components";
 import { usePrintableTable } from "src/context/PrintDataTableContext";
 import { useAllRents } from "src/hooks/rentHooks";
+import Routes from "src/routes/Routes";
 import { convertToCSV } from "src/utils/convertToCSV";
 import { Download } from "src/utils/downloads";
 import { dateTimeStamp, timeStamp } from "src/utils/timeStamp";
@@ -158,9 +159,9 @@ export function Rents() {
         ],
         sortable: true,
         addButtonText: "Rent Vehicle",
-        addPath: "/rents/new",
-        editPath: (row) => `/rents/${row.id}/edit`,
-        detailsPath: (row) => `/rents/${row.id}`,
+        addPath: Routes.rents("new"),
+        detailsPath: (row) => Routes.rents(row.id),
+        editPath: (row) => Routes.rents(row.id, "edit"),
         canEdit: (row) => row.returnDate == null,
         canDelete: false,
       })}

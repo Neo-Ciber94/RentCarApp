@@ -7,7 +7,7 @@ import {
   Loading,
 } from "src/components";
 import { UserEmployee, useUserEmployees } from "src/hooks/employeeHooks";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 
 const columns: IDataTableColumn<UserEmployee>[] = [
   {
@@ -59,11 +59,13 @@ export function Employees() {
 
         return (
           <div className="flex flex-row w-full justify-center gap-4 lg:gap-10">
-            <NavLink to={`${Routes.employees.path}/${row.employee.id}`}>
+            <NavLink to={`${BaseRoutes.employees.path}/${row.employee.id}`}>
               <i className="fas fa-info-circle text-gray-500 hover:text-gray-700 cursor-pointer"></i>
             </NavLink>
 
-            <NavLink to={`${Routes.employees.path}/${row.employee.id}/edit`}>
+            <NavLink
+              to={`${BaseRoutes.employees.path}/${row.employee.id}/edit`}
+            >
               <i className="fas fa-edit text-green-600 hover:text-green-800 cursor-pointer"></i>
             </NavLink>
           </div>
@@ -74,7 +76,10 @@ export function Employees() {
   return (
     <Container className="h-full lg:max-w-6xl">
       <div className="p-2">
-        <LinkButton className="text-lg p-1" to={`${Routes.employees.path}/new`}>
+        <LinkButton
+          className="text-lg p-1"
+          to={`${BaseRoutes.employees.path}/new`}
+        >
           Add Employee
         </LinkButton>
       </div>

@@ -3,7 +3,7 @@ import { FormikHelpers } from "formik";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, FormStep, MultiStepForm } from "src/components";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { Services } from "src/services";
 import { RentFormValues, RentConfirmation } from ".";
 import { RentClientForm } from "./RentClientForm";
@@ -80,7 +80,7 @@ export const RentForm: React.FC<RentFormProps> = ({ initialValues }) => {
         onCancel={() => history.push("/rents")}
         onSubmit={async (values, actions) => {
           await submitRent(values, actions);
-          history.push(Routes.rent.path);
+          history.push(BaseRoutes.rent.path);
         }}
       />
     </Container>

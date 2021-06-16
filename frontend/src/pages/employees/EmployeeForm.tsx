@@ -11,7 +11,7 @@ import {
   withCustomForm,
 } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { AuthService, Services } from "src/services";
 import * as yup from "yup";
 import { TestConfig } from "yup";
@@ -139,7 +139,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
       {withCustomForm({
         initialValues,
         validationSchema,
-        onCancel: () => history.push(Routes.employees.path),
+        onCancel: () => history.push(BaseRoutes.employees.path),
         onSubmit: async (values, actions) => {
           console.log(values);
 
@@ -153,7 +153,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             await addEmployee(values as NewEmployee, authService, setError);
           }
 
-          history.push(Routes.employees.path);
+          history.push(BaseRoutes.employees.path);
           actions.setSubmitting(false);
         },
         render: ({ errors, touched }) => (

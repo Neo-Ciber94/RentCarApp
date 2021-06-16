@@ -4,6 +4,7 @@ import { Container, Loading, withCrudDataTable } from "src/components";
 import { useAllReservations } from "src/hooks/reservationHooks";
 import dayjs from "dayjs";
 import { capitalize } from "src/utils/capitalize";
+import Routes from "src/routes/Routes";
 
 const columns: IDataTableColumn<ReservationDTO>[] = [
   {
@@ -57,10 +58,10 @@ export function Reservation() {
         columns,
         sortable: true,
         addButtonText: "New Reservation",
-        addPath: "/reservations/new",
-        detailsPath: (row) => `/reservations/${row.id}`,
-        deletePath: (row) => `/reservations/${row.id}/delete`,
-        editPath: (row) => `/reservations/${row.id}/edit`,
+        addPath: Routes.reservations("new"),
+        detailsPath: (row) => Routes.reservations(row.id),
+        deletePath: (row) => Routes.reservations(row.id, "delete"),
+        editPath: (row) => Routes.reservations(row.id, "edit"),
         canEdit: (row) => row.status === ReservationStatus.Active,
         canDelete: (row) => row.status === ReservationStatus.Active,
       })}

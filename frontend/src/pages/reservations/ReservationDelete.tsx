@@ -2,7 +2,7 @@ import { ReservationStatus } from "@shared/types";
 import { useHistory, useParams } from "react-router";
 import { BottomButtonGroup, Container, Loading } from "src/components";
 import { useReservation } from "src/hooks/reservationHooks";
-import { Routes } from "src/layout";
+import Routes from "src/routes/Routes";
 import { Services } from "src/services";
 import { ReservationInfo } from "./ReservationInfo";
 
@@ -26,9 +26,9 @@ export function ReservationDelete() {
         confirmText="Delete"
         onConfirm={async () => {
           await Services.reservations.delete(data.id);
-          history.push(Routes.reservations.path);
+          history.push(Routes.reservations());
         }}
-        onCancel={() => history.push(Routes.reservations.path)}
+        onCancel={() => history.push(Routes.reservations())}
         noConfirmButton={isCompleted}
       />
     </Container>

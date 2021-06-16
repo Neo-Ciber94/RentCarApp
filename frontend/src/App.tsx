@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ROLES_ALL, ROLES_ADMIN } from "./config";
 import { AuthContext } from "./context/AuthContext";
-import { withHeaderAndFooter, Routes } from "./layout";
+import { withHeaderAndFooter, BaseRoutes } from "./layout";
 import {
   VehicleRoutes,
   Login,
@@ -24,6 +24,7 @@ import NotFound from "./pages/common/NotFound";
 import { ProtectedRoute } from "./components";
 import { NavbarProvider } from "./context/NavbarContext";
 import { PrintDataTableProvider } from "./context/PrintDataTableContext";
+import Routes from "./routes/Routes";
 
 const queryClient = new QueryClient();
 
@@ -60,61 +61,58 @@ const App = observer(() => {
               {/* Common routes */}
               <Route path="/" exact component={withHeaderAndFooter(Home)} />
               <Route
-                path={Routes.reservations.path}
+                path={Routes.reservations()}
                 component={ReservationRoutes}
               />
-              <Route path={Routes.vehicles.path} component={VehicleRoutes} />
+              <Route path={Routes.vehicles()} component={VehicleRoutes} />
               <Route
-                path={Routes.login.path}
-                component={withHeaderAndFooter(Login, Routes.login.name)}
+                path={Routes.login()}
+                component={withHeaderAndFooter(Login, "Login")}
               />
 
               {/* Employees */}
               <ProtectedRoute
                 roles={ROLES_ALL}
-                path={Routes.profile.path}
+                path={Routes.profile()}
                 component={ProfileRoutes}
               />
 
               <ProtectedRoute
                 roles={ROLES_ALL}
-                path={Routes.clients.path}
-                component={withHeaderAndFooter(Clients, Routes.clients.name)}
+                path={Routes.clients()}
+                component={withHeaderAndFooter(Clients, "Clients")}
               />
               <ProtectedRoute
                 roles={ROLES_ALL}
-                path={Routes.inspections.path}
-                component={withHeaderAndFooter(
-                  Inspections,
-                  Routes.inspections.name
-                )}
+                path={Routes.inspections()}
+                component={withHeaderAndFooter(Inspections, "Inspections")}
               />
               <ProtectedRoute
                 roles={ROLES_ALL}
-                path={Routes.rent.path}
+                path={Routes.rents()}
                 component={RentRoutes}
               />
 
               {/* Admin */}
               <ProtectedRoute
                 roles={ROLES_ADMIN}
-                path={Routes.employees.path}
+                path={Routes.employees()}
                 component={EmployeeRoutes}
               />
               <ProtectedRoute
                 roles={ROLES_ADMIN}
-                path={Routes.brands.path}
-                component={withHeaderAndFooter(Brands, Routes.brands.name)}
+                path={Routes.brands()}
+                component={withHeaderAndFooter(Brands, "Brands")}
               />
               <ProtectedRoute
                 roles={ROLES_ADMIN}
-                path={Routes.models.path}
-                component={withHeaderAndFooter(Models, Routes.models.name)}
+                path={Routes.models()}
+                component={withHeaderAndFooter(Models, "Models")}
               />
               <ProtectedRoute
                 roles={ROLES_ADMIN}
-                path={Routes.fuels.path}
-                component={withHeaderAndFooter(Fuels, Routes.fuels.name)}
+                path={Routes.fuels()}
+                component={withHeaderAndFooter(Fuels, "Fuels")}
               />
 
               {/* 404 */}

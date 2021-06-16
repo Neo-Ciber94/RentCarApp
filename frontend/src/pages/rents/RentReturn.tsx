@@ -2,7 +2,7 @@ import { InspectionDTO, TireStatus } from "@shared/types";
 import { useHistory, useParams } from "react-router";
 import { Container, FormStep, Loading, MultiStepForm } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { Services } from "src/services";
 import { RentInfo } from "./RentInfo";
 import { InspectionForm } from "src/pages/inspections";
@@ -73,7 +73,7 @@ export function RentReturn() {
           });
 
           actions.setSubmitting(false);
-          history.push(Routes.rent.path);
+          history.push(BaseRoutes.rent.path);
         }}
       />
     </Container>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import "./Home.css";
 
 export default function Home() {
@@ -17,8 +17,8 @@ export default function Home() {
         </span>
         <Link
           to={{
-            pathname: Routes.reservations.path,
-            state: Routes.reservations.name,
+            pathname: BaseRoutes.reservations.path,
+            state: BaseRoutes.reservations.name,
           }}
           className="bg-red-600 hover:bg-red-800 rounded-lg mt-5 md:mt-0 ml-auto text-white p-3 text-center text-xl w-full md:w-2/6 shadow"
         >

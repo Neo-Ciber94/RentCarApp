@@ -1,8 +1,9 @@
 import { GearBox, UserRole, VehicleDTO } from "@shared/types";
+import { FormikHelpers } from "formik";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { useQuery } from "react-query";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import {
   FormInput,
   FormImageFile,
@@ -12,13 +13,21 @@ import {
   FormCheckbox,
 } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
-import { Routes } from "src/layout";
+import Routes from "src/routes/Routes";
 import { Services } from "src/services";
-import { getImage } from "src/utils/getImage";
+import { getImage } from "src/utils";
+
 import * as yup from "yup";
+
+type OnSubmitVehicle = (
+  values: Partial<VehicleDTO>,
+  helpers: FormikHelpers<Partial<VehicleDTO>>
+) => void;
 
 interface VehicleFormProps {
   initialValues: Partial<VehicleDTO>;
+  onSubmit?: OnSubmitVehicle;
+  onCancel?: () => void;
 }
 
 const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
@@ -55,137 +64,126 @@ const validationSchema: yup.SchemaOf<Partial<VehicleDTO>> = yup.object({
   status: yup.string().optional(),
 });
 
-export const VehicleForm = observer<VehicleFormProps>(({ initialValues }) => {
-  const history = useHistory();
-  const authService = useContext(AuthContext);
-  const modelsResult = useModels();
-  const fuelsResult = useFuels();
+export const VehicleForm = observer<VehicleFormProps>(
+  ({ initialValues, onSubmit, onCancel }) => {
+    const history = useHistory();
+    const authService = useContext(AuthContext);
+    const modelsResult = useModels();
+    const fuelsResult = useFuels();
 
-  if (modelsResult.isLoading || fuelsResult.isLoading) {
-    return <Loading />;
-  }
+    if (modelsResult.isLoading || fuelsResult.isLoading) {
+      return <Loading />;
+    }
 
-  const isAdmin = authService.currentUser?.role === UserRole.Admin;
+    const isAdmin = authService.currentUser?.role === UserRole.Admin;
 
-  return withCustomForm({
-    initialValues: initialValues,
-    validationSchema,
-    formProps: {
-      encType: "multipart/form-data",
-    },
-    onCancel: () => history.push(Routes.vehicles.path),
-    onSubmit: async (values, actions) => {
-      const formData = new FormData();
-      for (const key in values) {
-        const value = (values as any)[key];
-        if (value) {
-          formData.append(key, value);
+    return withCustomForm({
+      initialValues: initialValues,
+      validationSchema,
+      formProps: {
+        encType: "multipart/form-data",
+      },
+
+      onCancel: () => {
+        if (onCancel) {
+          onCancel();
+        } else {
+          history.push(Routes.vehicles());
         }
-      }
+      },
 
-      if ("id" in values) {
-        const result = await Services.vehicles.update(
-          formData as unknown as VehicleDTO
+      onSubmit: (values, actions) => onSubmit?.(values, actions),
+
+      render: ({ errors, touched, setFieldValue }) => {
+        const models = modelsResult.data?.map((e) => ({
+          label: `${e.brand.name} ${e.name}`,
+          value: e.id,
+        }));
+
+        const fuels = fuelsResult.data?.map((e) => ({
+          label: e.name,
+          value: e.id,
+        }));
+
+        const previewImage = initialValues.image
+          ? getImage(initialValues.image)
+          : undefined;
+
+        return (
+          <>
+            {initialValues.id && <FormInput label="ID" name="id" readOnly />}
+            <FormImageFile
+              label="Image"
+              name="image"
+              onFile={setFieldValue}
+              defaultSrc={previewImage}
+            />
+            <FormSelect
+              label="Model"
+              name="modelId"
+              options={models || []}
+              error={errors.modelId}
+              touched={touched.modelId}
+              defaultOption={"Select an model..."}
+            />
+            <FormSelect
+              label="Fuel"
+              name="fuelId"
+              options={fuels || []}
+              error={errors.fuelId}
+              touched={touched.fuelId}
+              defaultOption={"Select a fuel..."}
+            />
+            {isAdmin && (
+              <FormCheckbox label="Is Available" name="isAvailable" />
+            )}
+            <FormInput
+              label="Rent Price"
+              name="rentPrice"
+              type="number"
+              min={1}
+              error={errors.rentPrice}
+              touched={touched.rentPrice}
+            />
+            <FormInput
+              label="Engine Number"
+              name="engineNumber"
+              error={errors.engineNumber}
+              touched={touched.engineNumber}
+            />
+            <FormInput
+              label="Chassis Number"
+              name="chassisNumber"
+              error={errors.chassisNumber}
+              touched={touched.chassisNumber}
+            />
+            <FormInput
+              label="License Plate Number"
+              name="licensePlate"
+              error={errors.licensePlate}
+              touched={touched.licensePlate}
+            />
+            <FormSelect
+              label="GearBox"
+              name="gearBox"
+              options={GearBox}
+              error={errors.gearBox}
+              touched={touched.gearBox}
+            />
+            {/* <FormInput label="Status" name="status" /> */}
+            <FormInput
+              label="Description"
+              name="description"
+              as="textarea"
+              error={errors.description}
+              touched={touched.description}
+            />
+          </>
         );
-        console.log(result);
-      } else {
-        const result = await Services.vehicles.create(
-          formData as unknown as VehicleDTO
-        );
-        console.log(result);
-      }
-
-      history.push(Routes.vehicles.path);
-
-      actions.setSubmitting(false);
-    },
-    render: ({ errors, touched, setFieldValue }) => {
-      const models = modelsResult.data?.map((e) => ({
-        label: `${e.brand.name} ${e.name}`,
-        value: e.id,
-      }));
-
-      const fuels = fuelsResult.data?.map((e) => ({
-        label: e.name,
-        value: e.id,
-      }));
-
-      const previewImage = initialValues.image
-        ? getImage(initialValues.image)
-        : undefined;
-
-      return (
-        <>
-          {initialValues.id && <FormInput label="ID" name="id" readOnly />}
-          <FormImageFile
-            label="Image"
-            name="image"
-            onFile={setFieldValue}
-            defaultSrc={previewImage}
-          />
-          <FormSelect
-            label="Model"
-            name="modelId"
-            options={models || []}
-            error={errors.modelId}
-            touched={touched.modelId}
-            defaultOption={"Select an model..."}
-          />
-          <FormSelect
-            label="Fuel"
-            name="fuelId"
-            options={fuels || []}
-            error={errors.fuelId}
-            touched={touched.fuelId}
-            defaultOption={"Select a fuel..."}
-          />
-          {isAdmin && <FormCheckbox label="Is Available" name="isAvailable" />}
-          <FormInput
-            label="Rent Price"
-            name="rentPrice"
-            type="number"
-            min={1}
-            error={errors.rentPrice}
-            touched={touched.rentPrice}
-          />
-          <FormInput
-            label="Engine Number"
-            name="engineNumber"
-            error={errors.engineNumber}
-            touched={touched.engineNumber}
-          />
-          <FormInput
-            label="Chassis Number"
-            name="chassisNumber"
-            error={errors.chassisNumber}
-            touched={touched.chassisNumber}
-          />
-          <FormInput
-            label="License Plate Number"
-            name="licensePlate"
-            error={errors.licensePlate}
-            touched={touched.licensePlate}
-          />
-          <FormSelect
-            label="GearBox"
-            name="gearBox"
-            options={GearBox}
-            error={errors.gearBox}
-            touched={touched.gearBox}
-          />
-          {/* <FormInput label="Status" name="status" /> */}
-          <FormInput
-            label="Description"
-            name="description"
-            as="textarea"
-            error={errors.description}
-            touched={touched.description}
-          />
-        </>
-      );
-    },
-  });
-});
+      },
+    });
+  }
+);
 
 function useModels() {
   return useQuery("models", () => {

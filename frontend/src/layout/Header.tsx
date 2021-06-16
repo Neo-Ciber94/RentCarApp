@@ -1,7 +1,7 @@
 import { createRef, useContext, useEffect, useLayoutEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { NavDropdown, NavItem } from "src/components";
-import { Routes } from "./routes";
+import { BaseRoutes } from "./routes";
 import { useNavbar } from "src/context/NavbarContext";
 import { UserRole } from "@shared/types";
 import { AuthContext } from "src/context/AuthContext";
@@ -135,14 +135,14 @@ const HomeNav = observer(() => {
   return (
     <>
       <NavItem
-        key={Routes.reservations.name}
-        route={Routes.reservations}
+        key={BaseRoutes.reservations.name}
+        route={BaseRoutes.reservations}
         to={toPath}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.vehicles.name}
-        route={Routes.vehicles}
+        key={BaseRoutes.vehicles.name}
+        route={BaseRoutes.vehicles}
         onClick={() => setOpen(false)}
       />
       {/** Login/Logout */}
@@ -158,33 +158,33 @@ const EmployeeNav: React.FC = () => {
   return (
     <>
       <NavItem
-        key={Routes.clients.name}
-        route={Routes.clients}
+        key={BaseRoutes.clients.name}
+        route={BaseRoutes.clients}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.inspections.name}
-        route={Routes.inspections}
+        key={BaseRoutes.inspections.name}
+        route={BaseRoutes.inspections}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.rent.name}
-        route={Routes.rent}
+        key={BaseRoutes.rent.name}
+        route={BaseRoutes.rent}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.reservations.name}
-        route={Routes.reservations}
+        key={BaseRoutes.reservations.name}
+        route={BaseRoutes.reservations}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.vehicles.name}
-        route={Routes.vehicles}
+        key={BaseRoutes.vehicles.name}
+        route={BaseRoutes.vehicles}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.profile.name}
-        route={Routes.profile}
+        key={BaseRoutes.profile.name}
+        route={BaseRoutes.profile}
         onClick={() => setOpen(false)}
       />
       {/** Login/Logout */}
@@ -201,56 +201,56 @@ const AdminNav: React.FC = () => {
     <>
       <NavDropdown name="Admin">
         <NavItem
-          key={Routes.employees.name}
-          route={Routes.employees}
+          key={BaseRoutes.employees.name}
+          route={BaseRoutes.employees}
           onClick={() => setOpen(false)}
         />
         <NavItem
-          key={Routes.models.name}
-          route={Routes.models}
+          key={BaseRoutes.models.name}
+          route={BaseRoutes.models}
           onClick={() => setOpen(false)}
         />
         <NavItem
-          key={Routes.brands.name}
-          route={Routes.brands}
+          key={BaseRoutes.brands.name}
+          route={BaseRoutes.brands}
           onClick={() => setOpen(false)}
         />
         <NavItem
-          key={Routes.fuels.name}
-          route={Routes.fuels}
+          key={BaseRoutes.fuels.name}
+          route={BaseRoutes.fuels}
           onClick={() => setOpen(false)}
         />
       </NavDropdown>
 
       {/** Employee routes */}
       <NavItem
-        key={Routes.clients.name}
-        route={Routes.clients}
+        key={BaseRoutes.clients.name}
+        route={BaseRoutes.clients}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.inspections.name}
-        route={Routes.inspections}
+        key={BaseRoutes.inspections.name}
+        route={BaseRoutes.inspections}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.rent.name}
-        route={Routes.rent}
+        key={BaseRoutes.rent.name}
+        route={BaseRoutes.rent}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.reservations.name}
-        route={Routes.reservations}
+        key={BaseRoutes.reservations.name}
+        route={BaseRoutes.reservations}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.vehicles.name}
-        route={Routes.vehicles}
+        key={BaseRoutes.vehicles.name}
+        route={BaseRoutes.vehicles}
         onClick={() => setOpen(false)}
       />
       <NavItem
-        key={Routes.profile.name}
-        route={Routes.profile}
+        key={BaseRoutes.profile.name}
+        route={BaseRoutes.profile}
         onClick={() => setOpen(false)}
       />
       {/** Login/Logout */}
@@ -273,8 +273,8 @@ const NavLoginAndLogout = observer(() => {
   if (!authService.isAuthenticated) {
     return (
       <NavItem
-        key={Routes.login.name}
-        route={Routes.login}
+        key={BaseRoutes.login.name}
+        route={BaseRoutes.login}
         onClick={() => setOpen(false)}
       />
     );

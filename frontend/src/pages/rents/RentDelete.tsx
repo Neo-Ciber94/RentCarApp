@@ -1,7 +1,7 @@
 import { useParams, useHistory } from "react-router-dom";
 import { Loading, Container, MainButton } from "src/components";
 import { useRent } from "src/hooks/rentHooks";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { Services } from "src/services";
 import { RentInfo } from ".";
 
@@ -32,7 +32,7 @@ export function RentDelete() {
             color="primary"
             onClick={async () => {
               await Services.rents.delete(rent.id);
-              history.push(Routes.rent.path);
+              history.push(BaseRoutes.rent.path);
             }}
           >
             Delete

@@ -2,6 +2,7 @@ import { Switch, Route, useRouteMatch } from "react-router";
 import { ProtectedRoute } from "src/components";
 import { ROLES_ALL } from "src/config";
 import { Footer, Header } from "src/layout";
+import Routes from "src/routes/Routes";
 import { Reservation } from "./Reservation";
 import { ReservationCreate } from "./ReservationCreate";
 import { ReservationDelete } from "./ReservationDelete";
@@ -22,28 +23,32 @@ export function ReservationRoutes() {
           roles={ROLES_ALL}
           component={Reservation}
         />
-        <Route exact path={`${match.url}/new`} component={ReservationCreate} />
+        <Route
+          exact
+          path={Routes.join(match.url, "new")}
+          component={ReservationCreate}
+        />
         <ProtectedRoute
           exact
-          path={`${match.url}/:id`}
+          path={Routes.join(match.url, ":id")}
           roles={ROLES_ALL}
           component={ReservationDetails}
         />
         <ProtectedRoute
           exact
-          path={`${match.url}/:id/edit`}
+          path={Routes.join(match.url, ":id", "edit")}
           roles={ROLES_ALL}
           component={ReservationEdit}
         />
         <ProtectedRoute
           exact
-          path={`${match.url}/:id/rent`}
+          path={Routes.join(match.url, ":id", "rent")}
           roles={ROLES_ALL}
           component={ReservationRent}
         />
         <ProtectedRoute
           exact
-          path={`${match.url}/:id/delete`}
+          path={Routes.join(match.url, ":id", "delete")}
           roles={ROLES_ALL}
           component={ReservationDelete}
         />

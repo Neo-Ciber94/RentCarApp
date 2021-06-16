@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
 import { Redirect, Route } from "react-router";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { RouteProps } from "react-router-dom";
 
 type LoginOrNotFound = "login" | "notfound";
@@ -55,7 +55,7 @@ function RedirectToRoute(props: { to?: LoginOrNotFound }) {
     <Redirect
       to={{
         pathname: "/login",
-        state: Routes.login.name,
+        state: BaseRoutes.login.name,
       }}
     />
   );

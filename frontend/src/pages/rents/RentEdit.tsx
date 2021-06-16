@@ -12,7 +12,7 @@ import {
   vehicleValidationSchema,
 } from "./validationSchema";
 import { Services } from "src/services";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import React from "react";
 import NotFound from "../common/NotFound";
 
@@ -101,7 +101,7 @@ export function RentEdit() {
           });
 
           actions.setSubmitting(false);
-          history.push(Routes.rent.path);
+          history.push(BaseRoutes.rent.path);
         }}
       />
     </Container>

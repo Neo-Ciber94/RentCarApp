@@ -1,9 +1,15 @@
-import { GearBox } from "@shared/types";
+import { GearBox, VehicleDTO } from "@shared/types";
 import { Container } from "src/components";
 import { VehicleForm } from "./VehicleForm";
 import { RandomString } from "src/utils/RandomString";
+import { toFormData } from "src/utils";
+import { Services } from "src/services";
+import Routes from "src/routes/Routes";
+import { useHistory } from "react-router-dom";
 
 export function VehicleCreate() {
+  const history = useHistory();
+
   return (
     <Container>
       <VehicleForm
@@ -17,6 +23,16 @@ export function VehicleCreate() {
           licensePlate: RandomString.hex(6),
           engineNumber: RandomString.hex(6),
           chassisNumber: RandomString.hex(6),
+        }}
+        onSubmit={async (values, actions) => {
+          const formData = toFormData(values);
+          const result = await Services.vehicles.create(
+            formData as unknown as VehicleDTO
+          );
+
+          console.log(result);
+          actions.setSubmitting(false);
+          history.push(Routes.vehicles());
         }}
       />
     </Container>

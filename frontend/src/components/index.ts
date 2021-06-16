@@ -10,6 +10,7 @@ export * from "./FormSelect";
 export * from "./FormStepper";
 export * from "./ImageContainer";
 export * from "./InputWithReset";
+export * from "./Line";
 export * from "./Loading";
 export * from "./LoadingScreen";
 export * from "./MultiStepForm";

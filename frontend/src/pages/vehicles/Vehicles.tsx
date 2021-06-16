@@ -85,7 +85,7 @@ export const Vehicles = observer(() => {
         onTable={() => setAndSaveShowKind(ShowKind.Table)}
       />
     ),
-    [showKind, setShowKind]
+    [setAndSaveShowKind]
   );
 
   if (isLoading) {

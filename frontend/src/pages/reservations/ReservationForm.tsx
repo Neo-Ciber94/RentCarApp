@@ -7,9 +7,10 @@ import { FormInput, FormSelect } from "src/components";
 import { FormikProps } from "formik";
 import { Services } from "src/services";
 import { useHistory } from "react-router";
-import { Routes } from "src/layout";
+import { BaseRoutes } from "src/layout";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
+import Routes from "src/routes/Routes";
 
 export interface ReservationValues extends Omit<ClientDTO, "id"> {
   reservationId?: number;
@@ -68,7 +69,7 @@ export const ReservationForm = observer<ReservationFormProps>(
         <MultiStepForm
           initialValues={initialValues}
           steps={steps}
-          onCancel={() => history.push("/reservations")}
+          onCancel={() => history.push(Routes.reservations())}
           onSubmit={async (values, actions) => {
             console.log(values);
             // Updates
@@ -109,7 +110,7 @@ export const ReservationForm = observer<ReservationFormProps>(
 
             actions.setSubmitting(false);
             if (authService.isAuthenticated) {
-              history.push(Routes.reservations.path);
+              history.push(Routes.reservations());
             } else {
               history.push("/");
             }

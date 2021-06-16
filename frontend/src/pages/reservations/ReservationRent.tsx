@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router";
 import { Container, FormStep, Loading, MultiStepForm } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import { useReservation } from "src/hooks/reservationHooks";
-import { Routes } from "src/layout";
+import Routes from "src/routes/Routes";
 import { Services } from "src/services";
 import { InspectionForm } from "../inspections";
 import { inspectionValidationSchema } from "../rents";
@@ -64,6 +64,7 @@ export const ReservationRent = observer(() => {
       <MultiStepForm
         initialValues={initialValues}
         steps={steps}
+        onCancel={() => history.push(Routes.reservations())}
         onSubmit={async (values, actions) => {
           // Creates the reservation
           const newRent = await Services.rents.fromReservation(values);
@@ -75,7 +76,7 @@ export const ReservationRent = observer(() => {
           });
 
           actions.setSubmitting(false);
-          history.push(Routes.reservations.path);
+          history.push(Routes.reservations());
         }}
       />
     </Container>

@@ -1,8 +1,13 @@
-import { Container, Loading, withCrudDataTable } from "src/components";
+import {
+  Container,
+  Loading,
+  CheckboxButton,
+  withCrudDataTable,
+} from "src/components";
 import { VehicleDTO } from "@shared/types";
 import { IDataTableColumn } from "react-data-table-component";
 import { observer } from "mobx-react-lite";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "src/context/AuthContext";
 import { VehicleCard } from ".";
 import { useAllVehicles } from "src/hooks";
@@ -71,6 +76,7 @@ export const Vehicles = observer(() => {
   const authService = useContext(AuthContext);
   const history = useHistory();
   const [showKind, setShowKind] = useState(getInitialShowKind);
+  const [showAll, setShowAll] = useState(false);
   const { isLoading, data = [] } = useAllVehicles();
 
   const setAndSaveShowKind = (value: ShowKind) => {
@@ -78,15 +84,20 @@ export const Vehicles = observer(() => {
     setShowKind(value);
   };
 
-  const buttonGroup = useMemo(
-    () => (
+  const buttonGroup = (
+    <div className="flex flex-row w-full justify-between">
+      <CheckboxButton
+        text="View All"
+        className="h-full font-bold"
+        checked={showAll}
+        onClick={() => setShowAll(!showAll)}
+      />
       <ButtonShowKind
         kind={showKind}
         onGrid={() => setAndSaveShowKind(ShowKind.Grid)}
         onTable={() => setAndSaveShowKind(ShowKind.Table)}
       />
-    ),
-    [showKind]
+    </div>
   );
 
   if (isLoading) {
@@ -94,14 +105,20 @@ export const Vehicles = observer(() => {
   }
 
   // Get all the available vehicles
-  const availableVehicles = data.filter((v) => v.isAvailable);
+  let availableVehicles: VehicleDTO[];
+
+  if (showAll) {
+    availableVehicles = data;
+  } else {
+    availableVehicles = data.filter((v) => v.isAvailable);
+  }
 
   if (authService.currentUser == null || showKind === ShowKind.Grid) {
     const vehicles = availableVehicles.map((e, index) => (
       <VehicleCard
         key={index}
         vehicle={e}
-        className="cursor-pointer"
+        className="cursor-pointer animate-fadein"
         onClick={(v) => {
           if (authService.isAuthenticated) {
             history.push(Routes.vehicles(v.id));
@@ -140,7 +157,7 @@ const ButtonShowKind: React.FC<ButtonShowKindProps> = ({
   kind,
 }) => {
   const className =
-    "text-white font-bold py-2 px-10  hover:bg-red-800 focus:outline-none";
+    "text-white font-bold py-2 px-10 hover:bg-red-800 focus:outline-none";
 
   return (
     <div className="flex flex-row py-2 justify-end">

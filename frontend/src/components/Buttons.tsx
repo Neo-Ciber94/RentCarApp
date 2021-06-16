@@ -1,13 +1,16 @@
+import React from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 
 export type ButtonColor = "primary" | "secondary" | "warning" | "info";
 
 interface ColoredButton {
   color?: ButtonColor;
+  text?: string;
 }
 
 interface LinkButtonProps {
   to: string;
+  text?: string;
 }
 
 const PRIMARY_COLOR =
@@ -28,13 +31,19 @@ export type LinkProps<S = unknown> = ColoredButton & LinkButtonProps & React.Pro
 export const MainButton: React.FC<ButtonProps> = ({
   className,
   color,
+  text,
+  children,
   ...props
 }) => {
   const btnColor = getColor(color);
 
+  if (text && (children != null || React.Children.count(children) > 0)) {
+    throw new Error("Button cannot contain text if have children");
+  }
+
   return (
     <button {...props} className={getClassNames(btnColor, className)}>
-      {props.children}
+      {text || children}
     </button>
   );
 };
@@ -42,10 +51,16 @@ export const MainButton: React.FC<ButtonProps> = ({
 export const LinkButton: React.FC<LinkProps> = ({
   className,
   color,
+  text,
   to,
+  children,
   ...props
 }) => {
   const btnColor = getColor(color);
+
+  if (text && (children == null || React.Children.count(children) === 0)) {
+    throw new Error("Button cannot contain text if have children");
+  }
 
   return (
     <NavLink
@@ -55,7 +70,7 @@ export const LinkButton: React.FC<LinkProps> = ({
         getClassNames(btnColor, className) + " inline-block text-center"
       }
     >
-      {props.children}
+      {text || children}
     </NavLink>
   );
 };

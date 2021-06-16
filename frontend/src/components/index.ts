@@ -1,5 +1,6 @@
 export * from "./BottomButtonGroup";
 export * from "./Buttons";
+export * from "./CheckboxButton";
 export * from "./Container";
 export * from "./CSSDataTableStyles";
 export * from "./CustomDataTable";

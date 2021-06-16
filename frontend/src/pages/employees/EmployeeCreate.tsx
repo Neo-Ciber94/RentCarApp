@@ -9,6 +9,7 @@ export function EmployeeCreate() {
     lastName: "",
     email: "",
     password: "",
+    passwordConfirmation: "",
     comissionPercentage: 0,
     documentId: "",
     workShift: WorkShift.Morning,

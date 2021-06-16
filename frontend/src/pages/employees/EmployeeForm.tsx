@@ -21,6 +21,7 @@ export interface NewEmployee extends UserSignup {
   employeeId?: number;
   comissionPercentage: number;
   workShift: WorkShift;
+  passwordConfirmation: string;
 }
 
 export interface UpdateEmployee extends UserUpdate {
@@ -72,6 +73,17 @@ const newEmployeeShchema: yup.SchemaOf<Omit<NewEmployee, "type">> = yup.object({
       MIN_PASSWORD_LENGTH,
       `Password must have at least ${MIN_PASSWORD_LENGTH} characters`
     ),
+
+  passwordConfirmation: yup
+    .string()
+    .required("Password Confirmation is required")
+    .test({
+      name: "passwordConfirmation",
+      message: "Password missmatch",
+      test: (value, context) => {
+        return value === context.parent.password;
+      },
+    }),
 
   workShift: yup
     .mixed<WorkShift>()
@@ -207,6 +219,20 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 touched={(touched as FormikTouched<NewEmployee>).password}
               />
             )}
+            {initialValues.type === "new" && (
+              <FormInput
+                label="Password Confirmation"
+                name="passwordConfirmation"
+                type="password"
+                autoComplete="new-password"
+                error={
+                  (errors as FormikErrors<NewEmployee>).passwordConfirmation
+                }
+                touched={
+                  (touched as FormikTouched<NewEmployee>).passwordConfirmation
+                }
+              />
+            )}
             <FormSelect
               label="WorkShift"
               name="workShift"
@@ -294,6 +320,6 @@ function noBlank(name: string, message: string): TestConfig<any> {
   return {
     name,
     message,
-    test: (value: string) => value.trim().length > 0,
+    test: (value: string) => value?.trim().length > 0,
   };
 }

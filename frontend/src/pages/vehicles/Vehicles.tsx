@@ -7,6 +7,7 @@ import { AuthContext } from "src/context/AuthContext";
 import { VehicleCard } from ".";
 import { useAllVehicles } from "src/hooks";
 import { useHistory } from "react-router";
+import Routes from "src/routes/Routes";
 
 const SHOW_KIND_KEY = "vehicles-show-kind";
 
@@ -102,7 +103,9 @@ export const Vehicles = observer(() => {
         vehicle={e}
         className="cursor-pointer"
         onClick={(v) => {
-          history.push(`/vehicles/${v.id}`);
+          if (authService.isAuthenticated) {
+            history.push(Routes.vehicles(v.id));
+          }
         }}
       />
     ));
@@ -122,10 +125,10 @@ export const Vehicles = observer(() => {
         columns,
         data: data,
         addButtonText: "Add Vehicle",
-        addPath: "/vehicles/new",
-        editPath: (e) => `/vehicles/${e.id}/edit`,
-        deletePath: (e) => `/vehicles/${e.id}/delete`,
-        detailsPath: (e) => `/vehicles/${e.id}`,
+        addPath: Routes.vehicles("new"),
+        editPath: (e) => Routes.vehicles(e.id, "edit"),
+        deletePath: (e) => Routes.vehicles(e.id, "delete"),
+        detailsPath: (e) => Routes.vehicles(e.id),
       })}
     </Container>
   );

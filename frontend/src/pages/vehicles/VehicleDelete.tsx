@@ -2,7 +2,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
 import { BottomButtonGroup } from "src/components/BottomButtonGroup";
 import { useVehicle } from "src/hooks";
-import { BaseRoutes } from "src/layout";
+import Routes from "src/routes/Routes";
 import { Services } from "src/services";
 import { VehicleInfo } from "./VehicleInfo";
 
@@ -24,10 +24,10 @@ export function VehicleDelete() {
       <VehicleInfo vehicle={data!} />
       <BottomButtonGroup
         confirmText="Delete"
-        onCancel={() => history.push(BaseRoutes.vehicles.path)}
+        onCancel={() => history.push(Routes.vehicles())}
         onConfirm={async () => {
           const result = await Services.vehicles.delete(id);
-          history.push(BaseRoutes.vehicles.path);
+          history.push(Routes.vehicles());
           console.log(result);
         }}
       />

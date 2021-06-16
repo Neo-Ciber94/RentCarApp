@@ -3,8 +3,8 @@ import { useContext } from "react";
 import { AuthContext } from "src/context/AuthContext";
 import { observer } from "mobx-react-lite";
 import { Redirect, Route } from "react-router";
-import { BaseRoutes } from "src/layout";
 import { RouteProps } from "react-router-dom";
+import Routes from "src/routes/Routes";
 
 type LoginOrNotFound = "login" | "notfound";
 
@@ -51,12 +51,5 @@ export const ProtectedRoute = observer<ProtectedRouteProps>(
 function RedirectToRoute(props: { to?: LoginOrNotFound }) {
   // Redirect to login
   // TODO: Redirect to 404 instead?
-  return (
-    <Redirect
-      to={{
-        pathname: "/login",
-        state: BaseRoutes.login.name,
-      }}
-    />
-  );
+  return <Redirect to={Routes.login()} />;
 }

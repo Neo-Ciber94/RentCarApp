@@ -3,7 +3,7 @@ import { Container, Loading } from "src/components";
 import { BottomButtonGroup } from "src/components/BottomButtonGroup";
 import { TextInfo } from "src/components/TextInfo";
 import { useEmployee } from "src/hooks/employeeHooks";
-import { BaseRoutes } from "src/layout";
+import Routes from "src/routes/Routes";
 
 export function EmployeeDetails() {
   const params = useParams<{ id: string }>();
@@ -25,8 +25,8 @@ export function EmployeeDetails() {
       <TextInfo label="Work Shift" value={data.workShift} />
       <TextInfo label="Created At" value={data.user.createdAt} />
       <BottomButtonGroup
-        cancelPath={BaseRoutes.employees.path}
-        confirmPath={`${BaseRoutes.employees.path}/${data.id}/edit`}
+        cancelPath={Routes.employees()}
+        confirmPath={Routes.employees(data.id, "edit")}
         confirmText="Edit"
       />
     </Container>

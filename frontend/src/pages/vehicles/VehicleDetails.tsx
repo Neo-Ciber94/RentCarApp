@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
 import { BottomButtonGroup } from "src/components/BottomButtonGroup";
 import { useVehicle } from "src/hooks";
-import { BaseRoutes } from "src/layout";
 import Routes from "src/routes/Routes";
 import { VehicleInfo } from "./VehicleInfo";
 
@@ -18,7 +17,7 @@ export function VehicleDetails() {
     <Container className="lg:w-4/6 md:w-5/6">
       <VehicleInfo vehicle={data!} />
       <BottomButtonGroup
-        cancelPath={BaseRoutes.vehicles.path}
+        cancelPath={Routes.vehicles()}
         confirmPath={Routes.vehicles(data.id, "edit")}
         confirmText="Edit"
       />

@@ -1,6 +1,4 @@
 import { NavLink, NavLinkProps } from "react-router-dom";
-import { RouteName } from "src/layout";
-import { LocationDescriptor } from "history";
 
 export type ButtonColor = "primary" | "secondary" | "warning" | "info";
 
@@ -9,7 +7,7 @@ interface ColoredButton {
 }
 
 interface LinkButtonProps {
-  route?: RouteName;
+  to: string;
 }
 
 const PRIMARY_COLOR =
@@ -45,22 +43,14 @@ export const LinkButton: React.FC<LinkProps> = ({
   className,
   color,
   to,
-  route,
   ...props
 }) => {
-  if (to == null && route == null) {
-    throw new Error("LinkButton require 'to' or 'route' property");
-  }
-
   const btnColor = getColor(color);
-  const location: LocationDescriptor = to
-    ? (to as any)
-    : { pathname: route?.path, state: route?.name };
 
   return (
     <NavLink
       {...props}
-      to={location}
+      to={to}
       className={
         getClassNames(btnColor, className) + " inline-block text-center"
       }

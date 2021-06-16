@@ -25,7 +25,7 @@ export class Employee extends BaseEntity {
   @JoinColumn()
   user!: User;
 
-  @Column({ type: "decimal" })
+  @Column({ type: "decimal", precision: 3, scale: 2 })
   comissionPercentage!: number;
 
   @Column({

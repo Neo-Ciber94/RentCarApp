@@ -12,6 +12,7 @@ import {
 } from "src/components";
 import { AuthContext } from "src/context/AuthContext";
 import { BaseRoutes } from "src/layout";
+import Routes from "src/routes/Routes";
 import { AuthService, Services } from "src/services";
 import * as yup from "yup";
 import { TestConfig } from "yup";
@@ -153,7 +154,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             await addEmployee(values as NewEmployee, authService, setError);
           }
 
-          history.push(BaseRoutes.employees.path);
+          history.push(Routes.employees());
           actions.setSubmitting(false);
         },
         render: ({ errors, touched }) => (

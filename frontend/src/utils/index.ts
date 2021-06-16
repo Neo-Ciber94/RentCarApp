@@ -3,7 +3,6 @@ export * from "./capitalize";
 export * from "./convertToCSV";
 export * from "./downloads";
 export * from "./getImage";
-export * from "./historyHelper";
 export * from "./nextId";
 export * from "./RandomString";
 export * from "./timeStamp";

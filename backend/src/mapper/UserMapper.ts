@@ -8,8 +8,12 @@ export class UserMapper extends Mapper<User, UserDTO> {
   }
 
   map(entity: User): UserDTO {
+    if (entity == null) {
+      return {} as UserDTO;
+    }
+
     return {
-      id: entity.id,
+      id: entity?.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
       createdAt: entity.createdAt,

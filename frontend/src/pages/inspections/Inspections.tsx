@@ -112,8 +112,9 @@ export function Inspections() {
       {withCrudDataTable({
         columns,
         data,
-        addButtonText: "Add Inspection",
-        onAdd: () => openEditor(initialValues).then(() => refetch()),
+        canAdd: false,
+        // addButtonText: "Add Inspection",
+        // onAdd: () => openEditor(initialValues).then(() => refetch()),
         onDelete: (row) => openDelete(row).then(() => refetch),
         onDetails: (row) => openDetails(row, refetch),
         onEdit: (row) => openEditor(row).then(() => refetch()),

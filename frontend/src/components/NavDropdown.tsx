@@ -9,7 +9,7 @@ interface NavDropdownProps {
 }
 
 export const NavDropdown: React.FC<NavDropdownProps> = (props) => {
-  const { behaviour = "click" } = props;
+  const { behaviour = "hover" } = props;
 
   if (behaviour === "hover") {
     return <HoverableDropdown {...props} />;

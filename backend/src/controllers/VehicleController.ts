@@ -1,3 +1,8 @@
+// No idea why multer typing is implemented like this:
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18569
+import "multer";
+type MulterFile = Express.Multer.File;
+
 import {
   Body,
   JsonController,
@@ -9,14 +14,10 @@ import {
 import { Vehicle } from "src/entities";
 import { AbstractController } from "./AbstractController";
 
-// No idea why multer typing is implemented like this:
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18569
-import "multer";
 import { VehicleDTO } from "@shared/types";
 import { Response } from "express";
 import { VehicleRespository } from "src/repositories";
 import { handleError } from "./handleError";
-type MulterFile = Express.Multer.File;
 
 @JsonController("/vehicles")
 export class VehicleController extends AbstractController<

@@ -25,6 +25,7 @@ export function VehicleCreate() {
           chassisNumber: RandomString.hex(6),
         }}
         onSubmit={async (values, actions) => {
+          console.log("create", values);
           const formData = toFormData(values);
           const result = await Services.vehicles.create(
             formData as unknown as VehicleDTO

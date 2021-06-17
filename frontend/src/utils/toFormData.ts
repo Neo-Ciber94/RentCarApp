@@ -6,7 +6,7 @@ export function toFormData<T extends any>(obj: T): FormData {
 
     // We ignore null values
     if (value) {
-      formData.append(key, value + "");
+      formData.append(key, value as any);
     }
   }
 

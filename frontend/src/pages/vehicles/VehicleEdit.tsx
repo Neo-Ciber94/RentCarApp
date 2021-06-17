@@ -1,11 +1,11 @@
 import { VehicleDTO } from "@shared/types";
-import { useHistory, useParams } from "react-router-dom";
 import { Container, Loading } from "src/components";
-import { useVehicle } from "src/hooks";
-import Routes from "src/routes/Routes";
-import { Services } from "src/services";
-import { toFormData } from "src/utils";
 import { VehicleForm } from "./VehicleForm";
+import { toFormData } from "src/utils";
+import { Services } from "src/services";
+import Routes from "src/routes/Routes";
+import { useHistory, useParams } from "react-router-dom";
+import { useVehicle } from "src/hooks";
 
 export function VehicleEdit() {
   const params = useParams<{ id?: string }>();
@@ -19,10 +19,13 @@ export function VehicleEdit() {
   return (
     <Container>
       <VehicleForm
-        initialValues={data}
+        initialValues={{
+          ...data,
+          status: data.status || "",
+          description: data.description || "",
+        }}
         onSubmit={async (values, actions) => {
           const formData = toFormData(values);
-
           const result = await Services.vehicles.update(
             formData as unknown as VehicleDTO
           );

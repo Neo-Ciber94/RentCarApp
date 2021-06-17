@@ -17,7 +17,7 @@ export function Footer() {
         <span className="self-center mt-auto text-red-800 font-semibold text-sm">
           Creado por:
           <span className="opacity-75 ml-2 text-red-600">
-            Freddy L. Paredes B. (2018 - 1001)
+            Freddy L. Paredes B. (A00100796)
           </span>
         </span>
       </div>

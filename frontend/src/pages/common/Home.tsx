@@ -16,7 +16,7 @@ export default function Home() {
           We have a car for you anywhere for everywhere
         </span>
         <Link
-          to={Routes.reservations()}
+          to={Routes.reservations("new")}
           className="bg-red-600 hover:bg-red-800 rounded-lg mt-5 md:mt-0 ml-auto text-white p-3 text-center text-xl w-full md:w-2/6 shadow"
         >
           Reserve
